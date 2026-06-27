@@ -1,0 +1,36 @@
+# Sorties de build .NET
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio / Rider / VS Code
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Résultats de tests
+[Tt]est[Rr]esult*/
+*.trx
+
+# Restauration NuGet
+*.nupkg
+*.snupkg
+.nuget/
+
+# Bases SQLite générées localement (la base vit dans AppDataDirectory de l'app)
+*.db3
+*.db
+*.sqlite
+
+# Divers OS
+.DS_Store
+Thumbs.db
+
+# Exécutables / installeurs égarés (ne rien versionner de binaire non maîtrisé)
+*.exe
+*.msi

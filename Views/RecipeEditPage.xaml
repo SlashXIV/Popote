@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:RecettesApp.ViewModels"
+             x:Class="RecettesApp.Views.RecipeEditPage"
+             x:DataType="vm:RecipeEditViewModel"
+             Title="Recette">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="14">
+
+            <Label Text="Titre" FontAttributes="Bold" />
+            <Entry Text="{Binding Title}"
+                   Placeholder="Ex : Curry de pois chiches" />
+
+            <Label Text="Portions" FontAttributes="Bold" />
+            <HorizontalStackLayout Spacing="12">
+                <Stepper Minimum="1" Maximum="20" Increment="1"
+                         Value="{Binding Servings}" />
+                <Label Text="{Binding Servings, StringFormat='{0} portions'}"
+                       VerticalOptions="Center" />
+            </HorizontalStackLayout>
+
+            <Label Text="Préparation" FontAttributes="Bold" />
+            <Editor Text="{Binding Instructions}"
+                    Placeholder="Décris les étapes..."
+                    AutoSize="TextChanges"
+                    HeightRequest="180" />
+
+            <Button Text="Enregistrer"
+                    Command="{Binding SaveCommand}"
+                    Margin="0,8,0,0" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
