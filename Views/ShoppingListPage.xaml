@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:RecettesApp.ViewModels"
+             xmlns:services="clr-namespace:RecettesApp.Services"
+             x:Class="RecettesApp.Views.ShoppingListPage"
+             x:DataType="vm:ShoppingListViewModel"
+             Title="Liste de courses">
+
+    <Grid RowDefinitions="Auto,*,Auto,Auto,*" Padding="12" RowSpacing="8">
+
+        <!-- Sélection des recettes -->
+        <Label Grid.Row="0" Text="Choisis des recettes" FontAttributes="Bold" />
+
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Recipes}" SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:SelectableRecipeViewModel">
+                    <Grid ColumnDefinitions="Auto,*" Padding="0,4" ColumnSpacing="8">
+                        <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected}" />
+                        <Label Grid.Column="1" Text="{Binding Title}" VerticalOptions="Center" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            <CollectionView.EmptyView>
+                <Label Text="Aucune recette à sélectionner." Opacity="0.6" Margin="0,8" />
+            </CollectionView.EmptyView>
+        </CollectionView>
+
+        <!-- Génération -->
+        <Button Grid.Row="2" Text="Générer la liste"
+                Command="{Binding GenerateCommand}" Margin="0,4" />
+
+        <!-- Résultat -->
+        <Label Grid.Row="3" Text="Liste de courses" FontAttributes="Bold"
+               IsVisible="{Binding HasGenerated}" />
+
+        <CollectionView Grid.Row="4" ItemsSource="{Binding ShoppingList}" IsGrouped="True">
+            <CollectionView.GroupHeaderTemplate>
+                <DataTemplate x:DataType="vm:ShoppingAisle">
+                    <Label Text="{Binding Aisle}" FontAttributes="Bold"
+                           Padding="4,10,4,4" Opacity="0.8" />
+                </DataTemplate>
+            </CollectionView.GroupHeaderTemplate>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="services:ShoppingItem">
+                    <Grid ColumnDefinitions="*,Auto" Padding="8,4">
+                        <Label Grid.Column="0" Text="{Binding Name}" />
+                        <Label Grid.Column="1" Text="{Binding QuantityLabel}" Opacity="0.7" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            <CollectionView.EmptyView>
+                <Label Text="Coche des recettes puis « Générer la liste »."
+                       HorizontalOptions="Center" Margin="24" Opacity="0.6" />
+            </CollectionView.EmptyView>
+        </CollectionView>
+    </Grid>
+</ContentPage>

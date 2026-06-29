@@ -159,7 +159,12 @@ public class RecipeService
 }
 
 // Ligne de liste de courses (résultat agrégé, pas une entité en base).
-public record ShoppingItem(string Name, string Aisle, double Quantity, string? Unit);
+public record ShoppingItem(string Name, string Aisle, double Quantity, string? Unit)
+{
+    // Libellé prêt à afficher (ex : "400 g", "2 pièce", ou juste "1,5" sans unité).
+    public string QuantityLabel =>
+        string.IsNullOrWhiteSpace(Unit) ? Quantity.ToString() : $"{Quantity} {Unit}";
+}
 
 // Saisie d'une ligne d'ingrédient venant de l'UI (pas une entité en base).
 // Le service la transforme en Ingredient (catalogue) + RecipeIngredient.

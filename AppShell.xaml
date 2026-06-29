@@ -4,9 +4,14 @@
        xmlns:views="clr-namespace:RecettesApp.Views"
        x:Class="RecettesApp.AppShell">
 
-    <!-- Page d'accueil = la liste des recettes -->
-    <ShellContent Title="Recettes"
-                  ContentTemplate="{DataTemplate views:RecipeListPage}"
-                  Route="RecipeListPage" />
+    <!-- Onglets en bas : deux sections principales de l'app. -->
+    <TabBar>
+        <ShellContent Title="Recettes"
+                      ContentTemplate="{DataTemplate views:RecipeListPage}"
+                      Route="RecipeListPage" />
+        <ShellContent Title="Courses"
+                      ContentTemplate="{DataTemplate views:ShoppingListPage}"
+                      Route="ShoppingListPage" />
+    </TabBar>
 
 </Shell>

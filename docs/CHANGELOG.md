@@ -20,6 +20,8 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 - Édition des ingrédients d'une recette : lignes `nom + quantité + unité`,
   ajout/suppression, persistées via `RecipeService`. Catalogue d'ingrédients
   trouver-ou-créer insensible à la casse.
+- Liste de courses : onglet « Courses », sélection multi-recettes → liste agrégée
+  regroupée par rayon (réutilise `BuildShoppingListAsync`). Navigation par onglets (`TabBar`).
 
 ### Changed
 - Code source rangé en dossiers : `Models/`, `Data/`, `Services/`, `ViewModels/`, `Views/`.
