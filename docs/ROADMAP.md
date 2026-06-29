@@ -18,6 +18,14 @@
 2. [ ] Photo du plat (`MediaPicker`). _[DEV]_
 3. [ ] Tags et filtres (végé, rapide, batch cooking…). _[DATA]_
 
+## Identité & direction artistique
+- [ ] Choisir le **nom définitif** de l'app (titre provisoire actuel : « RecettesApp » ; `ApplicationId` = `com.companyname.recettesapp` à mettre à jour aussi).
+- [ ] **Logo / icône adaptative** + splash screen, dans une direction artistique cohérente.
+- [ ] Définir la **DA** : palette, typographie, composant d'accent.
+      Référence : icône **Kalos** (`~/Downloads/kcal_tracker/.../res/drawable`) — fond navy sombre
+      `#111120`, monogramme blanc gras, accent vert `~#34D399`, style « tuile d'élément du tableau
+      périodique ». Pour les recettes : reprendre le système, accent **safran/ambre `#F59E0B`** (décidé).
+
 ## Plus tard / idées
 - [ ] Recherche « qu'est-ce que je peux cuisiner avec les ingrédients X, Y ».
 - [ ] Import depuis mes notes existantes.
