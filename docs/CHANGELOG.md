@@ -17,8 +17,14 @@ versionnage [SemVer](https://semver.org/lang/fr/).
   Le projet compile désormais (`dotnet build -f net10.0-android` : 0 erreur).
 - README racine : prérequis et procédure de build documentés.
 
+- Édition des ingrédients d'une recette : lignes `nom + quantité + unité`,
+  ajout/suppression, persistées via `RecipeService`. Catalogue d'ingrédients
+  trouver-ou-créer insensible à la casse.
+
 ### Changed
 - Code source rangé en dossiers : `Models/`, `Data/`, `Services/`, `ViewModels/`, `Views/`.
+- `RecipeService.SaveRecipeAsync` prend désormais aussi les lignes d'ingrédients
+  (`IReadOnlyList<IngredientInput>`).
 
 ### Security
 - Avertissement connu NU1903 sur `SQLitePCLRaw.lib.e_sqlite3.android` 2.1.11 (transitif EF Core) — correctif à venir.

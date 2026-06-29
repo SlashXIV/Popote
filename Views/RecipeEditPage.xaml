@@ -4,6 +4,7 @@
              xmlns:vm="clr-namespace:RecettesApp.ViewModels"
              x:Class="RecettesApp.Views.RecipeEditPage"
              x:DataType="vm:RecipeEditViewModel"
+             x:Name="EditPage"
              Title="Recette">
 
     <ScrollView>
@@ -20,6 +21,30 @@
                 <Label Text="{Binding Servings, StringFormat='{0} portions'}"
                        VerticalOptions="Center" />
             </HorizontalStackLayout>
+
+            <Label Text="Ingrédients" FontAttributes="Bold" />
+            <!-- Liste éditable : une ligne = nom + quantité + unité + bouton supprimer.
+                 BindableLayout suffit (peu de lignes, pas besoin de virtualisation). -->
+            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Ingredients}" Spacing="6">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="vm:IngredientLineViewModel">
+                        <Grid ColumnDefinitions="*,Auto,Auto,Auto" ColumnSpacing="6">
+                            <Entry Grid.Column="0" Text="{Binding Name}" Placeholder="Ingrédient" />
+                            <Entry Grid.Column="1" Text="{Binding QuantityText}"
+                                   Placeholder="Qté" Keyboard="Numeric" WidthRequest="64" />
+                            <Entry Grid.Column="2" Text="{Binding Unit}"
+                                   Placeholder="Unité" WidthRequest="76" />
+                            <!-- La ligne ne connaît pas le VM de page : on vise sa commande
+                                 via x:Reference, et on passe la ligne en paramètre. -->
+                            <Button Grid.Column="3" Text="✕"
+                                    Command="{Binding BindingContext.RemoveIngredientCommand, Source={x:Reference EditPage}}"
+                                    CommandParameter="{Binding .}" />
+                        </Grid>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
+            <Button Text="Ajouter un ingrédient"
+                    Command="{Binding AddIngredientCommand}" />
 
             <Label Text="Préparation" FontAttributes="Bold" />
             <Editor Text="{Binding Instructions}"

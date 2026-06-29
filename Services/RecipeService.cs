@@ -44,32 +44,80 @@ public class RecipeService
             .FirstOrDefaultAsync(r => r.Id == id);
     }
 
-    // --- Création / mise à jour des champs principaux ---
-    // (L'édition des ingrédients viendra à l'étape 1 des "prochaines étapes".)
-    public async Task SaveRecipeAsync(Recipe recipe)
+    // --- Création / mise à jour des champs principaux ET des lignes d'ingrédients ---
+    // Les lignes (nom + quantité + unité) arrivent sous forme de DTO (IngredientInput).
+    // Le service se charge du catalogue : pour chaque nom, on réutilise l'Ingredient
+    // existant (recherche insensible à la casse) ou on le crée.
+    public async Task SaveRecipeAsync(Recipe recipe, IReadOnlyList<IngredientInput> ingredients)
     {
         using var db = await _factory.CreateDbContextAsync();
 
+        Recipe target;
         if (recipe.Id == 0)
         {
             // Nouvelle recette
-            db.Recipes.Add(recipe);
+            target = new Recipe();
+            db.Recipes.Add(target);
         }
         else
         {
-            // Recette existante : on met à jour les champs scalaires
-            var existing = await db.Recipes.FindAsync(recipe.Id);
+            // Recette existante : on charge aussi ses lignes pour pouvoir les remplacer
+            var existing = await db.Recipes
+                .Include(r => r.Ingredients)
+                .FirstOrDefaultAsync(r => r.Id == recipe.Id);
             if (existing is null) return;
+            target = existing;
+        }
 
-            existing.Title = recipe.Title;
-            existing.Instructions = recipe.Instructions;
-            existing.Servings = recipe.Servings;
-            existing.PrepMinutes = recipe.PrepMinutes;
-            existing.CookMinutes = recipe.CookMinutes;
-            existing.PhotoPath = recipe.PhotoPath;
+        // Champs scalaires
+        target.Title = recipe.Title;
+        target.Instructions = recipe.Instructions;
+        target.Servings = recipe.Servings;
+        target.PrepMinutes = recipe.PrepMinutes;
+        target.CookMinutes = recipe.CookMinutes;
+        target.PhotoPath = recipe.PhotoPath;
+
+        // Lignes d'ingrédients : stratégie simple et fiable pour un usage perso —
+        // on vide les lignes existantes (EF supprime les RecipeIngredient orphelins
+        // par cascade) puis on les recrée à partir des saisies.
+        target.Ingredients.Clear();
+
+        // Cache local pour ne pas créer deux fois le même ingrédient dans une même sauvegarde.
+        var cache = new Dictionary<string, Ingredient>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var input in ingredients)
+        {
+            if (string.IsNullOrWhiteSpace(input.Name))
+                continue; // on ignore les lignes sans nom
+
+            var name = input.Name.Trim();
+            var ingredient = await GetOrCreateIngredientAsync(db, cache, name);
+
+            target.Ingredients.Add(new RecipeIngredient
+            {
+                Ingredient = ingredient,
+                Quantity = input.Quantity,
+                Unit = string.IsNullOrWhiteSpace(input.Unit) ? null : input.Unit!.Trim()
+            });
         }
 
         await db.SaveChangesAsync();
+    }
+
+    // Trouve l'ingrédient par nom (insensible à la casse) ou le crée.
+    // EF l'insérera au SaveChanges car il est référencé par une nouvelle RecipeIngredient.
+    private static async Task<Ingredient> GetOrCreateIngredientAsync(
+        AppDbContext db, Dictionary<string, Ingredient> cache, string name)
+    {
+        if (cache.TryGetValue(name, out var cached))
+            return cached;
+
+        var lower = name.ToLower();
+        var existing = await db.Ingredients.FirstOrDefaultAsync(i => i.Name.ToLower() == lower);
+
+        var ingredient = existing ?? new Ingredient { Name = name };
+        cache[name] = ingredient;
+        return ingredient;
     }
 
     // --- Suppression ---
@@ -112,3 +160,7 @@ public class RecipeService
 
 // Ligne de liste de courses (résultat agrégé, pas une entité en base).
 public record ShoppingItem(string Name, string Aisle, double Quantity, string? Unit);
+
+// Saisie d'une ligne d'ingrédient venant de l'UI (pas une entité en base).
+// Le service la transforme en Ingredient (catalogue) + RecipeIngredient.
+public record IngredientInput(string Name, double Quantity, string? Unit);
