@@ -13,7 +13,7 @@
         <ToolbarItem Text="Ajouter" Command="{Binding GoToEditCommand}" />
     </ContentPage.ToolbarItems>
 
-    <Grid RowDefinitions="Auto,*" Padding="12" RowSpacing="8">
+    <Grid RowDefinitions="Auto,*" Padding="16" RowSpacing="12">
 
         <!-- Barre de recherche : déclenche LoadCommand à la validation -->
         <SearchBar Grid.Row="0"
@@ -30,9 +30,7 @@
 
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:Recipe">
-                        <Border Padding="12" Margin="0,4"
-                                StrokeShape="RoundRectangle 12"
-                                StrokeThickness="1">
+                        <Border Style="{StaticResource CardBorder}" Margin="0,4">
                             <!-- Tap sur la carte = éditer cette recette.
                                  On vise la commande du ViewModel de la page via x:Reference,
                                  car ici le BindingContext local est une Recipe, pas le VM. -->
@@ -42,11 +40,10 @@
                                     CommandParameter="{Binding .}" />
                             </Border.GestureRecognizers>
 
-                            <VerticalStackLayout Spacing="2">
-                                <Label Text="{Binding Title}"
-                                       FontSize="18" FontAttributes="Bold" />
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="{Binding Title}" Style="{StaticResource SubtitleLabel}" />
                                 <Label Text="{Binding Servings, StringFormat='{0} portions'}"
-                                       FontSize="13" Opacity="0.7" />
+                                       Style="{StaticResource CaptionLabel}" />
                             </VerticalStackLayout>
                         </Border>
                     </DataTemplate>
@@ -54,7 +51,8 @@
 
                 <CollectionView.EmptyView>
                     <Label Text="Aucune recette. Appuie sur Ajouter pour commencer."
-                           HorizontalOptions="Center" Margin="24" Opacity="0.6" />
+                           Style="{StaticResource CaptionLabel}"
+                           HorizontalOptions="Center" Margin="24" />
                 </CollectionView.EmptyView>
 
             </CollectionView>

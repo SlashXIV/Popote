@@ -3,6 +3,9 @@
 Une feature = un fichier. Pour toute nouvelle feature, créer `docs/<nom>.md`
 à partir de `_TEMPLATE.md`, et tenir le fichier à jour quand la feature évolue.
 
+## Design
+- [design-system.md](design-system.md) — Brief de design : palette, typo, espacements, composants. **À suivre pour toute UI.**
+
 ## Features documentées
 - [project-setup.md](project-setup.md) — Coquille MAUI compilable (csproj, App, Platforms, Resources).
 - [recipe-crud.md](recipe-crud.md) — Création / lecture / édition de recettes.

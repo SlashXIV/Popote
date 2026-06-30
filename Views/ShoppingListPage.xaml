@@ -7,51 +7,55 @@
              x:DataType="vm:ShoppingListViewModel"
              Title="Liste de courses">
 
-    <Grid RowDefinitions="Auto,*,Auto,Auto,*" Padding="12" RowSpacing="8">
+    <Grid RowDefinitions="Auto,*,Auto,Auto,*" Padding="16" RowSpacing="12">
 
         <!-- Sélection des recettes -->
-        <Label Grid.Row="0" Text="Choisis des recettes" FontAttributes="Bold" />
+        <Label Grid.Row="0" Text="Choisis des recettes" Style="{StaticResource SubtitleLabel}" />
 
         <CollectionView Grid.Row="1" ItemsSource="{Binding Recipes}" SelectionMode="None">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="vm:SelectableRecipeViewModel">
                     <Grid ColumnDefinitions="Auto,*" Padding="0,4" ColumnSpacing="8">
-                        <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected}" />
-                        <Label Grid.Column="1" Text="{Binding Title}" VerticalOptions="Center" />
+                        <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected}"
+                                  Color="{AppThemeBinding Light={StaticResource AccentLight}, Dark={StaticResource AccentDark}}" />
+                        <Label Grid.Column="1" Text="{Binding Title}"
+                               Style="{StaticResource BodyLabel}" VerticalOptions="Center" />
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
             <CollectionView.EmptyView>
-                <Label Text="Aucune recette à sélectionner." Opacity="0.6" Margin="0,8" />
+                <Label Text="Aucune recette à sélectionner." Style="{StaticResource CaptionLabel}" Margin="0,8" />
             </CollectionView.EmptyView>
         </CollectionView>
 
         <!-- Génération -->
         <Button Grid.Row="2" Text="Générer la liste"
+                Style="{StaticResource PrimaryButton}"
                 Command="{Binding GenerateCommand}" Margin="0,4" />
 
         <!-- Résultat -->
-        <Label Grid.Row="3" Text="Liste de courses" FontAttributes="Bold"
+        <Label Grid.Row="3" Text="Liste de courses" Style="{StaticResource SubtitleLabel}"
                IsVisible="{Binding HasGenerated}" />
 
         <CollectionView Grid.Row="4" ItemsSource="{Binding ShoppingList}" IsGrouped="True">
             <CollectionView.GroupHeaderTemplate>
                 <DataTemplate x:DataType="vm:ShoppingAisle">
-                    <Label Text="{Binding Aisle}" FontAttributes="Bold"
-                           Padding="4,10,4,4" Opacity="0.8" />
+                    <Label Text="{Binding Aisle}" Style="{StaticResource SubtitleLabel}"
+                           Padding="4,10,4,4" />
                 </DataTemplate>
             </CollectionView.GroupHeaderTemplate>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="services:ShoppingItem">
                     <Grid ColumnDefinitions="*,Auto" Padding="8,4">
-                        <Label Grid.Column="0" Text="{Binding Name}" />
-                        <Label Grid.Column="1" Text="{Binding QuantityLabel}" Opacity="0.7" />
+                        <Label Grid.Column="0" Text="{Binding Name}" Style="{StaticResource BodyLabel}" />
+                        <Label Grid.Column="1" Text="{Binding QuantityLabel}" Style="{StaticResource CaptionLabel}" />
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
             <CollectionView.EmptyView>
                 <Label Text="Coche des recettes puis « Générer la liste »."
-                       HorizontalOptions="Center" Margin="24" Opacity="0.6" />
+                       Style="{StaticResource CaptionLabel}"
+                       HorizontalOptions="Center" Margin="24" />
             </CollectionView.EmptyView>
         </CollectionView>
     </Grid>

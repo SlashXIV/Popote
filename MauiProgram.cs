@@ -18,6 +18,10 @@ public static class MauiProgram
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                // Police du design system (cf. docs/design-system.md).
+                fonts.AddFont("Inter-Regular.ttf", "Inter");
+                fonts.AddFont("Inter-Medium.ttf", "InterMedium");
+                fonts.AddFont("Inter-SemiBold.ttf", "InterSemiBold");
             });
 
         // --- Couche DONNÉES ---

@@ -10,11 +10,11 @@
     <ScrollView>
         <VerticalStackLayout Padding="16" Spacing="14">
 
-            <Label Text="Titre" FontAttributes="Bold" />
+            <Label Text="Titre" Style="{StaticResource SubtitleLabel}" />
             <Entry Text="{Binding Title}"
                    Placeholder="Ex : Curry de pois chiches" />
 
-            <Label Text="Portions" FontAttributes="Bold" />
+            <Label Text="Portions" Style="{StaticResource SubtitleLabel}" />
             <HorizontalStackLayout Spacing="12">
                 <Stepper Minimum="1" Maximum="20" Increment="1"
                          Value="{Binding Servings}" />
@@ -22,7 +22,7 @@
                        VerticalOptions="Center" />
             </HorizontalStackLayout>
 
-            <Label Text="Ingrédients" FontAttributes="Bold" />
+            <Label Text="Ingrédients" Style="{StaticResource SubtitleLabel}" />
             <!-- Liste éditable : une ligne = nom + quantité + unité + bouton supprimer.
                  BindableLayout suffit (peu de lignes, pas besoin de virtualisation). -->
             <VerticalStackLayout BindableLayout.ItemsSource="{Binding Ingredients}" Spacing="6">
@@ -46,13 +46,14 @@
             <Button Text="Ajouter un ingrédient"
                     Command="{Binding AddIngredientCommand}" />
 
-            <Label Text="Préparation" FontAttributes="Bold" />
+            <Label Text="Préparation" Style="{StaticResource SubtitleLabel}" />
             <Editor Text="{Binding Instructions}"
                     Placeholder="Décris les étapes..."
                     AutoSize="TextChanges"
                     HeightRequest="180" />
 
             <Button Text="Enregistrer"
+                    Style="{StaticResource PrimaryButton}"
                     Command="{Binding SaveCommand}"
                     Margin="0,8,0,0" />
 

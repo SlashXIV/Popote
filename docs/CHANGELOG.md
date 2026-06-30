@@ -22,6 +22,11 @@ versionnage [SemVer](https://semver.org/lang/fr/).
   trouver-ou-créer insensible à la casse.
 - Liste de courses : onglet « Courses », sélection multi-recettes → liste agrégée
   regroupée par rayon (réutilise `BuildShoppingListAsync`). Navigation par onglets (`TabBar`).
+- Design system (brief `docs/design-system.md`) : base neutre chaude + accents
+  « earthy naturals » (teal principal) en tokens (`AppColors.xaml`), styles de
+  composants (`AppStyles.xaml`), police Inter, thème clair forcé. Chrome dé-violetté
+  (Shell + barre système + token `Primary` du template + splash/icône). Appliqué aux
+  pages liste, courses et édition.
 
 ### Changed
 - Code source rangé en dossiers : `Models/`, `Data/`, `Services/`, `ViewModels/`, `Views/`.

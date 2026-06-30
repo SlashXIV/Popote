@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    Palette RecettesApp — base neutre chaude + accents "earthy naturals".
+    Base douce (pas de blanc pur) pour le confort visuel ; les couleurs vives
+    servent d'ACCENTS (actions, pastilles de rayon, tags), pas de fond.
+    À fusionner dans App.xaml (après Colors.xaml/Styles.xaml du template).
+-->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Écrase les tokens du template MAUI (sinon les contrôles non stylés
+         restent violets #512BD4). Toute l'UI par défaut passe au teal. -->
+    <Color x:Key="Primary">#5B8E7D</Color>
+    <Color x:Key="Secondary">#E4EDE9</Color>
+    <Color x:Key="Tertiary">#4A7468</Color>
+
+    <!-- Marque / accent principal = Jungle Teal -->
+    <Color x:Key="PrimaryLight">#5B8E7D</Color>
+    <Color x:Key="PrimaryDark">#7FB3A2</Color>
+    <Color x:Key="PrimaryContainerLight">#E4EDE9</Color>
+    <Color x:Key="PrimaryContainerDark">#2A3F38</Color>
+
+    <!-- Accent (actions) = teal ; texte posé dessus = clair/sombre -->
+    <Color x:Key="AccentLight">#5B8E7D</Color>
+    <Color x:Key="AccentDark">#7FB3A2</Color>
+    <Color x:Key="OnAccentLight">#FFFFFF</Color>
+    <Color x:Key="OnAccentDark">#10221C</Color>
+
+    <!-- Fonds et surfaces (chauds, doux) -->
+    <Color x:Key="BackgroundLight">#F7F4EE</Color>
+    <Color x:Key="BackgroundDark">#15191A</Color>
+    <Color x:Key="SurfaceLight">#FCFAF4</Color>
+    <Color x:Key="SurfaceDark">#1E2422</Color>
+
+    <!-- Texte (encre douce, pas de noir pur) -->
+    <Color x:Key="TextPrimaryLight">#2B2926</Color>
+    <Color x:Key="TextPrimaryDark">#ECEAE4</Color>
+    <Color x:Key="TextSecondaryLight">#6F6A61</Color>
+    <Color x:Key="TextSecondaryDark">#A6A29A</Color>
+
+    <!-- Filets / bordures (doux) -->
+    <Color x:Key="BorderLight">#E8E2D5</Color>
+    <Color x:Key="BorderDark">#2C322F</Color>
+
+    <!-- Palette "earthy naturals" (réutilisable : tags, signature, etc.) -->
+    <Color x:Key="PaletteOlive">#8CB369</Color>
+    <Color x:Key="PaletteGold">#F4E285</Color>
+    <Color x:Key="PaletteSand">#F4A259</Color>
+    <Color x:Key="PaletteTeal">#5B8E7D</Color>
+    <Color x:Key="PaletteBrick">#BC4B51</Color>
+
+    <!-- Pastilles de rayon (codage data, identiques clair/sombre) -->
+    <Color x:Key="AisleProduce">#8CB369</Color>
+    <Color x:Key="AisleDairy">#F4E285</Color>
+    <Color x:Key="AislePantry">#F4A259</Color>
+    <Color x:Key="AisleFrozen">#5B8E7D</Color>
+    <Color x:Key="AisleOther">#9AA8A2</Color>
+
+</ResourceDictionary>

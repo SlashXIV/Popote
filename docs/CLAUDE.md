@@ -28,6 +28,7 @@ Instructions persistantes pour Claude Code, lues à chaque session.
 - C# : nullable activé ; `async`/`await` pour toute I/O ; suffixe `Async` sur les méthodes asynchrones.
 - MVVM : utiliser les générateurs CommunityToolkit (`[ObservableProperty]`, `[RelayCommand]`) ; classes `partial`.
 - XAML : activer `x:DataType` (bindings compilés) sur chaque page et chaque DataTemplate.
+- UI : suivre `docs/design-system.md` (palette, typo, espacements, composants). Aucune couleur/taille en dur ; tout passe par les tokens (`AppColors.xaml`) et les styles (`AppStyles.xaml`).
 
 ## Workflow obligatoire (à chaque feature)
 1. Avant de coder : proposer un court plan et le confronter à `ROADMAP.md`. Ne pas s'écarter du but.
