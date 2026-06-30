@@ -8,12 +8,6 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
-    <!-- Écrase les tokens du template MAUI (sinon les contrôles non stylés
-         restent violets #512BD4). Toute l'UI par défaut passe au teal. -->
-    <Color x:Key="Primary">#5B8E7D</Color>
-    <Color x:Key="Secondary">#E4EDE9</Color>
-    <Color x:Key="Tertiary">#4A7468</Color>
-
     <!-- Marque / accent principal = Jungle Teal -->
     <Color x:Key="PrimaryLight">#5B8E7D</Color>
     <Color x:Key="PrimaryDark">#7FB3A2</Color>

@@ -38,5 +38,10 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 - `RecipeService.SaveRecipeAsync` prend désormais aussi les lignes d'ingrédients
   (`IReadOnlyList<IngredientInput>`).
 
+### Fixed
+- Violet résiduel du template MAUI : les tokens `Primary`/`Secondary`/`Tertiary`
+  de `Colors.xaml` sont ramenés au teal, donc les contrôles non stylés (boutons ✕,
+  « Ajouter un ingrédient »…) ne sont plus violets.
+
 ### Security
 - Avertissement connu NU1903 sur `SQLitePCLRaw.lib.e_sqlite3.android` 2.1.11 (transitif EF Core) — correctif à venir.
