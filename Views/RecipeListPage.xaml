@@ -36,7 +36,7 @@
                                  car ici le BindingContext local est une Recipe, pas le VM. -->
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer
-                                    Command="{Binding BindingContext.GoToEditCommand, Source={x:Reference Page}}"
+                                    Command="{Binding BindingContext.GoToDetailCommand, Source={x:Reference Page}}"
                                     CommandParameter="{Binding .}" />
                             </Border.GestureRecognizers>
 

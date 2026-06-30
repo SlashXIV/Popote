@@ -47,7 +47,7 @@ public partial class RecipeListViewModel : ObservableObject
     }
 
     // Navigation vers la page d'édition.
-    // recipe == null  -> création ; sinon -> édition de la recette existante.
+    // recipe == null  -> création (bouton « Ajouter ») ; sinon -> édition.
     [RelayCommand]
     private async Task GoToEditAsync(Recipe? recipe)
     {
@@ -55,5 +55,13 @@ public partial class RecipeListViewModel : ObservableObject
             ? "RecipeEditPage"                       // route enregistrée dans AppShell
             : $"RecipeEditPage?id={recipe.Id}";      // on passe l'id en paramètre
         await Shell.Current.GoToAsync(route);
+    }
+
+    // Tap sur une recette -> page de consultation (détail).
+    [RelayCommand]
+    private async Task GoToDetailAsync(Recipe? recipe)
+    {
+        if (recipe is null) return;
+        await Shell.Current.GoToAsync($"RecipeDetailPage?id={recipe.Id}");
     }
 }

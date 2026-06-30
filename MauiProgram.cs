@@ -43,6 +43,9 @@ public static class MauiProgram
         // Édition : transient (une instance neuve à chaque ouverture).
         builder.Services.AddTransient<RecipeEditViewModel>();
         builder.Services.AddTransient<RecipeEditPage>();
+        // Détail (consultation) : transient.
+        builder.Services.AddTransient<RecipeDetailViewModel>();
+        builder.Services.AddTransient<RecipeDetailPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Popote.ViewModels"
+             xmlns:conv="clr-namespace:Popote.Converters"
+             x:Class="Popote.Views.RecipeDetailPage"
+             x:DataType="vm:RecipeDetailViewModel"
+             Title="Recette">
+
+    <ContentPage.Resources>
+        <conv:AisleToColorConverter x:Key="AisleToColor" />
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Éditer" Command="{Binding GoToEditCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="24">
+
+            <Label Text="{Binding Title}" Style="{StaticResource DisplayLabel}" />
+
+            <!-- Sélecteur de portions : recalcule les quantités -->
+            <Border Style="{StaticResource CardBorder}">
+                <HorizontalStackLayout Spacing="12">
+                    <Label Text="Portions" Style="{StaticResource SubtitleLabel}" VerticalOptions="Center" />
+                    <Stepper Minimum="1" Maximum="50" Increment="1"
+                             Value="{Binding TargetServings}" VerticalOptions="Center" />
+                    <Label Text="{Binding TargetServings}" Style="{StaticResource TitleLabel}" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+            </Border>
+
+            <!-- Ingrédients en chips (avec pastille de rayon) -->
+            <VerticalStackLayout Spacing="8">
+                <Label Text="Ingrédients" Style="{StaticResource SubtitleLabel}" />
+                <FlexLayout BindableLayout.ItemsSource="{Binding Ingredients}" Wrap="Wrap" Direction="Row">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="vm:ScaledIngredient">
+                            <Border Style="{StaticResource Chip}" Margin="0,0,8,8">
+                                <HorizontalStackLayout Spacing="8">
+                                    <!-- Pastille de rayon -->
+                                    <Border WidthRequest="10" HeightRequest="10" StrokeThickness="0"
+                                            VerticalOptions="Center"
+                                            StrokeShape="RoundRectangle 5"
+                                            BackgroundColor="{Binding Aisle, Converter={StaticResource AisleToColor}}" />
+                                    <Label Text="{Binding Name}" Style="{StaticResource ChipLabel}" />
+                                    <Label Text="{Binding QuantityLabel}" Style="{StaticResource ChipLabel}" Opacity="0.7" />
+                                </HorizontalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
+            </VerticalStackLayout>
+
+            <!-- Préparation en étapes numérotées -->
+            <VerticalStackLayout Spacing="12">
+                <Label Text="Préparation" Style="{StaticResource SubtitleLabel}" />
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Steps}" Spacing="12">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="vm:StepLine">
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                                <Border Grid.Column="0" WidthRequest="28" HeightRequest="28"
+                                        StrokeThickness="0" VerticalOptions="Start"
+                                        StrokeShape="RoundRectangle 14"
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource AccentLight}, Dark={StaticResource AccentDark}}">
+                                    <Label Text="{Binding Number}" FontSize="13" FontFamily="InterSemiBold"
+                                           HorizontalOptions="Center" VerticalOptions="Center"
+                                           TextColor="{AppThemeBinding Light={StaticResource OnAccentLight}, Dark={StaticResource OnAccentDark}}" />
+                                </Border>
+                                <Label Grid.Column="1" Text="{Binding Text}" Style="{StaticResource BodyLabel}"
+                                       VerticalOptions="Center" />
+                            </Grid>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

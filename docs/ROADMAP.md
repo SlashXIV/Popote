@@ -10,14 +10,15 @@
 - [x] Édition des ingrédients d'une recette (lignes ingrédient + quantité + unité). _[DATA]_ — voir `docs/recipe-ingredients.md`.
 - [x] Page « liste de courses » : sélection multi-recettes → agrégation par rayon. _[DATA]_ — voir `docs/shopping-list.md`.
 - [x] Identité : nom **Popote**, logo (monogramme « P » olive + barre or) et design system (base neutre chaude, accent teal). _[DESIGN]_ — voir `docs/design-system.md`.
+- [x] Page détail + portions ajustables (chips d'ingrédients, étapes numérotées, recalcul via `ServingsScaler`). _[DEV + DATA]_ — voir `docs/recipe-detail.md`.
 
 ## En cours
 - [ ] (rien pour l'instant)
 
 ## Prochain (par priorité)
-1. [ ] Affichage avec portions ajustables (`ServingsScaler` dans la page détail). _[DEV + DATA]_
-2. [ ] Photo du plat (`MediaPicker`). _[DEV]_
-3. [ ] Tags et filtres (végé, rapide, batch cooking…). _[DATA]_
+1. [ ] Photo du plat (`MediaPicker`). _[DEV]_
+2. [ ] Tags et filtres (végé, rapide, batch cooking…). _[DATA]_
+3. [ ] Édition du rayon des ingrédients (active les pastilles colorées du détail). _[DATA]_
 
 ## Plus tard / idées
 - [ ] Recherche « qu'est-ce que je peux cuisiner avec les ingrédients X, Y ».

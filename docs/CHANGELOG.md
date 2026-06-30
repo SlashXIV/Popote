@@ -22,6 +22,8 @@ versionnage [SemVer](https://semver.org/lang/fr/).
   trouver-ou-créer insensible à la casse.
 - Liste de courses : onglet « Courses », sélection multi-recettes → liste agrégée
   regroupée par rayon (réutilise `BuildShoppingListAsync`). Navigation par onglets (`TabBar`).
+- Page détail (consultation) avec **portions ajustables** : recalcul des quantités
+  via `ServingsScaler`, ingrédients en chips (pastille de rayon), préparation en étapes numérotées.
 - Design system (brief `docs/design-system.md`) : base neutre chaude + accents
   « earthy naturals » (teal principal) en tokens (`AppColors.xaml`), styles de
   composants (`AppStyles.xaml`), police Inter, thème clair forcé. Chrome dé-violetté
