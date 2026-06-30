@@ -26,6 +26,10 @@ public partial class RecipeDetailViewModel : ObservableObject
     [ObservableProperty]
     private string title = string.Empty;
 
+    // Rappel des portions de base (libellé d'aide).
+    [ObservableProperty]
+    private string baseServingsLabel = string.Empty;
+
     // Portions cibles : changer cette valeur recalcule les quantités.
     [ObservableProperty]
     private int targetServings = 1;
@@ -46,6 +50,7 @@ public partial class RecipeDetailViewModel : ObservableObject
 
         Title = r.Title;
         _baseServings = r.Servings <= 0 ? 1 : r.Servings;
+        BaseServingsLabel = $"Recette de base : {_baseServings} portion" + (_baseServings > 1 ? "s" : "");
 
         _baseLines.Clear();
         foreach (var ri in r.Ingredients)
@@ -77,6 +82,15 @@ public partial class RecipeDetailViewModel : ObservableObject
             var label = string.IsNullOrWhiteSpace(b.Unit) ? qtyText : $"{qtyText} {b.Unit}";
             Ingredients.Add(new ScaledIngredient(b.Name, b.Aisle, label));
         }
+    }
+
+    // Multiplie la recette par rapport aux portions de BASE (×½, ×1, ×2, ×3…).
+    // Plus intuitif que de saisir un nombre absolu de portions.
+    [RelayCommand]
+    private void Multiply(string? factor)
+    {
+        if (double.TryParse(factor, NumberStyles.Any, CultureInfo.InvariantCulture, out var f) && f > 0)
+            TargetServings = Math.Max(1, (int)Math.Round(_baseServings * f));
     }
 
     [RelayCommand]

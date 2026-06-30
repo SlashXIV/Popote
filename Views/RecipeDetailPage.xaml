@@ -20,14 +20,23 @@
 
             <Label Text="{Binding Title}" Style="{StaticResource DisplayLabel}" />
 
-            <!-- Sélecteur de portions : recalcule les quantités -->
+            <!-- Portions : multiplicateur rapide + ajustement fin, recalcule les quantités -->
             <Border Style="{StaticResource CardBorder}">
-                <HorizontalStackLayout Spacing="12">
-                    <Label Text="Portions" Style="{StaticResource SubtitleLabel}" VerticalOptions="Center" />
-                    <Stepper Minimum="1" Maximum="50" Increment="1"
-                             Value="{Binding TargetServings}" VerticalOptions="Center" />
-                    <Label Text="{Binding TargetServings}" Style="{StaticResource TitleLabel}" VerticalOptions="Center" />
-                </HorizontalStackLayout>
+                <VerticalStackLayout Spacing="12">
+                    <HorizontalStackLayout Spacing="12">
+                        <Stepper Minimum="1" Maximum="50" Increment="1"
+                                 Value="{Binding TargetServings}" VerticalOptions="Center" />
+                        <Label Text="{Binding TargetServings, StringFormat='{0} portions'}"
+                               Style="{StaticResource TitleLabel}" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                    <Label Text="{Binding BaseServingsLabel}" Style="{StaticResource CaptionLabel}" />
+                    <HorizontalStackLayout Spacing="8">
+                        <Button Text="×½" Style="{StaticResource ChipButton}" Command="{Binding MultiplyCommand}" CommandParameter="0.5" />
+                        <Button Text="×1" Style="{StaticResource ChipButton}" Command="{Binding MultiplyCommand}" CommandParameter="1" />
+                        <Button Text="×2" Style="{StaticResource ChipButton}" Command="{Binding MultiplyCommand}" CommandParameter="2" />
+                        <Button Text="×3" Style="{StaticResource ChipButton}" Command="{Binding MultiplyCommand}" CommandParameter="3" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
             </Border>
 
             <!-- Ingrédients en chips (avec pastille de rayon) -->

@@ -24,6 +24,8 @@ versionnage [SemVer](https://semver.org/lang/fr/).
   regroupée par rayon (réutilise `BuildShoppingListAsync`). Navigation par onglets (`TabBar`).
 - Page détail (consultation) avec **portions ajustables** : recalcul des quantités
   via `ServingsScaler`, ingrédients en chips (pastille de rayon), préparation en étapes numérotées.
+- Détail : **multiplicateur de portions** (×½ ×1 ×2 ×3) relatif à la recette de base, plus intuitif.
+- Édition : **unité d'ingrédient via liste déroulante** (Picker) au lieu de texte libre (évite les doublons d'unités).
 - Design system (brief `docs/design-system.md`) : base neutre chaude + accents
   « earthy naturals » (teal principal) en tokens (`AppColors.xaml`), styles de
   composants (`AppStyles.xaml`), police Inter, thème clair forcé. Chrome dé-violetté

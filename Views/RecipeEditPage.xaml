@@ -19,8 +19,11 @@
                 <Stepper Minimum="1" Maximum="20" Increment="1"
                          Value="{Binding Servings}" />
                 <Label Text="{Binding Servings, StringFormat='{0} portions'}"
+                       Style="{StaticResource BodyLabel}"
                        VerticalOptions="Center" />
             </HorizontalStackLayout>
+            <Label Text="Les quantités d'ingrédients ci-dessous sont pour ce nombre de portions. Pas besoin d'être exact — au détail, on pourra multiplier la recette."
+                   Style="{StaticResource CaptionLabel}" />
 
             <Label Text="Ingrédients" Style="{StaticResource SubtitleLabel}" />
             <!-- Liste éditable : une ligne = nom + quantité + unité + bouton supprimer.
@@ -32,8 +35,10 @@
                             <Entry Grid.Column="0" Text="{Binding Name}" Placeholder="Ingrédient" />
                             <Entry Grid.Column="1" Text="{Binding QuantityText}"
                                    Placeholder="Qté" Keyboard="Numeric" WidthRequest="64" />
-                            <Entry Grid.Column="2" Text="{Binding Unit}"
-                                   Placeholder="Unité" WidthRequest="76" />
+                            <Picker Grid.Column="2" Title="Unité"
+                                    ItemsSource="{Binding Units}"
+                                    SelectedItem="{Binding Unit}"
+                                    WidthRequest="104" />
                             <!-- La ligne ne connaît pas le VM de page : on vise sa commande
                                  via x:Reference, et on passe la ligne en paramètre. -->
                             <Button Grid.Column="3" Text="✕"

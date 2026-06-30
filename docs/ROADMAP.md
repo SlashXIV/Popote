@@ -16,9 +16,10 @@
 - [ ] (rien pour l'instant)
 
 ## Prochain (par priorité)
-1. [ ] Photo du plat (`MediaPicker`). _[DEV]_
-2. [ ] Tags et filtres (végé, rapide, batch cooking…). _[DATA]_
-3. [ ] Édition du rayon des ingrédients (active les pastilles colorées du détail). _[DATA]_
+1. [ ] Auto-complétion du nom d'ingrédient (catalogue) — via UraniumUI. _[DEV + DATA]_
+2. [ ] Photo du plat (`MediaPicker`). _[DEV]_
+3. [ ] Tags et filtres (végé, rapide, batch cooking…). _[DATA]_
+4. [ ] Édition du rayon des ingrédients (active les pastilles colorées du détail). _[DATA]_
 
 ## Plus tard / idées
 - [ ] Recherche « qu'est-ce que je peux cuisiner avec les ingrédients X, Y ».

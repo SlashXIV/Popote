@@ -31,6 +31,8 @@ features suivantes (liste de courses, portions ajustables).
   orphelins par cascade. Le catalogue `Ingredient`, lui, n'est jamais supprimé.
 - **Quantité saisie en texte** (`QuantityText`) puis parsée à l'enregistrement
   (virgule → point, `InvariantCulture`) : évite les soucis de culture du binding.
+- **Unité choisie dans une liste** (`Picker`, `IngredientLineViewModel.UnitOptions`)
+  plutôt qu'en texte libre : évite les doublons (« g » / « gr ») qui casseraient l'agrégation des courses.
 - **`BindableLayout`** plutôt qu'un `CollectionView` : peu de lignes, pas besoin de
   virtualisation ; la suppression vise la commande du VM de page via `x:Reference`.
 

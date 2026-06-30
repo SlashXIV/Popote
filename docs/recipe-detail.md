@@ -9,7 +9,7 @@ automatiquement les quantités d'ingrédients.
 
 ## Comportement attendu
 - Tap sur une recette (liste) → page détail (l'édition se fait via « Éditer »).
-- Sélecteur de **portions** (stepper) : le changer recalcule les quantités via `ServingsScaler`.
+- **Portions** : multiplicateur rapide (×½ ×1 ×2 ×3, relatif à la recette de base) + stepper d'ajustement fin ; tout recalcule les quantités via `ServingsScaler`.
 - **Ingrédients en chips** : nom + quantité recalculée + unité, avec une **pastille de rayon** colorée.
 - **Préparation en étapes numérotées** : une ligne non vide = une étape.
 - Bouton **« Éditer »** (barre d'outils) → page d'édition.
