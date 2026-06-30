@@ -1,6 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace RecettesApp.ViewModels;
+namespace Popote.ViewModels;
 
 // Une ligne d'ingrédient en cours d'édition dans la page recette.
 // La quantité est gardée en texte (QuantityText) pour tolérer la virgule

@@ -1,7 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using RecettesApp.Models;
+using Popote.Models;
 
-namespace RecettesApp.ViewModels;
+namespace Popote.ViewModels;
 
 // Enveloppe une recette pour la sélection multiple de la liste de courses :
 // on ajoute juste un état "coché" sans toucher à l'entité Recipe.

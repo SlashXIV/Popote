@@ -1,4 +1,4 @@
-namespace RecettesApp.Models;
+namespace Popote.Models;
 
 // Un tag/étiquette pour filtrer (ex : "végé", "rapide", "batch cooking").
 public class Tag

@@ -1,4 +1,4 @@
-# ROADMAP — RecettesApp
+# ROADMAP — Popote
 
 > **Objectif (north star)** : une app Android locale, simple et fiable, pour recenser mes recettes,
 > qui me fait progresser sur .NET à parts égales côté données et côté logiciel.
@@ -19,7 +19,7 @@
 3. [ ] Tags et filtres (végé, rapide, batch cooking…). _[DATA]_
 
 ## Identité & direction artistique
-- [ ] Choisir le **nom définitif** de l'app (titre provisoire actuel : « RecettesApp » ; `ApplicationId` = `com.companyname.recettesapp` à mettre à jour aussi).
+- [ ] Choisir le **nom définitif** de l'app (titre provisoire actuel : « Popote » ; `ApplicationId` = `com.companyname.Popote` à mettre à jour aussi).
 - [ ] **Logo / icône adaptative** + splash screen, dans une direction artistique cohérente.
 - [ ] Définir la **DA** : palette, typographie, composant d'accent.
       Référence : icône **Kalos** (`~/Downloads/kcal_tracker/.../res/drawable`) — fond navy sombre

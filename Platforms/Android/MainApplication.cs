@@ -1,7 +1,7 @@
-﻿using Android.App;
+using Android.App;
 using Android.Runtime;
 
-namespace RecettesApp;
+namespace Popote;
 
 [Application]
 public class MainApplication : MauiApplication

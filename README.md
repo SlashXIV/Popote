@@ -1,4 +1,4 @@
-# RecettesApp
+# Popote
 
 App Android locale de gestion de recettes de cuisine (usage personnel).
 Stack : **.NET MAUI** (UI/XAML) + **EF Core / SQLite** (données) + **CommunityToolkit.Mvvm** (MVVM).
@@ -37,7 +37,7 @@ dotnet build -t:Run -f net10.0-android `
 
 ## Arborescence
 ```
-RecettesApp.csproj      Projet MAUI (cible net10.0-android)
+Popote.csproj      Projet MAUI (cible net10.0-android)
 App.xaml(.cs)           Application ; ouvre AppShell
 AppShell.xaml(.cs)      Navigation Shell + routes
 MauiProgram.cs          DI, EF Core, création de la base au démarrage

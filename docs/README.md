@@ -1,4 +1,4 @@
-# Documentation — RecettesApp
+# Documentation — Popote
 
 Une feature = un fichier. Pour toute nouvelle feature, créer `docs/<nom>.md`
 à partir de `_TEMPLATE.md`, et tenir le fichier à jour quand la feature évolue.

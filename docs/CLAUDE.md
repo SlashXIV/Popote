@@ -1,4 +1,4 @@
-# CLAUDE.md — RecettesApp
+# CLAUDE.md — Popote
 
 Instructions persistantes pour Claude Code, lues à chaque session.
 Écrites à l'impératif = ce sont des règles, pas des suggestions.

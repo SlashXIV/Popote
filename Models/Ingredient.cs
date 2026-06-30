@@ -1,4 +1,4 @@
-namespace RecettesApp.Models;
+namespace Popote.Models;
 
 // Un ingrédient "catalogue" (ex : Tomate, Farine, Lait de coco).
 // Il est partagé entre plusieurs recettes : on ne le duplique pas.

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using RecettesApp.Models;
+using Popote.Models;
 
-namespace RecettesApp.Data;
+namespace Popote.Data;
 
 // Le DbContext est le point d'entrée d'EF Core : il expose les tables (DbSet)
 // et traduit ton LINQ en SQL. La connexion SQLite est configurée dans MauiProgram

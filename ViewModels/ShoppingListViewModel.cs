@@ -1,9 +1,9 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using RecettesApp.Services;
+using Popote.Services;
 
-namespace RecettesApp.ViewModels;
+namespace Popote.ViewModels;
 
 // ViewModel de la page "liste de courses".
 // 1) On liste les recettes avec une case à cocher.

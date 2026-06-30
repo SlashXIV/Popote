@@ -1,4 +1,4 @@
-namespace RecettesApp.Models;
+namespace Popote.Models;
 
 // Table de jointure entre Recipe et Ingredient.
 // Particularité : elle porte des données propres (quantité + unité),

@@ -1,6 +1,6 @@
-using RecettesApp.ViewModels;
+using Popote.ViewModels;
 
-namespace RecettesApp.Views;
+namespace Popote.Views;
 
 public partial class RecipeListPage : ContentPage
 {

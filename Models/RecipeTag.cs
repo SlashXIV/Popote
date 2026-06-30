@@ -1,4 +1,4 @@
-namespace RecettesApp.Models;
+namespace Popote.Models;
 
 // Jointure many-to-many simple entre Recipe et Tag (pas de données propres).
 // La clé primaire est composite (RecipeId + TagId), définie dans AppDbContext.

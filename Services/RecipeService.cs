@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using RecettesApp.Data;
-using RecettesApp.Models;
+using Popote.Data;
+using Popote.Models;
 
-namespace RecettesApp.Services;
+namespace Popote.Services;
 
 // Couche "métier" : centralise toutes les requêtes.
 // Les ViewModels NE touchent JAMAIS la base directement, ils passent par ici.

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
-    Palette RecettesApp — base neutre chaude + accents "earthy naturals".
+    Palette Popote — base neutre chaude + accents "earthy naturals".
     Base douce (pas de blanc pur) pour le confort visuel ; les couleurs vives
     servent d'ACCENTS (actions, pastilles de rayon, tags), pas de fond.
     À fusionner dans App.xaml (après Colors.xaml/Styles.xaml du template).

@@ -1,6 +1,6 @@
-using RecettesApp.Views;
+using Popote.Views;
 
-namespace RecettesApp;
+namespace Popote;
 
 public partial class AppShell : Shell
 {

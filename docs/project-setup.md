@@ -14,7 +14,7 @@ coquille MAUI minimale pour que `dotnet build -f net10.0-android` réussisse.
 - Le code existant (CRUD recettes) est rangé en dossiers conformément à CLAUDE.md.
 
 ## Fichiers concernés
-- `RecettesApp.csproj` — projet MAUI ciblant **net10.0-android uniquement**
+- `Popote.csproj` — projet MAUI ciblant **net10.0-android uniquement**
   (cf. non-objectif « pas d'iOS pour l'instant »). Référence les packages
   `Microsoft.Maui.Controls`, `CommunityToolkit.Mvvm` (8.4.2),
   `Microsoft.EntityFrameworkCore.Sqlite` (10.0.9), `Microsoft.Extensions.Logging.Debug` (10.0.9).
@@ -22,7 +22,7 @@ coquille MAUI minimale pour que `dotnet build -f net10.0-android` réussisse.
 - `Platforms/Android/` — `MainActivity`, `MainApplication`, `AndroidManifest.xml`, `colors.xml`.
 - `Resources/` — polices OpenSans (réelles), icône, splash, styles, images.
 - Réorganisation en dossiers : `Models/`, `Data/`, `Services/`, `ViewModels/`, `Views/`.
-- Restent à la racine : `App`, `AppShell`, `MauiProgram.cs`, `RecettesApp.csproj`.
+- Restent à la racine : `App`, `AppShell`, `MauiProgram.cs`, `Popote.csproj`.
 
 ## Choix techniques
 - **Coquille générée via `dotnet new maui`** puis fusionnée avec le code existant,

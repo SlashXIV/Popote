@@ -12,7 +12,7 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 - `RecipeService` : CRUD + génération de liste de courses agrégée (`GroupBy` + `Sum`).
 - `ServingsScaler` : mise à l'échelle des portions.
 - Navigation Shell, injection de dépendances et création de la base au démarrage (`MauiProgram`).
-- **Coquille de projet MAUI compilable** : `RecettesApp.csproj` (cible `net10.0-android`),
+- **Coquille de projet MAUI compilable** : `Popote.csproj` (cible `net10.0-android`),
   classe `App`, `Platforms/Android`, `Resources/` (polices, icône, splash, styles).
   Le projet compile désormais (`dotnet build -f net10.0-android` : 0 erreur).
 - README racine : prérequis et procédure de build documentés.

@@ -1,4 +1,4 @@
-namespace RecettesApp.Models;
+namespace Popote.Models;
 
 // Une recette. C'est l'entité centrale de l'app.
 public class Recipe

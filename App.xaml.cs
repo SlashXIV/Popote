@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace RecettesApp;
+namespace Popote;
 
 public partial class App : Application
 {

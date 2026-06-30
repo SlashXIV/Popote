@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using RecettesApp.Data;
-using RecettesApp.Services;
-using RecettesApp.ViewModels;
-using RecettesApp.Views;
+using Popote.Data;
+using Popote.Services;
+using Popote.ViewModels;
+using Popote.Views;
 
-namespace RecettesApp;
+namespace Popote;
 
 public static class MauiProgram
 {

@@ -1,4 +1,4 @@
-# Convention de commit — RecettesApp
+# Convention de commit — Popote
 
 > Norme à appliquer à **chaque** commit, sans exception. But : un historique
 > lisible, professionnel et homogène, exploitable pour générer le CHANGELOG.

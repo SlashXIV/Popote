@@ -1,4 +1,4 @@
-# Design system — RecettesApp
+# Design system — Popote
 
 Brief de design à suivre pour toute UI. Objectif : une app **cohérente, calme et
 intentionnelle**, pas une accumulation de contrôles. La cohérence prime sur l'effet.

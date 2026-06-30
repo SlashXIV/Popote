@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:RecettesApp.ViewModels"
-             xmlns:services="clr-namespace:RecettesApp.Services"
-             x:Class="RecettesApp.Views.ShoppingListPage"
+             xmlns:vm="clr-namespace:Popote.ViewModels"
+             xmlns:services="clr-namespace:Popote.Services"
+             x:Class="Popote.Views.ShoppingListPage"
              x:DataType="vm:ShoppingListViewModel"
              Title="Liste de courses">
 

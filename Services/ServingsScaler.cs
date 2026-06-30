@@ -1,4 +1,4 @@
-namespace RecettesApp.Services;
+namespace Popote.Services;
 
 // Petit utilitaire pur (pas d'état, facile à tester unitairement).
 // Recalcule une quantité quand on change le nombre de portions.

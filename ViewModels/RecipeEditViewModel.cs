@@ -2,10 +2,10 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using RecettesApp.Models;
-using RecettesApp.Services;
+using Popote.Models;
+using Popote.Services;
 
-namespace RecettesApp.ViewModels;
+namespace Popote.ViewModels;
 
 // [QueryProperty] récupère le paramètre "id" passé dans l'URL de navigation
 // (ex : "RecipeEditPage?id=3") et l'injecte dans la propriété RecipeId.

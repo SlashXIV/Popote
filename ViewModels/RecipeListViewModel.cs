@@ -1,10 +1,10 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using RecettesApp.Models;
-using RecettesApp.Services;
+using Popote.Models;
+using Popote.Services;
 
-namespace RecettesApp.ViewModels;
+namespace Popote.ViewModels;
 
 // ViewModel de la page liste.
 // "partial" est obligatoire : CommunityToolkit.Mvvm génère du code
