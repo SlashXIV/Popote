@@ -44,6 +44,16 @@ public class RecipeService
             .FirstOrDefaultAsync(r => r.Id == id);
     }
 
+    // --- Lecture : noms du catalogue d'ingrédients (pour suggestions de saisie) ---
+    public async Task<List<string>> GetIngredientNamesAsync()
+    {
+        using var db = await _factory.CreateDbContextAsync();
+        return await db.Ingredients
+            .OrderBy(i => i.Name)
+            .Select(i => i.Name)
+            .ToListAsync();
+    }
+
     // --- Création / mise à jour des champs principaux ET des lignes d'ingrédients ---
     // Les lignes (nom + quantité + unité) arrivent sous forme de DTO (IngredientInput).
     // Le service se charge du catalogue : pour chaque nom, on réutilise l'Ingredient

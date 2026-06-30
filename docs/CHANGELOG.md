@@ -26,6 +26,7 @@ versionnage [SemVer](https://semver.org/lang/fr/).
   via `ServingsScaler`, ingrédients en chips (pastille de rayon), préparation en étapes numérotées.
 - Détail : **multiplicateur de portions** (×½ ×1 ×2 ×3) relatif à la recette de base, plus intuitif.
 - Édition : **unité d'ingrédient via liste déroulante** (Picker) au lieu de texte libre (évite les doublons d'unités).
+- Édition : **suggestions cliquables du catalogue** (« Déjà utilisés ») pour ajouter vite un ingrédient connu et favoriser la réutilisation.
 - Design system (brief `docs/design-system.md`) : base neutre chaude + accents
   « earthy naturals » (teal principal) en tokens (`AppColors.xaml`), styles de
   composants (`AppStyles.xaml`), police Inter, thème clair forcé. Chrome dé-violetté

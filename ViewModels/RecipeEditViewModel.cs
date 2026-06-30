@@ -14,7 +14,34 @@ public partial class RecipeEditViewModel : ObservableObject
 {
     private readonly RecipeService _service;
 
-    public RecipeEditViewModel(RecipeService service) => _service = service;
+    public RecipeEditViewModel(RecipeService service)
+    {
+        _service = service;
+        _ = LoadKnownIngredientsAsync(); // suggestions du catalogue
+    }
+
+    // Noms d'ingrédients déjà connus (catalogue), proposés en chips cliquables.
+    public ObservableCollection<string> KnownIngredients { get; } = new();
+
+    [ObservableProperty]
+    private bool hasKnownIngredients;
+
+    private async Task LoadKnownIngredientsAsync()
+    {
+        var names = await _service.GetIngredientNamesAsync();
+        KnownIngredients.Clear();
+        foreach (var name in names)
+            KnownIngredients.Add(name);
+        HasKnownIngredients = KnownIngredients.Count > 0;
+    }
+
+    // Tap sur une suggestion -> ajoute une ligne pré-remplie avec ce nom.
+    [RelayCommand]
+    private void AddKnownIngredient(string? name)
+    {
+        if (!string.IsNullOrWhiteSpace(name))
+            Ingredients.Add(new IngredientLineViewModel { Name = name });
+    }
 
     [ObservableProperty]
     private int recipeId;            // 0 = création, >0 = édition

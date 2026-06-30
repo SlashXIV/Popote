@@ -51,6 +51,25 @@
             <Button Text="Ajouter un ingrédient"
                     Command="{Binding AddIngredientCommand}" />
 
+            <!-- Suggestions du catalogue : tap pour ajouter une ligne pré-remplie -->
+            <VerticalStackLayout Spacing="6" IsVisible="{Binding HasKnownIngredients}">
+                <Label Text="Déjà utilisés (tap pour ajouter)" Style="{StaticResource CaptionLabel}" />
+                <FlexLayout BindableLayout.ItemsSource="{Binding KnownIngredients}" Wrap="Wrap" Direction="Row">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <Border Style="{StaticResource Chip}" Margin="0,0,8,8">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding BindingContext.AddKnownIngredientCommand, Source={x:Reference EditPage}}"
+                                        CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+                                <Label Text="{Binding .}" Style="{StaticResource ChipLabel}" />
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
+            </VerticalStackLayout>
+
             <Label Text="Préparation" Style="{StaticResource SubtitleLabel}" />
             <Editor Text="{Binding Instructions}"
                     Placeholder="Décris les étapes..."
