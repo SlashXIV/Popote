@@ -9,6 +9,7 @@
 - [x] Coquille de projet MAUI compilable (`.csproj`, `App`, `Platforms/Android`, `Resources/`) ; build `net10.0-android` vert. _[DEV]_ — voir `docs/project-setup.md`.
 - [x] Édition des ingrédients d'une recette (lignes ingrédient + quantité + unité). _[DATA]_ — voir `docs/recipe-ingredients.md`.
 - [x] Page « liste de courses » : sélection multi-recettes → agrégation par rayon. _[DATA]_ — voir `docs/shopping-list.md`.
+- [x] Identité : nom **Popote**, logo (monogramme « P » olive + barre or) et design system (base neutre chaude, accent teal). _[DESIGN]_ — voir `docs/design-system.md`.
 
 ## En cours
 - [ ] (rien pour l'instant)
@@ -17,14 +18,6 @@
 1. [ ] Affichage avec portions ajustables (`ServingsScaler` dans la page détail). _[DEV + DATA]_
 2. [ ] Photo du plat (`MediaPicker`). _[DEV]_
 3. [ ] Tags et filtres (végé, rapide, batch cooking…). _[DATA]_
-
-## Identité & direction artistique
-- [ ] Choisir le **nom définitif** de l'app (titre provisoire actuel : « Popote » ; `ApplicationId` = `com.companyname.Popote` à mettre à jour aussi).
-- [ ] **Logo / icône adaptative** + splash screen, dans une direction artistique cohérente.
-- [ ] Définir la **DA** : palette, typographie, composant d'accent.
-      Référence : icône **Kalos** (`~/Downloads/kcal_tracker/.../res/drawable`) — fond navy sombre
-      `#111120`, monogramme blanc gras, accent vert `~#34D399`, style « tuile d'élément du tableau
-      périodique ». Pour les recettes : reprendre le système, accent **safran/ambre `#F59E0B`** (décidé).
 
 ## Plus tard / idées
 - [ ] Recherche « qu'est-ce que je peux cuisiner avec les ingrédients X, Y ».
