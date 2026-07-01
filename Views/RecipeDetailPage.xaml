@@ -18,6 +18,11 @@
     <ScrollView>
         <VerticalStackLayout Padding="16" Spacing="24">
 
+            <Border IsVisible="{Binding PhotoPath, Converter={StaticResource HasText}}"
+                    StrokeThickness="0" StrokeShape="RoundRectangle 16" HeightRequest="220">
+                <Image Source="{Binding PhotoPath}" Aspect="AspectFill" />
+            </Border>
+
             <Label Text="{Binding Title}" Style="{StaticResource DisplayLabel}" />
 
             <!-- Portions : multiplicateur rapide + ajustement fin, recalcule les quantités -->

@@ -2,6 +2,8 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Maui.Media;
+using Microsoft.Maui.Storage;
 using Popote.Models;
 using Popote.Services;
 
@@ -55,8 +57,54 @@ public partial class RecipeEditViewModel : ObservableObject
     [ObservableProperty]
     private int servings = 2;
 
+    // Chemin local de la photo du plat (copiée dans le dossier privé de l'app).
+    [ObservableProperty]
+    private string? photoPath;
+
     // Les lignes d'ingrédients éditables (nom + quantité + unité).
     public ObservableCollection<IngredientLineViewModel> Ingredients { get; } = new();
+
+    // --- Photo ---
+    [RelayCommand]
+    private async Task PickPhotoAsync()
+    {
+        try
+        {
+            var photo = await MediaPicker.Default.PickPhotoAsync();
+            if (photo is not null)
+                PhotoPath = await CopyToAppDataAsync(photo);
+        }
+        catch (Exception) { /* annulé ou non supporté */ }
+    }
+
+    [RelayCommand]
+    private async Task TakePhotoAsync()
+    {
+        try
+        {
+            if (!MediaPicker.Default.IsCaptureSupported) return;
+            var photo = await MediaPicker.Default.CapturePhotoAsync();
+            if (photo is not null)
+                PhotoPath = await CopyToAppDataAsync(photo);
+        }
+        catch (Exception) { /* permission refusée ou annulé */ }
+    }
+
+    [RelayCommand]
+    private void RemovePhoto() => PhotoPath = null;
+
+    // Copie le fichier choisi dans le dossier privé de l'app (persistant).
+    private static async Task<string> CopyToAppDataAsync(FileResult photo)
+    {
+        var ext = Path.GetExtension(photo.FileName);
+        if (string.IsNullOrEmpty(ext)) ext = ".jpg";
+        var dest = Path.Combine(FileSystem.AppDataDirectory, $"recipe_{Guid.NewGuid():N}{ext}");
+
+        using var src = await photo.OpenReadAsync();
+        using var dst = File.Create(dest);
+        await src.CopyToAsync(dst);
+        return dest;
+    }
 
     // Méthode partielle générée : appelée automatiquement quand RecipeId change.
     // Si on édite une recette existante, on charge ses données.
@@ -74,6 +122,7 @@ public partial class RecipeEditViewModel : ObservableObject
         Title = r.Title;
         Instructions = r.Instructions;
         Servings = r.Servings;
+        PhotoPath = r.PhotoPath;
 
         Ingredients.Clear();
         foreach (var ri in r.Ingredients)
@@ -111,7 +160,8 @@ public partial class RecipeEditViewModel : ObservableObject
             Id = RecipeId,
             Title = Title.Trim(),
             Instructions = Instructions,
-            Servings = Servings
+            Servings = Servings,
+            PhotoPath = PhotoPath
         };
 
         // On ne garde que les lignes avec un nom ; la quantité est parsée ici.

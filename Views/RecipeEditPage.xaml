@@ -15,6 +15,19 @@
             <Entry Text="{Binding Title}"
                    Placeholder="Ex : Curry de pois chiches" />
 
+            <Label Text="Photo" Style="{StaticResource SubtitleLabel}" />
+            <Border IsVisible="{Binding PhotoPath, Converter={StaticResource HasText}}"
+                    StrokeThickness="0" StrokeShape="RoundRectangle 12" HeightRequest="180">
+                <Image Source="{Binding PhotoPath}" Aspect="AspectFill" />
+            </Border>
+            <HorizontalStackLayout Spacing="8">
+                <Button Text="Galerie" Style="{StaticResource ChipButton}" Command="{Binding PickPhotoCommand}" />
+                <Button Text="Appareil photo" Style="{StaticResource ChipButton}" Command="{Binding TakePhotoCommand}" />
+                <Button Text="Retirer" Style="{StaticResource ChipButton}"
+                        Command="{Binding RemovePhotoCommand}"
+                        IsVisible="{Binding PhotoPath, Converter={StaticResource HasText}}" />
+            </HorizontalStackLayout>
+
             <Label Text="Portions" Style="{StaticResource SubtitleLabel}" />
             <HorizontalStackLayout Spacing="12">
                 <Stepper Minimum="1" Maximum="20" Increment="1"

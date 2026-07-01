@@ -27,6 +27,9 @@ public partial class RecipeDetailViewModel : ObservableObject
     [ObservableProperty]
     private string title = string.Empty;
 
+    [ObservableProperty]
+    private string? photoPath;
+
     // Rappel des portions de base (libellé d'aide).
     [ObservableProperty]
     private string baseServingsLabel = string.Empty;
@@ -50,6 +53,7 @@ public partial class RecipeDetailViewModel : ObservableObject
         if (r is null) return;
 
         Title = r.Title;
+        PhotoPath = r.PhotoPath;
         _baseServings = r.Servings <= 0 ? 1 : r.Servings;
         BaseServingsLabel = $"Recette de base : {_baseServings} portion" + (_baseServings > 1 ? "s" : "");
 

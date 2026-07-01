@@ -14,13 +14,13 @@
 - [x] Aide à la saisie d'ingrédient : unité en liste déroulante + suggestions cliquables du catalogue (sans dépendance, plutôt qu'UraniumUI). _[DEV + DATA]_
 - [x] Édition du rayon des ingrédients (Picker par ligne) → pastilles colorées du détail + meilleur regroupement des courses. _[DATA]_
 - [x] Liste de courses actionnable : cases à cocher pour barrer les articles. _[DEV]_
+- [x] Photo du plat (galerie/appareil photo via `MediaPicker`) : miniature en liste, photo en détail. _[DEV]_ — voir `docs/recipe-photo.md`.
 
 ## En cours
 - [ ] (rien pour l'instant)
 
 ## Prochain (par priorité)
-1. [ ] Photo du plat (`MediaPicker`). _[DEV]_
-2. [ ] Tags et filtres (végé, rapide, batch cooking…). _[DATA]_
+1. [ ] Tags et filtres (végé, rapide, batch cooking…). _[DATA]_
 
 ## Plus tard / idées
 - [ ] Recherche « qu'est-ce que je peux cuisiner avec les ingrédients X, Y ».

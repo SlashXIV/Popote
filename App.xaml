@@ -2,6 +2,7 @@
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Popote"
+             xmlns:conv="clr-namespace:Popote.Converters"
              x:Class="Popote.App">
     <Application.Resources>
         <ResourceDictionary>
@@ -12,6 +13,9 @@
                 <ResourceDictionary Source="Resources/Styles/AppColors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/AppStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <!-- Converters globaux -->
+            <conv:HasTextConverter x:Key="HasText" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
