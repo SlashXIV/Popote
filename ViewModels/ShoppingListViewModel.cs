@@ -61,18 +61,18 @@ public partial class ShoppingListViewModel : ObservableObject
 
         // Le service trie déjà par rayon puis nom : le GroupBy conserve cet ordre.
         foreach (var group in items.GroupBy(i => i.Aisle))
-            ShoppingList.Add(new ShoppingAisle(group.Key, group));
+            ShoppingList.Add(new ShoppingAisle(group.Key, group.Select(i => new ShoppingItemViewModel(i))));
 
         HasGenerated = true;
     }
 }
 
 // Groupe d'items partageant le même rayon, pour le CollectionView IsGrouped="True".
-// Hériter de List<ShoppingItem> est le modèle attendu par MAUI pour les groupes.
-public class ShoppingAisle : List<ShoppingItem>
+// Hériter de List<...> est le modèle attendu par MAUI pour les groupes.
+public class ShoppingAisle : List<ShoppingItemViewModel>
 {
     public string Aisle { get; }
 
-    public ShoppingAisle(string aisle, IEnumerable<ShoppingItem> items) : base(items)
+    public ShoppingAisle(string aisle, IEnumerable<ShoppingItemViewModel> items) : base(items)
         => Aisle = aisle;
 }

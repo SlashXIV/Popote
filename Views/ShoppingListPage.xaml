@@ -54,10 +54,26 @@
                 </DataTemplate>
             </CollectionView.GroupHeaderTemplate>
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="services:ShoppingItem">
-                    <Grid ColumnDefinitions="*,Auto" Padding="8,4">
-                        <Label Grid.Column="0" Text="{Binding Name}" Style="{StaticResource BodyLabel}" />
-                        <Label Grid.Column="1" Text="{Binding QuantityLabel}" Style="{StaticResource CaptionLabel}" />
+                <DataTemplate x:DataType="vm:ShoppingItemViewModel">
+                    <Grid ColumnDefinitions="Auto,*,Auto" Padding="4,2,16,2" ColumnSpacing="8">
+                        <CheckBox Grid.Column="0" IsChecked="{Binding IsChecked}" VerticalOptions="Center"
+                                  Color="{AppThemeBinding Light={StaticResource AccentLight}, Dark={StaticResource AccentDark}}" />
+                        <Label Grid.Column="1" Text="{Binding Name}" Style="{StaticResource BodyLabel}" VerticalOptions="Center">
+                            <Label.Triggers>
+                                <DataTrigger TargetType="Label" Binding="{Binding IsChecked}" Value="True">
+                                    <Setter Property="TextDecorations" Value="Strikethrough" />
+                                    <Setter Property="Opacity" Value="0.45" />
+                                </DataTrigger>
+                            </Label.Triggers>
+                        </Label>
+                        <Label Grid.Column="2" Text="{Binding QuantityLabel}" Style="{StaticResource CaptionLabel}" VerticalOptions="Center">
+                            <Label.Triggers>
+                                <DataTrigger TargetType="Label" Binding="{Binding IsChecked}" Value="True">
+                                    <Setter Property="TextDecorations" Value="Strikethrough" />
+                                    <Setter Property="Opacity" Value="0.45" />
+                                </DataTrigger>
+                            </Label.Triggers>
+                        </Label>
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

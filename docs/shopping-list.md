@@ -14,6 +14,7 @@ regroupé par rayon pour faciliter les achats.
 - En bas : la liste agrégée, regroupée par rayon (en-têtes), chaque ligne
   affichant le nom et la quantité cumulée (+ unité).
 - Si rien n'est coché, aucune liste n'est produite.
+- Chaque article de la liste a une **case à cocher** : le barrer une fois acheté (état éphémère, réinitialisé à la régénération).
 
 ## Fichiers concernés
 - `Services/RecipeService.cs` — `BuildShoppingListAsync` (déjà écrit : `GroupBy` +

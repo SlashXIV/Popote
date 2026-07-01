@@ -28,6 +28,7 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 - Édition : **unité d'ingrédient via liste déroulante** (Picker) au lieu de texte libre (évite les doublons d'unités).
 - Édition : **suggestions cliquables du catalogue** (« Déjà utilisés ») pour ajouter vite un ingrédient connu et favoriser la réutilisation.
 - Édition : **rayon de l'ingrédient** (Picker par ligne) — colore les pastilles du détail et affine le regroupement de la liste de courses. Le rayon est mémorisé sur l'ingrédient du catalogue.
+- Liste de courses : **cases à cocher** pour barrer les articles au fur et à mesure des courses (état éphémère, réinitialisé à chaque génération).
 - Design system (brief `docs/design-system.md`) : base neutre chaude + accents
   « earthy naturals » (teal principal) en tokens (`AppColors.xaml`), styles de
   composants (`AppStyles.xaml`), police Inter, thème clair forcé. Chrome dé-violetté
