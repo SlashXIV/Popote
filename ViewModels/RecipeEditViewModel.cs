@@ -20,27 +20,27 @@ public partial class RecipeEditViewModel : ObservableObject
         _ = LoadKnownIngredientsAsync(); // suggestions du catalogue
     }
 
-    // Noms d'ingrédients déjà connus (catalogue), proposés en chips cliquables.
-    public ObservableCollection<string> KnownIngredients { get; } = new();
+    // Ingrédients déjà connus (catalogue : nom + rayon), proposés en chips cliquables.
+    public ObservableCollection<IngredientCatalogItem> KnownIngredients { get; } = new();
 
     [ObservableProperty]
     private bool hasKnownIngredients;
 
     private async Task LoadKnownIngredientsAsync()
     {
-        var names = await _service.GetIngredientNamesAsync();
+        var items = await _service.GetIngredientCatalogAsync();
         KnownIngredients.Clear();
-        foreach (var name in names)
-            KnownIngredients.Add(name);
+        foreach (var item in items)
+            KnownIngredients.Add(item);
         HasKnownIngredients = KnownIngredients.Count > 0;
     }
 
-    // Tap sur une suggestion -> ajoute une ligne pré-remplie avec ce nom.
+    // Tap sur une suggestion -> ajoute une ligne pré-remplie (nom + rayon connu).
     [RelayCommand]
-    private void AddKnownIngredient(string? name)
+    private void AddKnownIngredient(IngredientCatalogItem? item)
     {
-        if (!string.IsNullOrWhiteSpace(name))
-            Ingredients.Add(new IngredientLineViewModel { Name = name });
+        if (item is not null && !string.IsNullOrWhiteSpace(item.Name))
+            Ingredients.Add(new IngredientLineViewModel { Name = item.Name, Aisle = item.Aisle });
     }
 
     [ObservableProperty]
@@ -82,7 +82,8 @@ public partial class RecipeEditViewModel : ObservableObject
             {
                 Name = ri.Ingredient.Name,
                 QuantityText = FormatQuantity(ri.Quantity),
-                Unit = ri.Unit
+                Unit = ri.Unit,
+                Aisle = ri.Ingredient.Aisle
             });
         }
     }
@@ -116,7 +117,7 @@ public partial class RecipeEditViewModel : ObservableObject
         // On ne garde que les lignes avec un nom ; la quantité est parsée ici.
         var inputs = Ingredients
             .Where(l => !string.IsNullOrWhiteSpace(l.Name))
-            .Select(l => new IngredientInput(l.Name, ParseQuantity(l.QuantityText), l.Unit))
+            .Select(l => new IngredientInput(l.Name, ParseQuantity(l.QuantityText), l.Unit, l.Aisle))
             .ToList();
 
         await _service.SaveRecipeAsync(recipe, inputs);

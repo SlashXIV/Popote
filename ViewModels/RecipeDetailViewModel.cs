@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Popote.Services;
@@ -57,11 +58,13 @@ public partial class RecipeDetailViewModel : ObservableObject
             _baseLines.Add(new BaseLine(ri.Ingredient.Name, ri.Ingredient.Aisle, ri.Quantity, ri.Unit));
 
         // Préparation : une ligne non vide = une étape.
+        // On retire une éventuelle numérotation déjà tapée (« 1. », « 2) »…)
+        // pour ne pas doublonner avec le badge numéroté.
         Steps.Clear();
         var number = 1;
         foreach (var step in (r.Instructions ?? string.Empty)
                      .Split('\n')
-                     .Select(s => s.Trim())
+                     .Select(s => StripLeadingNumber(s.Trim()))
                      .Where(s => s.Length > 0))
             Steps.Add(new StepLine(number++, step));
 
@@ -83,6 +86,10 @@ public partial class RecipeDetailViewModel : ObservableObject
             Ingredients.Add(new ScaledIngredient(b.Name, b.Aisle, label));
         }
     }
+
+    // Retire une numérotation en tête de ligne : « 1. », « 2) », « 3 - »…
+    private static string StripLeadingNumber(string line)
+        => Regex.Replace(line, @"^\s*\d+\s*[.)\-–]\s*", "");
 
     // Multiplie la recette par rapport aux portions de BASE (×½, ×1, ×2, ×3…).
     // Plus intuitif que de saisir un nombre absolu de portions.

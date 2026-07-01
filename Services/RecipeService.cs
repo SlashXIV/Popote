@@ -44,13 +44,13 @@ public class RecipeService
             .FirstOrDefaultAsync(r => r.Id == id);
     }
 
-    // --- Lecture : noms du catalogue d'ingrédients (pour suggestions de saisie) ---
-    public async Task<List<string>> GetIngredientNamesAsync()
+    // --- Lecture : catalogue d'ingrédients (nom + rayon) pour les suggestions ---
+    public async Task<List<IngredientCatalogItem>> GetIngredientCatalogAsync()
     {
         using var db = await _factory.CreateDbContextAsync();
         return await db.Ingredients
             .OrderBy(i => i.Name)
-            .Select(i => i.Name)
+            .Select(i => new IngredientCatalogItem(i.Name, i.Aisle))
             .ToListAsync();
     }
 
@@ -101,7 +101,7 @@ public class RecipeService
                 continue; // on ignore les lignes sans nom
 
             var name = input.Name.Trim();
-            var ingredient = await GetOrCreateIngredientAsync(db, cache, name);
+            var ingredient = await GetOrCreateIngredientAsync(db, cache, name, input.Aisle);
 
             target.Ingredients.Add(new RecipeIngredient
             {
@@ -115,19 +115,33 @@ public class RecipeService
     }
 
     // Trouve l'ingrédient par nom (insensible à la casse) ou le crée.
-    // EF l'insérera au SaveChanges car il est référencé par une nouvelle RecipeIngredient.
+    // Met à jour son rayon si fourni (le rayon est une propriété du catalogue,
+    // partagée entre toutes les recettes qui utilisent cet ingrédient).
+    // EF l'insérera/le mettra à jour au SaveChanges.
     private static async Task<Ingredient> GetOrCreateIngredientAsync(
-        AppDbContext db, Dictionary<string, Ingredient> cache, string name)
+        AppDbContext db, Dictionary<string, Ingredient> cache, string name, string? aisle)
     {
-        if (cache.TryGetValue(name, out var cached))
-            return cached;
+        var canonical = Capitalize(name);
+        if (!cache.TryGetValue(canonical, out var ingredient))
+        {
+            var lower = canonical.ToLower();
+            var existing = await db.Ingredients.FirstOrDefaultAsync(i => i.Name.ToLower() == lower);
+            ingredient = existing ?? new Ingredient { Name = canonical };
+            cache[canonical] = ingredient;
+        }
 
-        var lower = name.ToLower();
-        var existing = await db.Ingredients.FirstOrDefaultAsync(i => i.Name.ToLower() == lower);
+        ingredient.Name = canonical; // normalise la casse (ex. « levure » -> « Levure »)
+        if (!string.IsNullOrWhiteSpace(aisle))
+            ingredient.Aisle = aisle;
 
-        var ingredient = existing ?? new Ingredient { Name = name };
-        cache[name] = ingredient;
         return ingredient;
+    }
+
+    // Met la première lettre en majuscule (le reste inchangé).
+    private static string Capitalize(string name)
+    {
+        var t = name.Trim();
+        return t.Length == 0 ? t : char.ToUpper(t[0]) + t[1..];
     }
 
     // --- Suppression ---
@@ -178,4 +192,7 @@ public record ShoppingItem(string Name, string Aisle, double Quantity, string? U
 
 // Saisie d'une ligne d'ingrédient venant de l'UI (pas une entité en base).
 // Le service la transforme en Ingredient (catalogue) + RecipeIngredient.
-public record IngredientInput(string Name, double Quantity, string? Unit);
+public record IngredientInput(string Name, double Quantity, string? Unit, string? Aisle);
+
+// Élément du catalogue d'ingrédients (suggestions de saisie).
+public record IngredientCatalogItem(string Name, string? Aisle);

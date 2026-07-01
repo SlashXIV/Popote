@@ -39,8 +39,8 @@ regroupé par rayon pour faciliter les achats.
 Aucun. Lecture seule : on agrège des `RecipeIngredient` existants.
 
 ## Reste à faire / limites connues
-- Le **rayon** vient de `Ingredient.Aisle`, non encore éditable → tout tombe dans
-  « Divers » tant que les rayons ne sont pas saisis (cf. ROADMAP / édition ingrédients).
+- Le **rayon** vient de `Ingredient.Aisle` (saisi à l'édition d'une recette) ; les
+  ingrédients sans rayon tombent dans « Divers ».
 - Pas de **mise à l'échelle des portions** dans l'agrégation (quantités de base) :
   viendra avec la feature « portions ajustables » (`ServingsScaler`).
 - Pas de case « tout cocher » ni de persistance de la liste générée (non nécessaire pour l'instant).

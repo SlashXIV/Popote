@@ -3,9 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Popote.ViewModels"
              xmlns:services="clr-namespace:Popote.Services"
+             xmlns:conv="clr-namespace:Popote.Converters"
              x:Class="Popote.Views.ShoppingListPage"
              x:DataType="vm:ShoppingListViewModel"
              Title="Liste de courses">
+
+    <ContentPage.Resources>
+        <conv:AisleToColorConverter x:Key="AisleToColor" />
+    </ContentPage.Resources>
 
     <Grid RowDefinitions="Auto,*,Auto,Auto,*" Padding="16" RowSpacing="12">
 
@@ -40,8 +45,12 @@
         <CollectionView Grid.Row="4" ItemsSource="{Binding ShoppingList}" IsGrouped="True">
             <CollectionView.GroupHeaderTemplate>
                 <DataTemplate x:DataType="vm:ShoppingAisle">
-                    <Label Text="{Binding Aisle}" Style="{StaticResource SubtitleLabel}"
-                           Padding="4,10,4,4" />
+                    <HorizontalStackLayout Spacing="8" Padding="4,10,4,4">
+                        <Border WidthRequest="12" HeightRequest="12" StrokeThickness="0"
+                                VerticalOptions="Center" StrokeShape="RoundRectangle 6"
+                                BackgroundColor="{Binding Aisle, Converter={StaticResource AisleToColor}}" />
+                        <Label Text="{Binding Aisle}" Style="{StaticResource SubtitleLabel}" />
+                    </HorizontalStackLayout>
                 </DataTemplate>
             </CollectionView.GroupHeaderTemplate>
             <CollectionView.ItemTemplate>

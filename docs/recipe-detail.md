@@ -34,6 +34,6 @@ automatiquement les quantités d'ingrédients.
 Aucun.
 
 ## Reste à faire / limites connues
-- Le rayon n'est pas encore éditable → pastilles grises pour l'instant.
+- Les pastilles se colorent selon le rayon saisi à l'édition (gris « Divers » si non renseigné).
 - Quantités recalculées affichées avec au plus 2 décimales (séparateur point).
 - Pas de photo ni de temps de préparation affichés (viendront avec leurs features).

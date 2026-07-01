@@ -15,6 +15,7 @@ public class AisleToColorConverter : IValueConverter
             "fruits & légumes" or "fruits et légumes" or "légumes" or "fruits" => Color.FromArgb("#8CB369"),
             "crèmerie" or "cremerie" or "frais" or "produits frais" => Color.FromArgb("#F4E285"),
             "épicerie" or "epicerie" => Color.FromArgb("#F4A259"),
+            "viande & poisson" or "viande et poisson" or "viande" or "poisson" or "boucherie" => Color.FromArgb("#BC4B51"),
             "surgelés" or "surgeles" => Color.FromArgb("#5B8E7D"),
             _ => Color.FromArgb("#9AA8A2"),
         };

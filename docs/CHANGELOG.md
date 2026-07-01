@@ -27,6 +27,7 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 - Détail : **multiplicateur de portions** (×½ ×1 ×2 ×3) relatif à la recette de base, plus intuitif.
 - Édition : **unité d'ingrédient via liste déroulante** (Picker) au lieu de texte libre (évite les doublons d'unités).
 - Édition : **suggestions cliquables du catalogue** (« Déjà utilisés ») pour ajouter vite un ingrédient connu et favoriser la réutilisation.
+- Édition : **rayon de l'ingrédient** (Picker par ligne) — colore les pastilles du détail et affine le regroupement de la liste de courses. Le rayon est mémorisé sur l'ingrédient du catalogue.
 - Design system (brief `docs/design-system.md`) : base neutre chaude + accents
   « earthy naturals » (teal principal) en tokens (`AppColors.xaml`), styles de
   composants (`AppStyles.xaml`), police Inter, thème clair forcé. Chrome dé-violetté
@@ -42,6 +43,11 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 - Violet résiduel du template MAUI : les tokens `Primary`/`Secondary`/`Tertiary`
   de `Colors.xaml` sont ramenés au teal, donc les contrôles non stylés (boutons ✕,
   « Ajouter un ingrédient »…) ne sont plus violets.
+- Chips « Déjà utilisés » tronqués (« Cacao » → « Caca ») : plus de rétrécissement dans le FlexLayout.
+- Double numérotation des étapes de préparation (badge + « 1. » déjà tapé) : la numérotation en tête de ligne est retirée.
+- Croix de suppression d'ingrédient allégée (✕ gris discret au lieu d'un carré plein).
+- Noms d'ingrédients normalisés avec majuscule initiale (« levure » → « Levure »).
+- En-tête de rayon coloré (pastille) dans la liste de courses.
 
 ### Security
 - Avertissement connu NU1903 sur `SQLitePCLRaw.lib.e_sqlite3.android` 2.1.11 (transitif EF Core) — correctif à venir.

@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Popote.ViewModels"
+             xmlns:services="clr-namespace:Popote.Services"
              x:Class="Popote.Views.RecipeEditPage"
              x:DataType="vm:RecipeEditViewModel"
              x:Name="EditPage"
@@ -28,23 +29,33 @@
             <Label Text="Ingrédients" Style="{StaticResource SubtitleLabel}" />
             <!-- Liste éditable : une ligne = nom + quantité + unité + bouton supprimer.
                  BindableLayout suffit (peu de lignes, pas besoin de virtualisation). -->
-            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Ingredients}" Spacing="6">
+            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Ingredients}" Spacing="14">
                 <BindableLayout.ItemTemplate>
                     <DataTemplate x:DataType="vm:IngredientLineViewModel">
-                        <Grid ColumnDefinitions="*,Auto,Auto,Auto" ColumnSpacing="6">
-                            <Entry Grid.Column="0" Text="{Binding Name}" Placeholder="Ingrédient" />
-                            <Entry Grid.Column="1" Text="{Binding QuantityText}"
-                                   Placeholder="Qté" Keyboard="Numeric" WidthRequest="64" />
-                            <Picker Grid.Column="2" Title="Unité"
-                                    ItemsSource="{Binding Units}"
-                                    SelectedItem="{Binding Unit}"
-                                    WidthRequest="104" />
-                            <!-- La ligne ne connaît pas le VM de page : on vise sa commande
-                                 via x:Reference, et on passe la ligne en paramètre. -->
-                            <Button Grid.Column="3" Text="✕"
-                                    Command="{Binding BindingContext.RemoveIngredientCommand, Source={x:Reference EditPage}}"
-                                    CommandParameter="{Binding .}" />
-                        </Grid>
+                        <VerticalStackLayout Spacing="6">
+                            <!-- Rangée 1 : nom + supprimer -->
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="6">
+                                <Entry Grid.Column="0" Text="{Binding Name}" Placeholder="Ingrédient" />
+                                <!-- La ligne ne connaît pas le VM de page : on vise sa commande
+                                     via x:Reference, et on passe la ligne en paramètre. -->
+                                <Button Grid.Column="1" Text="✕"
+                                        WidthRequest="40" HeightRequest="40"
+                                        BackgroundColor="Transparent" FontSize="16"
+                                        TextColor="{AppThemeBinding Light={StaticResource TextSecondaryLight}, Dark={StaticResource TextSecondaryDark}}"
+                                        Command="{Binding BindingContext.RemoveIngredientCommand, Source={x:Reference EditPage}}"
+                                        CommandParameter="{Binding .}" />
+                            </Grid>
+                            <!-- Rangée 2 : quantité + unité + rayon -->
+                            <Grid ColumnDefinitions="Auto,Auto,*" ColumnSpacing="6">
+                                <Entry Grid.Column="0" Text="{Binding QuantityText}"
+                                       Placeholder="Qté" Keyboard="Numeric" WidthRequest="64" />
+                                <Picker Grid.Column="1" Title="Unité"
+                                        ItemsSource="{Binding Units}" SelectedItem="{Binding Unit}"
+                                        WidthRequest="104" />
+                                <Picker Grid.Column="2" Title="Rayon"
+                                        ItemsSource="{Binding Aisles}" SelectedItem="{Binding Aisle}" />
+                            </Grid>
+                        </VerticalStackLayout>
                     </DataTemplate>
                 </BindableLayout.ItemTemplate>
             </VerticalStackLayout>
@@ -56,14 +67,14 @@
                 <Label Text="Déjà utilisés (tap pour ajouter)" Style="{StaticResource CaptionLabel}" />
                 <FlexLayout BindableLayout.ItemsSource="{Binding KnownIngredients}" Wrap="Wrap" Direction="Row">
                     <BindableLayout.ItemTemplate>
-                        <DataTemplate x:DataType="x:String">
-                            <Border Style="{StaticResource Chip}" Margin="0,0,8,8">
+                        <DataTemplate x:DataType="services:IngredientCatalogItem">
+                            <Border Style="{StaticResource Chip}" Margin="0,0,8,8" FlexLayout.Shrink="0">
                                 <Border.GestureRecognizers>
                                     <TapGestureRecognizer
                                         Command="{Binding BindingContext.AddKnownIngredientCommand, Source={x:Reference EditPage}}"
                                         CommandParameter="{Binding .}" />
                                 </Border.GestureRecognizers>
-                                <Label Text="{Binding .}" Style="{StaticResource ChipLabel}" />
+                                <Label Text="{Binding Name}" Style="{StaticResource ChipLabel}" LineBreakMode="NoWrap" />
                             </Border>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
