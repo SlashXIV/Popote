@@ -12,6 +12,8 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Cuisiner" Command="{Binding GoToCookWithCommand}" />
         <ToolbarItem Text="Ajouter" Command="{Binding GoToEditCommand}" />
+        <ToolbarItem Text="Sauvegarder les données" Order="Secondary" Command="{Binding BackupCommand}" />
+        <ToolbarItem Text="Restaurer une sauvegarde" Order="Secondary" Command="{Binding RestoreCommand}" />
     </ContentPage.ToolbarItems>
 
     <Grid RowDefinitions="Auto,Auto,*" Padding="16" RowSpacing="12">

@@ -275,6 +275,24 @@ public class RecipeService
         db.PlannedMeals.Remove(meal);
         await db.SaveChangesAsync();
     }
+
+    // =========================================================================
+    // SAUVEGARDE / RESTAURATION
+    // =========================================================================
+
+    // Rapatrie le journal WAL dans le fichier .db3 : la sauvegarde tient en un seul fichier.
+    public async Task CheckpointAsync()
+    {
+        using var db = await _factory.CreateDbContextAsync();
+        await db.Database.ExecuteSqlRawAsync("PRAGMA wal_checkpoint(TRUNCATE);");
+    }
+
+    // Applique les migrations (utile après restauration d'une base plus ancienne).
+    public async Task MigrateAsync()
+    {
+        using var db = await _factory.CreateDbContextAsync();
+        await db.Database.MigrateAsync();
+    }
 }
 
 // Saisie d'une ligne d'ingrédient venant de l'UI (pas une entité en base).

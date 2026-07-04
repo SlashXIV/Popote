@@ -38,6 +38,7 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 - **Mode cuisson** : étapes défilables (`CarouselView`), écran maintenu allumé, minuteur avec décompte et alerte.
 - **Favoris & notes** : étoile (bascule au détail), notes perso par recette, favoris triés en tête de liste.
 - **Build Release signé** : configuration de signature APK (keystore hors dépôt), trimming désactivé pour EF Core ; APK autonome installable sans PC.
+- **Sauvegarde / restauration** des données : export du `.db3` (partageable) et import depuis un fichier, via le menu ⋮ des Recettes.
 
 ### Tests
 - Projet `Popote.Tests` (xUnit) : `ServingsScaler` et l'agrégation des courses

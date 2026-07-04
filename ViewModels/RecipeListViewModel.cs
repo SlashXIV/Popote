@@ -1,6 +1,8 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Maui.ApplicationModel.DataTransfer;
+using Microsoft.Maui.Storage;
 using Popote.Models;
 using Popote.Services;
 
@@ -110,5 +112,58 @@ public partial class RecipeListViewModel : ObservableObject
 
         await _service.DeleteRecipeAsync(recipe.Id);
         await LoadAsync();
+    }
+
+    // Exporte la base (.db3) et la partage (Drive, Fichiers, mail…).
+    [RelayCommand]
+    private async Task BackupAsync()
+    {
+        await _service.CheckpointAsync(); // WAL -> .db3 (sauvegarde en un seul fichier)
+
+        var dbPath = Path.Combine(FileSystem.AppDataDirectory, "recettes.db3");
+        if (!File.Exists(dbPath))
+        {
+            await Shell.Current.DisplayAlertAsync("Sauvegarde", "Aucune donnée à sauvegarder.", "OK");
+            return;
+        }
+
+        var backup = Path.Combine(FileSystem.CacheDirectory, $"popote-sauvegarde-{DateTime.Now:yyyyMMdd-HHmm}.db3");
+        File.Copy(dbPath, backup, overwrite: true);
+
+        await Share.Default.RequestAsync(new ShareFileRequest
+        {
+            Title = "Sauvegarde Popote",
+            File = new ShareFile(backup)
+        });
+    }
+
+    // Restaure la base depuis un fichier de sauvegarde choisi.
+    [RelayCommand]
+    private async Task RestoreAsync()
+    {
+        var confirm = await Shell.Current.DisplayAlertAsync(
+            "Restaurer une sauvegarde ?",
+            "Tes données actuelles seront remplacées par le fichier choisi.",
+            "Restaurer", "Annuler");
+        if (!confirm) return;
+
+        var file = await FilePicker.Default.PickAsync(new PickOptions { PickerTitle = "Choisis une sauvegarde Popote (.db3)" });
+        if (file is null) return;
+
+        var dbPath = Path.Combine(FileSystem.AppDataDirectory, "recettes.db3");
+        using (var src = await file.OpenReadAsync())
+        using (var dst = File.Create(dbPath))
+            await src.CopyToAsync(dst);
+
+        // Supprime les journaux WAL périmés de l'ancienne base.
+        foreach (var ext in new[] { "-wal", "-shm" })
+        {
+            var p = dbPath + ext;
+            if (File.Exists(p)) File.Delete(p);
+        }
+
+        await _service.MigrateAsync(); // aligne le schéma si la sauvegarde est plus ancienne
+        await Shell.Current.DisplayAlertAsync("Restauration effectuée",
+            "Redémarre l'app pour voir tes données restaurées.", "OK");
     }
 }

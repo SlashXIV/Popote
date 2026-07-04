@@ -20,6 +20,7 @@ Une feature = un fichier. Pour toute nouvelle feature, créer `docs/<nom>.md`
 - [cook-with.md](cook-with.md) — Recherche par ingrédients (« Cuisiner avec… »).
 - [cooking-mode.md](cooking-mode.md) — Mode cuisson (étapes défilables, minuteur, écran allumé).
 - [favorites-notes.md](favorites-notes.md) — Favoris (★) & notes perso.
+- [backup-restore.md](backup-restore.md) — Sauvegarde & restauration des données.
 
 ## Repères
 - Suivi des modifs au fil de l'eau → `../CHANGELOG.md`
