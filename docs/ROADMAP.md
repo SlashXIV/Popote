@@ -28,6 +28,7 @@
 - [x] Build Release Android **signé** (APK autonome ; trimming off pour EF Core). _[DEV]_ — voir `README.md`.
 - [x] Publication GitHub + **Release** (APK via lien `latest`). _[DEV]_
 - [x] Sauvegarde / restauration de la base (`.db3` partageable + import). _[DATA + DEV]_ — voir `docs/backup-restore.md`.
+- [x] Liste de courses **persistante** : article manuel + cases cochées persistées + retrait/vidage. _[DATA]_ — voir `docs/shopping-list.md`.
 
 ## En cours
 - [ ] (rien pour l'instant)
@@ -38,7 +39,6 @@
 - [ ] (à définir — voir « Plus tard / idées »)
 
 ## Plus tard / idées
-- [ ] Liste de courses : ajouter un article manuel + persister les cases cochées.
 - [ ] Tri de la liste (date / titre / temps).
 - [ ] Import d'une recette (URL ou texte collé) ; import de mes notes existantes.
 - [ ] Export / partage d'une **recette** en texte (le partage se fait via `Share`).

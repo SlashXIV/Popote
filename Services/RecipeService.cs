@@ -293,6 +293,84 @@ public class RecipeService
         using var db = await _factory.CreateDbContextAsync();
         await db.Database.MigrateAsync();
     }
+
+    // =========================================================================
+    // LISTE DE COURSES PERSISTANTE
+    // =========================================================================
+    public async Task<List<ShoppingListItem>> GetShoppingListAsync()
+    {
+        using var db = await _factory.CreateDbContextAsync();
+        return await db.ShoppingListItems
+            .OrderBy(i => i.Aisle)
+            .ThenBy(i => i.Name)
+            .ToListAsync();
+    }
+
+    // (Re)génère les articles issus des recettes ; conserve les articles manuels.
+    public async Task RebuildShoppingListAsync(IEnumerable<int> recipeIds)
+    {
+        using var db = await _factory.CreateDbContextAsync();
+
+        var autos = await db.ShoppingListItems.Where(i => !i.IsManual).ToListAsync();
+        db.ShoppingListItems.RemoveRange(autos);
+
+        var lines = await db.RecipeIngredients
+            .Where(ri => recipeIds.Contains(ri.RecipeId))
+            .Include(ri => ri.Ingredient)
+            .ToListAsync();
+
+        foreach (var s in ShoppingListBuilder.Aggregate(lines))
+            db.ShoppingListItems.Add(new ShoppingListItem
+            {
+                Name = s.Name,
+                Aisle = s.Aisle,
+                Quantity = s.Quantity,
+                Unit = s.Unit,
+                IsManual = false,
+                IsChecked = false
+            });
+
+        await db.SaveChangesAsync();
+    }
+
+    public async Task AddManualItemAsync(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name)) return;
+        using var db = await _factory.CreateDbContextAsync();
+        db.ShoppingListItems.Add(new ShoppingListItem
+        {
+            Name = name.Trim(),
+            Aisle = "Divers",
+            IsManual = true
+        });
+        await db.SaveChangesAsync();
+    }
+
+    public async Task SetItemCheckedAsync(int id, bool isChecked)
+    {
+        using var db = await _factory.CreateDbContextAsync();
+        var item = await db.ShoppingListItems.FindAsync(id);
+        if (item is null) return;
+        item.IsChecked = isChecked;
+        await db.SaveChangesAsync();
+    }
+
+    public async Task RemoveShoppingItemAsync(int id)
+    {
+        using var db = await _factory.CreateDbContextAsync();
+        var item = await db.ShoppingListItems.FindAsync(id);
+        if (item is null) return;
+        db.ShoppingListItems.Remove(item);
+        await db.SaveChangesAsync();
+    }
+
+    public async Task ClearShoppingListAsync()
+    {
+        using var db = await _factory.CreateDbContextAsync();
+        var all = await db.ShoppingListItems.ToListAsync();
+        db.ShoppingListItems.RemoveRange(all);
+        await db.SaveChangesAsync();
+    }
 }
 
 // Saisie d'une ligne d'ingrédient venant de l'UI (pas une entité en base).

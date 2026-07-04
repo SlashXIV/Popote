@@ -5,10 +5,9 @@ using Popote.Services;
 
 namespace Popote.ViewModels;
 
-// ViewModel de la page "liste de courses".
-// 1) On liste les recettes avec une case à cocher.
-// 2) "Générer" agrège les ingrédients des recettes cochées (service déjà écrit)
-//    et remplit une liste groupée par rayon, affichée dans un CollectionView groupé.
+// ViewModel de l'onglet « Courses » : liste de courses PERSISTANTE.
+// - « Générer » (re)construit les articles issus des recettes cochées, en gardant les manuels.
+// - Ajout d'article à la main, coche persistée, retrait, vidage.
 public partial class ShoppingListViewModel : ObservableObject
 {
     private readonly RecipeService _service;
@@ -18,15 +17,17 @@ public partial class ShoppingListViewModel : ObservableObject
     // Recettes sélectionnables (haut de la page).
     public ObservableCollection<SelectableRecipeViewModel> Recipes { get; } = new();
 
-    // Résultat agrégé, groupé par rayon (bas de la page).
+    // Liste de courses persistante, groupée par rayon.
     public ObservableCollection<ShoppingAisle> ShoppingList { get; } = new();
 
     [ObservableProperty]
     private bool isBusy;
 
-    // Pilote l'affichage du titre "Liste de courses" et de l'éventuel message "rien".
     [ObservableProperty]
-    private bool hasGenerated;
+    private bool hasItems;
+
+    [ObservableProperty]
+    private string newItemText = string.Empty;
 
     [RelayCommand]
     private async Task LoadAsync()
@@ -36,9 +37,10 @@ public partial class ShoppingListViewModel : ObservableObject
         try
         {
             Recipes.Clear();
-            var list = await _service.GetRecipesAsync();
-            foreach (var r in list)
+            foreach (var r in await _service.GetRecipesAsync())
                 Recipes.Add(new SelectableRecipeViewModel(r));
+
+            await RefreshListAsync();
         }
         finally
         {
@@ -46,24 +48,54 @@ public partial class ShoppingListViewModel : ObservableObject
         }
     }
 
+    // Recharge la liste persistante depuis la base et la regroupe par rayon.
+    private async Task RefreshListAsync()
+    {
+        var items = await _service.GetShoppingListAsync();
+
+        ShoppingList.Clear();
+        foreach (var group in items.GroupBy(i => i.Aisle ?? "Divers"))
+            ShoppingList.Add(new ShoppingAisle(
+                group.Key,
+                group.Select(i => new ShoppingItemViewModel(i, _service.SetItemCheckedAsync))));
+
+        HasItems = items.Count > 0;
+    }
+
+    // Reconstruit les articles issus des recettes cochées (conserve les manuels).
     [RelayCommand]
     private async Task GenerateAsync()
     {
         var ids = Recipes.Where(r => r.IsSelected).Select(r => r.Recipe.Id).ToList();
+        await _service.RebuildShoppingListAsync(ids);
+        await RefreshListAsync();
+    }
 
-        ShoppingList.Clear();
-        HasGenerated = false;
+    [RelayCommand]
+    private async Task AddManualItemAsync()
+    {
+        if (string.IsNullOrWhiteSpace(NewItemText)) return;
+        await _service.AddManualItemAsync(NewItemText);
+        NewItemText = string.Empty;
+        await RefreshListAsync();
+    }
 
-        if (ids.Count == 0)
-            return; // rien de coché : on n'affiche pas de liste
+    [RelayCommand]
+    private async Task RemoveItemAsync(ShoppingItemViewModel? item)
+    {
+        if (item is null) return;
+        await _service.RemoveShoppingItemAsync(item.Id);
+        await RefreshListAsync();
+    }
 
-        var items = await _service.BuildShoppingListAsync(ids);
-
-        // Le service trie déjà par rayon puis nom : le GroupBy conserve cet ordre.
-        foreach (var group in items.GroupBy(i => i.Aisle))
-            ShoppingList.Add(new ShoppingAisle(group.Key, group.Select(i => new ShoppingItemViewModel(i))));
-
-        HasGenerated = true;
+    [RelayCommand]
+    private async Task ClearAsync()
+    {
+        var confirm = await Shell.Current.DisplayAlertAsync(
+            "Vider la liste ?", "Tous les articles seront retirés.", "Vider", "Annuler");
+        if (!confirm) return;
+        await _service.ClearShoppingListAsync();
+        await RefreshListAsync();
     }
 }
 

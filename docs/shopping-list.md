@@ -13,8 +13,10 @@ regroupé par rayon pour faciliter les achats.
 - Bouton « Générer la liste ».
 - En bas : la liste agrégée, regroupée par rayon (en-têtes), chaque ligne
   affichant le nom et la quantité cumulée (+ unité).
-- Si rien n'est coché, aucune liste n'est produite.
-- Chaque article de la liste a une **case à cocher** : le barrer une fois acheté (état éphémère, réinitialisé à la régénération).
+- La liste est **persistante** : « Générer » (re)construit les articles issus des
+  recettes en **conservant les articles ajoutés à la main**.
+- **Ajout manuel** d'un article (ex. « sopalin »), **retrait** (✕) et **vidage** de la liste.
+- Chaque article a une **case à cocher** ; l'état **persiste** (survit au redémarrage).
 
 ## Fichiers concernés
 - `Services/RecipeService.cs` — `BuildShoppingListAsync` (déjà écrit : `GroupBy` +
@@ -37,11 +39,11 @@ regroupé par rayon pour faciliter les achats.
   collecter les ids cochés et regrouper le résultat pour l'affichage.
 
 ## Modèle de données impacté
-Aucun. Lecture seule : on agrège des `RecipeIngredient` existants.
+Table **`ShoppingListItem`** (persistante) : nom, rayon, quantité, unité,
+`IsChecked`, `IsManual`. `RebuildShoppingListAsync` remplace les articles auto
+(garde les manuels) ; `SetItemCheckedAsync` persiste la coche.
 
 ## Reste à faire / limites connues
-- Le **rayon** vient de `Ingredient.Aisle` (saisi à l'édition d'une recette) ; les
-  ingrédients sans rayon tombent dans « Divers ».
-- Pas de **mise à l'échelle des portions** dans l'agrégation (quantités de base) :
-  viendra avec la feature « portions ajustables » (`ServingsScaler`).
-- Pas de case « tout cocher » ni de persistance de la liste générée (non nécessaire pour l'instant).
+- Le **rayon** vient de `Ingredient.Aisle` ; les ingrédients sans rayon tombent dans « Divers ».
+- Pas de **mise à l'échelle des portions** dans l'agrégation (quantités de base).
+- « Générer » **réinitialise** les articles auto (leur coche est perdue) ; les articles manuels et leur coche sont conservés.
