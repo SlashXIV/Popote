@@ -29,6 +29,7 @@
 - [x] Publication GitHub + **Release** (APK via lien `latest`). _[DEV]_
 - [x] Sauvegarde / restauration de la base (`.db3` partageable + import). _[DATA + DEV]_ — voir `docs/backup-restore.md`.
 - [x] Liste de courses **persistante** : article manuel + cases cochées persistées + retrait/vidage. _[DATA]_ — voir `docs/shopping-list.md`.
+- [x] Partage d'une recette en texte (feuille de partage système). _[DEV]_
 
 ## En cours
 - [ ] (rien pour l'instant)
@@ -41,7 +42,6 @@
 ## Plus tard / idées
 - [ ] Tri de la liste (date / titre / temps).
 - [ ] Import d'une recette (URL ou texte collé) ; import de mes notes existantes.
-- [ ] Export / partage d'une **recette** en texte (le partage se fait via `Share`).
 - [ ] Corriger l'alerte NU1903 (`SQLitePCLRaw` transitif) quand une version corrigée sera tirable par EF Core.
 
 ## Non-objectifs (pour ne pas se disperser)

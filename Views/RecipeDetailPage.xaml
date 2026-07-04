@@ -14,6 +14,7 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="{Binding FavoriteToggleText}" Command="{Binding ToggleFavoriteCommand}" />
         <ToolbarItem Text="Éditer" Command="{Binding GoToEditCommand}" />
+        <ToolbarItem Text="Partager" Order="Secondary" Command="{Binding ShareCommand}" />
     </ContentPage.ToolbarItems>
 
     <ScrollView>

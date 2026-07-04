@@ -1,8 +1,9 @@
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Text.RegularExpressions;
+using System.Text;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Maui.ApplicationModel.DataTransfer;
 using Popote.Services;
 
 namespace Popote.ViewModels;
@@ -146,6 +147,45 @@ public partial class RecipeDetailViewModel : ObservableObject
     {
         IsFavorite = !IsFavorite;
         await _service.SetFavoriteAsync(RecipeId, IsFavorite);
+    }
+
+    // Partage la recette en texte (aux portions actuellement affichées).
+    [RelayCommand]
+    private async Task ShareAsync()
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine(Title);
+        if (HasTimes) sb.AppendLine(TimesLabel);
+        sb.AppendLine($"Pour {TargetServings} portion(s)");
+
+        sb.AppendLine();
+        sb.AppendLine("Ingrédients :");
+        foreach (var i in Ingredients)
+            sb.AppendLine(string.IsNullOrEmpty(i.QuantityLabel) ? $"- {i.Name}" : $"- {i.Name} : {i.QuantityLabel}");
+
+        if (Steps.Count > 0)
+        {
+            sb.AppendLine();
+            sb.AppendLine("Préparation :");
+            foreach (var s in Steps)
+                sb.AppendLine($"{s.Number}. {s.Text}");
+        }
+
+        if (HasNotes)
+        {
+            sb.AppendLine();
+            sb.AppendLine($"Notes : {Notes}");
+        }
+
+        sb.AppendLine();
+        sb.AppendLine("— partagé depuis Popote");
+
+        await Share.Default.RequestAsync(new ShareTextRequest
+        {
+            Title = Title,
+            Subject = Title,
+            Text = sb.ToString()
+        });
     }
 
     // Ligne d'ingrédient aux portions de base (interne).

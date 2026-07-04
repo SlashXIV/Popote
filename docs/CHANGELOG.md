@@ -40,6 +40,7 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 - **Build Release signé** : configuration de signature APK (keystore hors dépôt), trimming désactivé pour EF Core ; APK autonome installable sans PC.
 - **Sauvegarde / restauration** des données : export du `.db3` (partageable) et import depuis un fichier, via le menu ⋮ des Recettes.
 - **Liste de courses persistante** : articles conservés en base, ajout manuel d'articles, cases cochées persistées (survivent au redémarrage), retrait et vidage.
+- **Partage d'une recette en texte** : depuis le détail (menu ⋮), compose la recette (ingrédients aux portions affichées, étapes) et ouvre la feuille de partage.
 
 ### Tests
 - Projet `Popote.Tests` (xUnit) : `ServingsScaler` et l'agrégation des courses
