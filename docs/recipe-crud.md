@@ -6,7 +6,7 @@
 Créer, lister, consulter et modifier des recettes stockées localement.
 
 ## Comportement attendu
-- Liste des recettes avec recherche par titre et pull-to-refresh.
+- Liste des recettes avec recherche par titre, **tri** (favoris / récent / titre / temps), filtre par tags et pull-to-refresh.
 - Bouton « Ajouter » → formulaire (titre, portions, préparation).
 - Tap sur une recette → édition du même formulaire.
 - « Enregistrer » → retour à la liste, qui se rafraîchit.

@@ -30,17 +30,14 @@
 - [x] Sauvegarde / restauration de la base (`.db3` partageable + import). _[DATA + DEV]_ — voir `docs/backup-restore.md`.
 - [x] Liste de courses **persistante** : article manuel + cases cochées persistées + retrait/vidage. _[DATA]_ — voir `docs/shopping-list.md`.
 - [x] Partage d'une recette en texte (feuille de partage système). _[DEV]_
+- [x] Tri de la liste des recettes (Favoris / Récent / Titre / Temps). _[DATA]_
 
 ## En cours
 - [ ] (rien pour l'instant)
 
-> 🎉 Toutes les priorités **initiales** sont livrées. Nouvelle vague ci-dessous.
-
-## Prochain (par priorité)
-- [ ] (à définir — voir « Plus tard / idées »)
+> 🎉 Toute la roadmap est livrée. Idées ouvertes ci-dessous.
 
 ## Plus tard / idées
-- [ ] Tri de la liste (date / titre / temps).
 - [ ] Import d'une recette (URL ou texte collé) ; import de mes notes existantes.
 - [ ] Corriger l'alerte NU1903 (`SQLitePCLRaw` transitif) quand une version corrigée sera tirable par EF Core.
 

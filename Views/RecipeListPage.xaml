@@ -16,7 +16,7 @@
         <ToolbarItem Text="Restaurer une sauvegarde" Order="Secondary" Command="{Binding RestoreCommand}" />
     </ContentPage.ToolbarItems>
 
-    <Grid RowDefinitions="Auto,Auto,*" Padding="16" RowSpacing="12">
+    <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="16" RowSpacing="12">
 
         <!-- Barre de recherche : déclenche LoadCommand à la validation -->
         <SearchBar Grid.Row="0"
@@ -24,8 +24,14 @@
                    Text="{Binding SearchText}"
                    SearchCommand="{Binding LoadCommand}" />
 
+        <!-- Tri -->
+        <HorizontalStackLayout Grid.Row="1" Spacing="8" VerticalOptions="Center">
+            <Label Text="Trier :" Style="{StaticResource CaptionLabel}" VerticalOptions="Center" />
+            <Picker ItemsSource="{Binding SortOptions}" SelectedIndex="{Binding SortIndex}" WidthRequest="150" />
+        </HorizontalStackLayout>
+
         <!-- Filtre par tags (défilement horizontal) -->
-        <ScrollView Grid.Row="1" Orientation="Horizontal" HorizontalScrollBarVisibility="Never"
+        <ScrollView Grid.Row="2" Orientation="Horizontal" HorizontalScrollBarVisibility="Never"
                     IsVisible="{Binding HasTags}">
             <HorizontalStackLayout BindableLayout.ItemsSource="{Binding FilterTags}" Spacing="8">
                 <BindableLayout.ItemTemplate>
@@ -57,7 +63,7 @@
         </ScrollView>
 
         <!-- Pull-to-refresh -->
-        <RefreshView Grid.Row="2"
+        <RefreshView Grid.Row="3"
                      IsRefreshing="{Binding IsBusy}"
                      Command="{Binding LoadCommand}">
 

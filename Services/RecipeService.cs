@@ -16,8 +16,9 @@ public class RecipeService
 
     public RecipeService(IDbContextFactory<AppDbContext> factory) => _factory = factory;
 
-    // --- Lecture : liste (recherche par titre + filtre par tags, cumul ET) ---
-    public async Task<List<Recipe>> GetRecipesAsync(string? search = null, IReadOnlyList<string>? tags = null)
+    // --- Lecture : liste (recherche par titre + filtre par tags, cumul ET + tri) ---
+    public async Task<List<Recipe>> GetRecipesAsync(
+        string? search = null, IReadOnlyList<string>? tags = null, RecipeSort sort = RecipeSort.Favorite)
     {
         using var db = await _factory.CreateDbContextAsync();
 
@@ -38,10 +39,15 @@ public class RecipeService
             }
         }
 
-        return await query
-            .OrderByDescending(r => r.IsFavorite)   // favoris en tête
-            .ThenByDescending(r => r.CreatedAt)
-            .ToListAsync();
+        query = sort switch
+        {
+            RecipeSort.Title => query.OrderBy(r => r.Title),
+            RecipeSort.Time => query.OrderBy(r => (r.PrepMinutes ?? 0) + (r.CookMinutes ?? 0)),
+            RecipeSort.Recent => query.OrderByDescending(r => r.CreatedAt),
+            _ => query.OrderByDescending(r => r.IsFavorite).ThenByDescending(r => r.CreatedAt), // Favoris
+        };
+
+        return await query.ToListAsync();
     }
 
     // Bascule rapidement l'état favori d'une recette (depuis la page détail).
@@ -372,6 +378,9 @@ public class RecipeService
         await db.SaveChangesAsync();
     }
 }
+
+// Critères de tri de la liste des recettes.
+public enum RecipeSort { Favorite, Recent, Title, Time }
 
 // Saisie d'une ligne d'ingrédient venant de l'UI (pas une entité en base).
 // Le service la transforme en Ingredient (catalogue) + RecipeIngredient.

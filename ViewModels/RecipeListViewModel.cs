@@ -27,6 +27,14 @@ public partial class RecipeListViewModel : ObservableObject
     [ObservableProperty]
     private bool hasTags;
 
+    // Tri (l'ordre doit correspondre à l'enum RecipeSort : Favoris, Récent, Titre, Temps).
+    public string[] SortOptions { get; } = { "Favoris", "Récent", "Titre", "Temps" };
+
+    [ObservableProperty]
+    private int sortIndex;
+
+    partial void OnSortIndexChanged(int value) => _ = LoadAsync();
+
     // [ObservableProperty] sur le champ "searchText" génère une propriété "SearchText"
     // qui notifie l'UI à chaque changement.
     [ObservableProperty]
@@ -56,7 +64,7 @@ public partial class RecipeListViewModel : ObservableObject
             var activeTags = FilterTags.Where(t => t.IsSelected).Select(t => t.Name).ToList();
 
             Recipes.Clear();
-            var list = await _service.GetRecipesAsync(SearchText, activeTags);
+            var list = await _service.GetRecipesAsync(SearchText, activeTags, (RecipeSort)SortIndex);
             foreach (var r in list)
                 Recipes.Add(r);
         }
