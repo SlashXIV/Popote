@@ -10,6 +10,8 @@ public class Recipe
     public int? PrepMinutes { get; set; }             // temps de préparation (optionnel)
     public int? CookMinutes { get; set; }             // temps de cuisson (optionnel)
     public string? PhotoPath { get; set; }            // chemin local de la photo du plat (étape 4)
+    public bool IsFavorite { get; set; }              // recette mise en favori (★)
+    public string? Notes { get; set; }                // notes perso (ex. « moins de sel »)
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     // --- Relations (EF Core les remplit via .Include(...) dans les requêtes) ---

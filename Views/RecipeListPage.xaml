@@ -91,7 +91,12 @@
                                     <Image Source="{Binding PhotoPath}" Aspect="AspectFill" />
                                 </Border>
                                 <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
-                                    <Label Text="{Binding Title}" Style="{StaticResource SubtitleLabel}" />
+                                    <HorizontalStackLayout Spacing="6">
+                                        <Label Text="★" Style="{StaticResource SubtitleLabel}"
+                                               IsVisible="{Binding IsFavorite}"
+                                               TextColor="{AppThemeBinding Light={StaticResource AccentLight}, Dark={StaticResource AccentDark}}" />
+                                        <Label Text="{Binding Title}" Style="{StaticResource SubtitleLabel}" />
+                                    </HorizontalStackLayout>
                                     <Label Text="{Binding Servings, StringFormat='{0} portions'}"
                                            Style="{StaticResource CaptionLabel}" />
                                 </VerticalStackLayout>

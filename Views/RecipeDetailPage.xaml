@@ -12,6 +12,7 @@
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{Binding FavoriteToggleText}" Command="{Binding ToggleFavoriteCommand}" />
         <ToolbarItem Text="Éditer" Command="{Binding GoToEditCommand}" />
     </ContentPage.ToolbarItems>
 
@@ -105,6 +106,12 @@
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </VerticalStackLayout>
+            </VerticalStackLayout>
+
+            <!-- Notes perso -->
+            <VerticalStackLayout Spacing="8" IsVisible="{Binding HasNotes}">
+                <Label Text="Notes" Style="{StaticResource SubtitleLabel}" />
+                <Label Text="{Binding Notes}" Style="{StaticResource BodyLabel}" />
             </VerticalStackLayout>
 
         </VerticalStackLayout>

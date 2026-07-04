@@ -104,6 +104,12 @@ public partial class RecipeEditViewModel : ObservableObject
     [ObservableProperty]
     private string cookMinutesText = string.Empty;
 
+    [ObservableProperty]
+    private bool isFavorite;
+
+    [ObservableProperty]
+    private string? notes;
+
     // Les lignes d'ingrédients éditables (nom + quantité + unité).
     public ObservableCollection<IngredientLineViewModel> Ingredients { get; } = new();
 
@@ -169,6 +175,8 @@ public partial class RecipeEditViewModel : ObservableObject
         PhotoPath = r.PhotoPath;
         PrepMinutesText = r.PrepMinutes?.ToString() ?? string.Empty;
         CookMinutesText = r.CookMinutes?.ToString() ?? string.Empty;
+        IsFavorite = r.IsFavorite;
+        Notes = r.Notes;
 
         // Coche les tags de la recette (une fois le catalogue de tags chargé).
         await _catalogsReady;
@@ -215,7 +223,9 @@ public partial class RecipeEditViewModel : ObservableObject
             Servings = Servings,
             PhotoPath = PhotoPath,
             PrepMinutes = ParseMinutes(PrepMinutesText),
-            CookMinutes = ParseMinutes(CookMinutesText)
+            CookMinutes = ParseMinutes(CookMinutesText),
+            IsFavorite = IsFavorite,
+            Notes = string.IsNullOrWhiteSpace(Notes) ? null : Notes.Trim()
         };
 
         // On ne garde que les lignes avec un nom ; la quantité est parsée ici.

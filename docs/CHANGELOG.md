@@ -36,6 +36,7 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 - **Planificateur de repas** : onglet « Semaine », recettes par jour (navigation entre semaines), et génération de la liste de courses de la semaine.
 - **Recherche par ingrédients** (« Cuisiner avec… ») : cocher des ingrédients → recettes qui les contiennent tous.
 - **Mode cuisson** : étapes défilables (`CarouselView`), écran maintenu allumé, minuteur avec décompte et alerte.
+- **Favoris & notes** : étoile (bascule au détail), notes perso par recette, favoris triés en tête de liste.
 
 ### Tests
 - Projet `Popote.Tests` (xUnit) : `ServingsScaler` et l'agrégation des courses

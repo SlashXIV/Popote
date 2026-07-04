@@ -30,6 +30,18 @@ public partial class RecipeDetailViewModel : ObservableObject
     [ObservableProperty]
     private string? photoPath;
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(FavoriteToggleText))]
+    private bool isFavorite;
+
+    public string FavoriteToggleText => IsFavorite ? "★ Favori" : "☆ Favori";
+
+    [ObservableProperty]
+    private string? notes;
+
+    [ObservableProperty]
+    private bool hasNotes;
+
     // Tags de la recette (affichage en puces, lecture seule).
     public ObservableCollection<string> Tags { get; } = new();
 
@@ -67,6 +79,9 @@ public partial class RecipeDetailViewModel : ObservableObject
 
         Title = r.Title;
         PhotoPath = r.PhotoPath;
+        IsFavorite = r.IsFavorite;
+        Notes = r.Notes;
+        HasNotes = !string.IsNullOrWhiteSpace(r.Notes);
 
         Tags.Clear();
         foreach (var rt in r.RecipeTags)
@@ -125,6 +140,13 @@ public partial class RecipeDetailViewModel : ObservableObject
 
     [RelayCommand]
     private Task GoToCookingModeAsync() => Shell.Current.GoToAsync($"CookingModePage?id={RecipeId}");
+
+    [RelayCommand]
+    private async Task ToggleFavoriteAsync()
+    {
+        IsFavorite = !IsFavorite;
+        await _service.SetFavoriteAsync(RecipeId, IsFavorite);
+    }
 
     // Ligne d'ingrédient aux portions de base (interne).
     private record BaseLine(string Name, string? Aisle, double Quantity, string? Unit);

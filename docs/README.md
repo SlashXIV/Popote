@@ -19,6 +19,7 @@ Une feature = un fichier. Pour toute nouvelle feature, créer `docs/<nom>.md`
 - [meal-planner.md](meal-planner.md) — Planificateur de repas (semaine → liste de courses).
 - [cook-with.md](cook-with.md) — Recherche par ingrédients (« Cuisiner avec… »).
 - [cooking-mode.md](cooking-mode.md) — Mode cuisson (étapes défilables, minuteur, écran allumé).
+- [favorites-notes.md](favorites-notes.md) — Favoris (★) & notes perso.
 
 ## Repères
 - Suivi des modifs au fil de l'eau → `../CHANGELOG.md`

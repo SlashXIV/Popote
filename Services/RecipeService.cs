@@ -39,8 +39,19 @@ public class RecipeService
         }
 
         return await query
-            .OrderByDescending(r => r.CreatedAt)
+            .OrderByDescending(r => r.IsFavorite)   // favoris en tête
+            .ThenByDescending(r => r.CreatedAt)
             .ToListAsync();
+    }
+
+    // Bascule rapidement l'état favori d'une recette (depuis la page détail).
+    public async Task SetFavoriteAsync(int id, bool isFavorite)
+    {
+        using var db = await _factory.CreateDbContextAsync();
+        var recipe = await db.Recipes.FindAsync(id);
+        if (recipe is null) return;
+        recipe.IsFavorite = isFavorite;
+        await db.SaveChangesAsync();
     }
 
     // --- Lecture : recettes contenant TOUS les ingrédients donnés (cumul ET) ---
@@ -122,6 +133,8 @@ public class RecipeService
         target.PrepMinutes = recipe.PrepMinutes;
         target.CookMinutes = recipe.CookMinutes;
         target.PhotoPath = recipe.PhotoPath;
+        target.IsFavorite = recipe.IsFavorite;
+        target.Notes = recipe.Notes;
 
         // Lignes d'ingrédients : stratégie simple et fiable pour un usage perso —
         // on vide les lignes existantes (EF supprime les RecipeIngredient orphelins
