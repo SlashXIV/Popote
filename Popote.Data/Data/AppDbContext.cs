@@ -16,6 +16,7 @@ public class AppDbContext : DbContext
     public DbSet<RecipeIngredient> RecipeIngredients => Set<RecipeIngredient>();
     public DbSet<Tag> Tags => Set<Tag>();
     public DbSet<RecipeTag> RecipeTags => Set<RecipeTag>();
+    public DbSet<PlannedMeal> PlannedMeals => Set<PlannedMeal>();
 
     // Configuration fine du schéma (ce que les attributs ne suffisent pas à exprimer).
     protected override void OnModelCreating(ModelBuilder mb)

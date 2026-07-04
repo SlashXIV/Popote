@@ -19,6 +19,7 @@
 - [x] Suppression d'une recette depuis l'UI (balayage + confirmation). _[DEV]_
 - [x] Temps de prépa / cuisson : édition + affichage au détail. _[DEV + DATA]_
 - [x] Migrations EF Core (couche données `Popote.Data`, remplace `EnsureCreated`). _[DATA]_ — voir `docs/data-migrations.md`.
+- [x] Planificateur de repas (semaine → liste de courses). _[DATA + DEV]_ — voir `docs/meal-planner.md`.
 
 ## En cours
 - [ ] (rien pour l'instant)
@@ -26,7 +27,7 @@
 > 🎉 Toutes les priorités **initiales** sont livrées. Nouvelle vague ci-dessous.
 
 ## Prochain (par priorité)
-1. [ ] Planificateur de repas (semaine) → génère la liste de courses. Feature fédératrice. _[DATA + DEV]_
+- [ ] (à définir — voir « Plus tard / idées »)
 
 ## Plus tard / idées
 - [ ] Mode cuisson : étapes plein écran, écran maintenu allumé, minuteur par étape.

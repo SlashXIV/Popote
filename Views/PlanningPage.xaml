@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Popote.ViewModels"
+             xmlns:models="clr-namespace:Popote.Models;assembly=Popote.Data"
+             x:Class="Popote.Views.PlanningPage"
+             x:DataType="vm:PlanningViewModel"
+             x:Name="Page"
+             Title="Semaine">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="16">
+
+            <!-- Navigation de semaine -->
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+                <Button Grid.Column="0" Text="◀" Style="{StaticResource ChipButton}"
+                        Command="{Binding PreviousWeekCommand}" />
+                <Label Grid.Column="1" Text="{Binding WeekLabel}" Style="{StaticResource SubtitleLabel}"
+                       HorizontalOptions="Center" VerticalOptions="Center" />
+                <Button Grid.Column="2" Text="▶" Style="{StaticResource ChipButton}"
+                        Command="{Binding NextWeekCommand}" />
+            </Grid>
+
+            <!-- Jours de la semaine -->
+            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Days}" Spacing="12">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="vm:PlanningDayViewModel">
+                        <Border Style="{StaticResource CardBorder}">
+                            <VerticalStackLayout Spacing="8">
+                                <Label Text="{Binding Label}" Style="{StaticResource SubtitleLabel}" />
+
+                                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Meals}" Spacing="4">
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate x:DataType="models:PlannedMeal">
+                                            <Grid ColumnDefinitions="*,Auto">
+                                                <Label Grid.Column="0" Text="{Binding Recipe.Title}"
+                                                       Style="{StaticResource BodyLabel}" VerticalOptions="Center" />
+                                                <Button Grid.Column="1" Text="✕" WidthRequest="40" HeightRequest="40"
+                                                        BackgroundColor="Transparent" FontSize="16"
+                                                        TextColor="{AppThemeBinding Light={StaticResource TextSecondaryLight}, Dark={StaticResource TextSecondaryDark}}"
+                                                        Command="{Binding BindingContext.RemoveMealCommand, Source={x:Reference Page}}"
+                                                        CommandParameter="{Binding .}" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </VerticalStackLayout>
+
+                                <Button Text="+ Ajouter" Style="{StaticResource ChipButton}" HorizontalOptions="Start"
+                                        Command="{Binding BindingContext.AddMealCommand, Source={x:Reference Page}}"
+                                        CommandParameter="{Binding .}" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
+
+            <!-- Courses de la semaine -->
+            <Button Text="Courses de la semaine" Style="{StaticResource PrimaryButton}"
+                    Command="{Binding GenerateShoppingListCommand}" />
+
+            <VerticalStackLayout IsVisible="{Binding HasShoppingList}" Spacing="8">
+                <Label Text="Liste de courses" Style="{StaticResource SubtitleLabel}" />
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding ShoppingList}" Spacing="8">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="vm:ShoppingAisle">
+                            <VerticalStackLayout Spacing="2">
+                                <HorizontalStackLayout Spacing="8" Padding="0,6,0,2">
+                                    <Border WidthRequest="12" HeightRequest="12" StrokeThickness="0"
+                                            VerticalOptions="Center" StrokeShape="RoundRectangle 6"
+                                            BackgroundColor="{Binding Aisle, Converter={StaticResource AisleToColor}}" />
+                                    <Label Text="{Binding Aisle}" Style="{StaticResource SubtitleLabel}" />
+                                </HorizontalStackLayout>
+                                <VerticalStackLayout BindableLayout.ItemsSource="{Binding .}" Spacing="0">
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate x:DataType="vm:ShoppingItemViewModel">
+                                            <Grid ColumnDefinitions="Auto,*,Auto" Padding="4,2" ColumnSpacing="8">
+                                                <CheckBox Grid.Column="0" IsChecked="{Binding IsChecked}" VerticalOptions="Center"
+                                                          Color="{AppThemeBinding Light={StaticResource AccentLight}, Dark={StaticResource AccentDark}}" />
+                                                <Label Grid.Column="1" Text="{Binding Name}" Style="{StaticResource BodyLabel}" VerticalOptions="Center">
+                                                    <Label.Triggers>
+                                                        <DataTrigger TargetType="Label" Binding="{Binding IsChecked}" Value="True">
+                                                            <Setter Property="TextDecorations" Value="Strikethrough" />
+                                                            <Setter Property="Opacity" Value="0.45" />
+                                                        </DataTrigger>
+                                                    </Label.Triggers>
+                                                </Label>
+                                                <Label Grid.Column="2" Text="{Binding QuantityLabel}" Style="{StaticResource CaptionLabel}" VerticalOptions="Center" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

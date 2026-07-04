@@ -223,6 +223,35 @@ public class RecipeService
             .ThenBy(s => s.Name)
             .ToList();
     }
+
+    // =========================================================================
+    // PLANIFICATEUR : repas prévus sur une plage de dates.
+    // =========================================================================
+    public async Task<List<PlannedMeal>> GetPlannedMealsAsync(DateTime fromInclusive, DateTime toExclusive)
+    {
+        using var db = await _factory.CreateDbContextAsync();
+        return await db.PlannedMeals
+            .Where(p => p.Date >= fromInclusive && p.Date < toExclusive)
+            .Include(p => p.Recipe)
+            .OrderBy(p => p.Date)
+            .ToListAsync();
+    }
+
+    public async Task AddPlannedMealAsync(DateTime date, int recipeId)
+    {
+        using var db = await _factory.CreateDbContextAsync();
+        db.PlannedMeals.Add(new PlannedMeal { Date = date.Date, RecipeId = recipeId });
+        await db.SaveChangesAsync();
+    }
+
+    public async Task RemovePlannedMealAsync(int id)
+    {
+        using var db = await _factory.CreateDbContextAsync();
+        var meal = await db.PlannedMeals.FindAsync(id);
+        if (meal is null) return;
+        db.PlannedMeals.Remove(meal);
+        await db.SaveChangesAsync();
+    }
 }
 
 // Ligne de liste de courses (résultat agrégé, pas une entité en base).

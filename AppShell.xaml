@@ -9,6 +9,9 @@
         <ShellContent Title="Recettes"
                       ContentTemplate="{DataTemplate views:RecipeListPage}"
                       Route="RecipeListPage" />
+        <ShellContent Title="Semaine"
+                      ContentTemplate="{DataTemplate views:PlanningPage}"
+                      Route="PlanningPage" />
         <ShellContent Title="Courses"
                       ContentTemplate="{DataTemplate views:ShoppingListPage}"
                       Route="ShoppingListPage" />

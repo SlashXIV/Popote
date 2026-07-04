@@ -16,6 +16,7 @@
 
             <!-- Converters globaux -->
             <conv:HasTextConverter x:Key="HasText" />
+            <conv:AisleToColorConverter x:Key="AisleToColor" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

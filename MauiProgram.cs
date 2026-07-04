@@ -40,6 +40,9 @@ public static class MauiProgram
         // Liste de courses : onglet unique, singleton.
         builder.Services.AddSingleton<ShoppingListViewModel>();
         builder.Services.AddSingleton<ShoppingListPage>();
+        // Planning : onglet unique, singleton.
+        builder.Services.AddSingleton<PlanningViewModel>();
+        builder.Services.AddSingleton<PlanningPage>();
         // Édition : transient (une instance neuve à chaque ouverture).
         builder.Services.AddTransient<RecipeEditViewModel>();
         builder.Services.AddTransient<RecipeEditPage>();
