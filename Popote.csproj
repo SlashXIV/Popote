@@ -52,4 +52,16 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.9" />
 	</ItemGroup>
 
+	<!-- Couche données (entités + EF Core + migrations) dans une bibliothèque à part. -->
+	<ItemGroup>
+		<ProjectReference Include="Popote.Data\Popote.Data.csproj" />
+	</ItemGroup>
+
+	<!-- La lib est dans un sous-dossier : on l'exclut de la compilation de l'app
+	     (sinon ses .cs seraient compilés deux fois). -->
+	<ItemGroup>
+		<Compile Remove="Popote.Data\**\*.cs" />
+		<None Remove="Popote.Data\**" />
+	</ItemGroup>
+
 </Project>

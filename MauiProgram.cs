@@ -53,14 +53,14 @@ public static class MauiProgram
 
         var app = builder.Build();
 
-        // Crée le fichier SQLite + les tables au tout premier lancement.
-        // (Suffisant pour apprendre ; on passera aux migrations plus tard si besoin.)
+        // Applique les migrations EF Core au démarrage : crée la base au premier
+        // lancement et fait évoluer le schéma ensuite, sans perdre les données.
         using (var scope = app.Services.CreateScope())
         {
             var factory = scope.ServiceProvider
                 .GetRequiredService<IDbContextFactory<AppDbContext>>();
             using var db = factory.CreateDbContext();
-            db.Database.EnsureCreated();
+            db.Database.Migrate();
         }
 
         return app;

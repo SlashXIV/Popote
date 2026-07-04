@@ -33,16 +33,16 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 - **Tags & filtres** : tags à bascule sur une recette (+ création), affichés au détail, et filtre de la liste par tags (cumul ET).
 - **Suppression d'une recette** depuis la liste : balayage vers la gauche + confirmation.
 - **Temps de préparation / cuisson** : éditables sur la recette, affichés au détail (« Prépa 15 min · Cuisson 20 min »).
-- Design system (brief `docs/design-system.md`) : base neutre chaude + accents
-  « earthy naturals » (teal principal) en tokens (`AppColors.xaml`), styles de
-  composants (`AppStyles.xaml`), police Inter, thème clair forcé. Chrome dé-violetté
-  (Shell + barre système + token `Primary` du template + splash/icône). Appliqué aux
-  pages liste, courses et édition.
 
 ### Changed
 - Code source rangé en dossiers : `Models/`, `Data/`, `Services/`, `ViewModels/`, `Views/`.
-- `RecipeService.SaveRecipeAsync` prend désormais aussi les lignes d'ingrédients
-  (`IReadOnlyList<IngredientInput>`).
+- `RecipeService.SaveRecipeAsync` prend désormais aussi les lignes d'ingrédients et les tags.
+- Design system (brief `docs/design-system.md`) : base neutre chaude + accents
+  « earthy naturals » (teal principal) en tokens (`AppColors.xaml`), styles de
+  composants (`AppStyles.xaml`), police Inter, thème clair forcé. Chrome dé-violetté
+  (Shell + barre système + token `Primary` du template + splash/icône).
+- Couche données extraite dans une bibliothèque **`Popote.Data`** ; passage aux
+  **migrations EF Core** (`Database.Migrate()` au démarrage) à la place d'`EnsureCreated()`.
 
 ### Fixed
 - Violet résiduel du template MAUI : les tokens `Primary`/`Secondary`/`Tertiary`

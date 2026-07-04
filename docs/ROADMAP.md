@@ -18,6 +18,7 @@
 - [x] Tags et filtres (puces à bascule + filtre ET). _[DATA]_ — voir `docs/recipe-tags.md`.
 - [x] Suppression d'une recette depuis l'UI (balayage + confirmation). _[DEV]_
 - [x] Temps de prépa / cuisson : édition + affichage au détail. _[DEV + DATA]_
+- [x] Migrations EF Core (couche données `Popote.Data`, remplace `EnsureCreated`). _[DATA]_ — voir `docs/data-migrations.md`.
 
 ## En cours
 - [ ] (rien pour l'instant)
@@ -36,7 +37,6 @@
 - [ ] Import d'une recette (URL ou texte collé) ; import de mes notes existantes.
 - [ ] Export / partage d'une recette (texte) + sauvegarde/restauration du `.db3`.
 - [ ] Tests unitaires (au moins `ServingsScaler` et la requête liste de courses).
-- [ ] Migrations EF Core (remplacer `EnsureCreated`) pour faire évoluer le schéma sans perte de données.
 - [ ] Corriger l'alerte NU1903 (`SQLitePCLRaw`) ; `PickPhotoAsync` déprécié → `PickPhotosAsync`.
 - [ ] Build Release Android signé (APK installable sans PC ; trimming EF Core).
 
