@@ -62,6 +62,8 @@
 	<ItemGroup>
 		<Compile Remove="Popote.Data\**\*.cs" />
 		<None Remove="Popote.Data\**" />
+		<Compile Remove="Popote.Tests\**\*.cs" />
+		<None Remove="Popote.Tests\**" />
 	</ItemGroup>
 
 </Project>

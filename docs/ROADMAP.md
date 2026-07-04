@@ -20,6 +20,8 @@
 - [x] Temps de prépa / cuisson : édition + affichage au détail. _[DEV + DATA]_
 - [x] Migrations EF Core (couche données `Popote.Data`, remplace `EnsureCreated`). _[DATA]_ — voir `docs/data-migrations.md`.
 - [x] Planificateur de repas (semaine → liste de courses). _[DATA + DEV]_ — voir `docs/meal-planner.md`.
+- [x] Tests unitaires (ServingsScaler + agrégation des courses, xUnit). _[DEV]_ — voir `docs/tests.md`.
+- [x] Nettoyage des API MAUI dépréciées (`DisplayAlertAsync`, `PickPhotosAsync`…). _[DEV]_
 
 ## En cours
 - [ ] (rien pour l'instant)
@@ -37,8 +39,7 @@
 - [ ] Tri de la liste (date / titre / temps).
 - [ ] Import d'une recette (URL ou texte collé) ; import de mes notes existantes.
 - [ ] Export / partage d'une recette (texte) + sauvegarde/restauration du `.db3`.
-- [ ] Tests unitaires (au moins `ServingsScaler` et la requête liste de courses).
-- [ ] Corriger l'alerte NU1903 (`SQLitePCLRaw`) ; `PickPhotoAsync` déprécié → `PickPhotosAsync`.
+- [ ] Corriger l'alerte NU1903 (`SQLitePCLRaw` transitif) quand une version corrigée sera tirable par EF Core.
 - [ ] Build Release Android signé (APK installable sans PC ; trimming EF Core).
 
 ## Non-objectifs (pour ne pas se disperser)

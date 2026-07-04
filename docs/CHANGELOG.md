@@ -35,8 +35,13 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 - **Temps de préparation / cuisson** : éditables sur la recette, affichés au détail (« Prépa 15 min · Cuisson 20 min »).
 - **Planificateur de repas** : onglet « Semaine », recettes par jour (navigation entre semaines), et génération de la liste de courses de la semaine.
 
+### Tests
+- Projet `Popote.Tests` (xUnit) : `ServingsScaler` et l'agrégation des courses
+  (`ShoppingListBuilder`, logique pure extraite dans `Popote.Data`).
+
 ### Changed
 - Code source rangé en dossiers : `Models/`, `Data/`, `Services/`, `ViewModels/`, `Views/`.
+- API MAUI dépréciées remplacées par leurs variantes `…Async` (`DisplayAlertAsync`, `PickPhotosAsync`…).
 - `RecipeService.SaveRecipeAsync` prend désormais aussi les lignes d'ingrédients et les tags.
 - Design system (brief `docs/design-system.md`) : base neutre chaude + accents
   « earthy naturals » (teal principal) en tokens (`AppColors.xaml`), styles de
