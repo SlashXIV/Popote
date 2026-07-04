@@ -88,12 +88,12 @@ public partial class PlanningViewModel : ObservableObject
         var recipes = await _service.GetRecipesAsync();
         if (recipes.Count == 0)
         {
-            await Shell.Current.DisplayAlert("Aucune recette", "Crée d'abord une recette.", "OK");
+            await Shell.Current.DisplayAlertAsync("Aucune recette", "Crée d'abord une recette.", "OK");
             return;
         }
 
         var titles = recipes.Select(r => r.Title).ToArray();
-        var choice = await Shell.Current.DisplayActionSheet($"Ajouter — {day.Label}", "Annuler", null, titles);
+        var choice = await Shell.Current.DisplayActionSheetAsync($"Ajouter — {day.Label}", "Annuler", null, titles);
         if (string.IsNullOrEmpty(choice) || choice == "Annuler") return;
 
         var recipe = recipes.FirstOrDefault(r => r.Title == choice);

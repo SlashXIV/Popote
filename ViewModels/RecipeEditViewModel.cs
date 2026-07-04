@@ -113,7 +113,8 @@ public partial class RecipeEditViewModel : ObservableObject
     {
         try
         {
-            var photo = await MediaPicker.Default.PickPhotoAsync();
+            var photos = await MediaPicker.Default.PickPhotosAsync();
+            var photo = photos?.FirstOrDefault();
             if (photo is not null)
                 PhotoPath = await CopyToAppDataAsync(photo);
         }

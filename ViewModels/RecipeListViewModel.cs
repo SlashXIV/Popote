@@ -98,7 +98,7 @@ public partial class RecipeListViewModel : ObservableObject
     {
         if (recipe is null) return;
 
-        var confirm = await Shell.Current.DisplayAlert(
+        var confirm = await Shell.Current.DisplayAlertAsync(
             "Supprimer la recette ?",
             $"« {recipe.Title} » sera définitivement supprimée.",
             "Supprimer", "Annuler");
