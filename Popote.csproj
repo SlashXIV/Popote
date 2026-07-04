@@ -27,6 +27,16 @@
 		<SupportedOSPlatformVersion>21.0</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
+	<!-- Signature de l'APK Release. Les mots de passe NE sont PAS ici :
+	     ils se passent au build (-p:AndroidSigningKeyPass=… -p:AndroidSigningStorePass=…). -->
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<AndroidKeyStore>true</AndroidKeyStore>
+		<AndroidSigningKeyStore>popote.keystore</AndroidSigningKeyStore>
+		<AndroidSigningKeyAlias>popote</AndroidSigningKeyAlias>
+		<!-- Pas de trimming : EF Core s'appuie sur la réflexion. -->
+		<AndroidLinkMode>None</AndroidLinkMode>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- Icône de l'app -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#8CB369" />

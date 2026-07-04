@@ -25,6 +25,7 @@
 - [x] Recherche par ingrédients (« cuisiner avec X, Y », cumul ET). _[DATA]_ — voir `docs/cook-with.md`.
 - [x] Mode cuisson : étapes défilables, écran maintenu allumé, minuteur. _[DEV]_ — voir `docs/cooking-mode.md`.
 - [x] Favoris (★) + notes perso par recette. _[DATA + DEV]_ — voir `docs/favorites-notes.md`.
+- [x] Build Release Android **signé** (APK autonome ; trimming off pour EF Core). _[DEV]_ — voir `README.md`.
 
 ## En cours
 - [ ] (rien pour l'instant)
@@ -40,7 +41,6 @@
 - [ ] Import d'une recette (URL ou texte collé) ; import de mes notes existantes.
 - [ ] Export / partage d'une recette (texte) + sauvegarde/restauration du `.db3`.
 - [ ] Corriger l'alerte NU1903 (`SQLitePCLRaw` transitif) quand une version corrigée sera tirable par EF Core.
-- [ ] Build Release Android signé (APK installable sans PC ; trimming EF Core).
 
 ## Non-objectifs (pour ne pas se disperser)
 - Pas de backend / cloud / compte utilisateur pour l'instant : 100 % local.

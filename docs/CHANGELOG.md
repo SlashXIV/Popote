@@ -37,6 +37,7 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 - **Recherche par ingrédients** (« Cuisiner avec… ») : cocher des ingrédients → recettes qui les contiennent tous.
 - **Mode cuisson** : étapes défilables (`CarouselView`), écran maintenu allumé, minuteur avec décompte et alerte.
 - **Favoris & notes** : étoile (bascule au détail), notes perso par recette, favoris triés en tête de liste.
+- **Build Release signé** : configuration de signature APK (keystore hors dépôt), trimming désactivé pour EF Core ; APK autonome installable sans PC.
 
 ### Tests
 - Projet `Popote.Tests` (xUnit) : `ServingsScaler` et l'agrégation des courses

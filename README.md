@@ -35,6 +35,25 @@ dotnet build -t:Run -f net10.0-android `
 ```
 > Astuce : définir `JAVA_HOME` vers le JDK 17 permet d'omettre `-p:JavaSdkDirectory`.
 
+## Build Release (APK signé)
+Produit un APK autonome, installable sans PC. Nécessite un **keystore** (clé de
+signature) — **non versionné** ; garde-le précieusement, Android exige la **même clé**
+pour toutes les mises à jour.
+
+Créer la clé une fois (adapter les mots de passe) :
+```sh
+keytool -genkeypair -v -keystore popote.keystore -alias popote `
+  -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Popote, O=Popote, C=FR"
+```
+Publier l'APK signé (mots de passe passés au build, jamais commités) :
+```sh
+dotnet publish -c Release -f net10.0-android -p:AndroidPackageFormat=apk `
+  -p:AndroidSigningKeyPass=<motdepasse> -p:AndroidSigningStorePass=<motdepasse>
+```
+→ `bin/Release/net10.0-android/publish/onl.nci.popote-Signed.apk`.
+Installer : `adb install <chemin>.apk` (désinstaller d'abord une version Debug : signature différente).
+> Trimming désactivé en Release (`AndroidLinkMode=None`) car EF Core utilise la réflexion.
+
 ## Arborescence
 ```
 Popote.csproj      Projet MAUI (cible net10.0-android)

@@ -34,3 +34,7 @@ Thumbs.db
 # Exécutables / installeurs égarés (ne rien versionner de binaire non maîtrisé)
 *.exe
 *.msi
+
+# Clés de signature Android — NE JAMAIS versionner (secrets)
+*.keystore
+*.jks
