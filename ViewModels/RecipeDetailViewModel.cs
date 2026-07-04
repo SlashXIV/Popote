@@ -30,6 +30,12 @@ public partial class RecipeDetailViewModel : ObservableObject
     [ObservableProperty]
     private string? photoPath;
 
+    // Tags de la recette (affichage en puces, lecture seule).
+    public ObservableCollection<string> Tags { get; } = new();
+
+    [ObservableProperty]
+    private bool hasTags;
+
     // Rappel des portions de base (libellé d'aide).
     [ObservableProperty]
     private string baseServingsLabel = string.Empty;
@@ -54,6 +60,12 @@ public partial class RecipeDetailViewModel : ObservableObject
 
         Title = r.Title;
         PhotoPath = r.PhotoPath;
+
+        Tags.Clear();
+        foreach (var rt in r.RecipeTags)
+            Tags.Add(rt.Tag.Name);
+        HasTags = Tags.Count > 0;
+
         _baseServings = r.Servings <= 0 ? 1 : r.Servings;
         BaseServingsLabel = $"Recette de base : {_baseServings} portion" + (_baseServings > 1 ? "s" : "");
 

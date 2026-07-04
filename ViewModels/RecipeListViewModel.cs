@@ -18,6 +18,13 @@ public partial class RecipeListViewModel : ObservableObject
     // Collection observable : la UI se met à jour automatiquement quand on ajoute/retire.
     public ObservableCollection<Recipe> Recipes { get; } = new();
 
+    // Tags de filtre (puces à bascule). Filtre en ET : une recette doit porter
+    // tous les tags actifs.
+    public ObservableCollection<TagToggleViewModel> FilterTags { get; } = new();
+
+    [ObservableProperty]
+    private bool hasTags;
+
     // [ObservableProperty] sur le champ "searchText" génère une propriété "SearchText"
     // qui notifie l'UI à chaque changement.
     [ObservableProperty]
@@ -35,8 +42,19 @@ public partial class RecipeListViewModel : ObservableObject
         IsBusy = true;
         try
         {
+            // Rafraîchit les tags de filtre en conservant les sélections actives.
+            var selected = FilterTags.Where(t => t.IsSelected).Select(t => t.Name)
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+            var allTags = await _service.GetTagsAsync();
+            FilterTags.Clear();
+            foreach (var name in allTags)
+                FilterTags.Add(new TagToggleViewModel(name, selected.Contains(name)));
+            HasTags = FilterTags.Count > 0;
+
+            var activeTags = FilterTags.Where(t => t.IsSelected).Select(t => t.Name).ToList();
+
             Recipes.Clear();
-            var list = await _service.GetRecipesAsync(SearchText);
+            var list = await _service.GetRecipesAsync(SearchText, activeTags);
             foreach (var r in list)
                 Recipes.Add(r);
         }
@@ -44,6 +62,15 @@ public partial class RecipeListViewModel : ObservableObject
         {
             IsBusy = false;
         }
+    }
+
+    // Active/désactive un tag de filtre puis recharge la liste.
+    [RelayCommand]
+    private async Task ToggleFilterAsync(TagToggleViewModel? tag)
+    {
+        if (tag is null) return;
+        tag.IsSelected = !tag.IsSelected;
+        await LoadAsync();
     }
 
     // Navigation vers la page d'édition.

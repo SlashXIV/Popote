@@ -16,8 +16,8 @@ public class RecipeService
 
     public RecipeService(IDbContextFactory<AppDbContext> factory) => _factory = factory;
 
-    // --- Lecture : liste (avec recherche optionnelle par titre) ---
-    public async Task<List<Recipe>> GetRecipesAsync(string? search = null)
+    // --- Lecture : liste (recherche par titre + filtre par tags, cumul ET) ---
+    public async Task<List<Recipe>> GetRecipesAsync(string? search = null, IReadOnlyList<string>? tags = null)
     {
         using var db = await _factory.CreateDbContextAsync();
 
@@ -28,9 +28,26 @@ public class RecipeService
         if (!string.IsNullOrWhiteSpace(search))
             query = query.Where(r => r.Title.Contains(search));
 
+        // Filtre ET : la recette doit porter CHACUN des tags sélectionnés.
+        if (tags is not null)
+        {
+            foreach (var tag in tags)
+            {
+                var name = tag; // capture par itération
+                query = query.Where(r => r.RecipeTags.Any(rt => rt.Tag.Name == name));
+            }
+        }
+
         return await query
             .OrderByDescending(r => r.CreatedAt)
             .ToListAsync();
+    }
+
+    // --- Lecture : tous les tags (pour l'édition et le filtre) ---
+    public async Task<List<string>> GetTagsAsync()
+    {
+        using var db = await _factory.CreateDbContextAsync();
+        return await db.Tags.OrderBy(t => t.Name).Select(t => t.Name).ToListAsync();
     }
 
     // --- Lecture : une recette complète (avec ses ingrédients) ---
@@ -58,7 +75,7 @@ public class RecipeService
     // Les lignes (nom + quantité + unité) arrivent sous forme de DTO (IngredientInput).
     // Le service se charge du catalogue : pour chaque nom, on réutilise l'Ingredient
     // existant (recherche insensible à la casse) ou on le crée.
-    public async Task SaveRecipeAsync(Recipe recipe, IReadOnlyList<IngredientInput> ingredients)
+    public async Task SaveRecipeAsync(Recipe recipe, IReadOnlyList<IngredientInput> ingredients, IReadOnlyList<string> tags)
     {
         using var db = await _factory.CreateDbContextAsync();
 
@@ -71,9 +88,10 @@ public class RecipeService
         }
         else
         {
-            // Recette existante : on charge aussi ses lignes pour pouvoir les remplacer
+            // Recette existante : on charge ses lignes ET ses tags pour les remplacer
             var existing = await db.Recipes
                 .Include(r => r.Ingredients)
+                .Include(r => r.RecipeTags)
                 .FirstOrDefaultAsync(r => r.Id == recipe.Id);
             if (existing is null) return;
             target = existing;
@@ -111,7 +129,32 @@ public class RecipeService
             });
         }
 
+        // Tags : même stratégie (on vide et on recrée les liaisons).
+        target.RecipeTags.Clear();
+        var tagCache = new Dictionary<string, Tag>(StringComparer.OrdinalIgnoreCase);
+        foreach (var raw in tags)
+        {
+            if (string.IsNullOrWhiteSpace(raw))
+                continue;
+            var tag = await GetOrCreateTagAsync(db, tagCache, raw.Trim());
+            target.RecipeTags.Add(new RecipeTag { Recipe = target, Tag = tag });
+        }
+
         await db.SaveChangesAsync();
+    }
+
+    // Trouve le tag par nom (insensible à la casse) ou le crée.
+    private static async Task<Tag> GetOrCreateTagAsync(
+        AppDbContext db, Dictionary<string, Tag> cache, string name)
+    {
+        if (cache.TryGetValue(name, out var tag))
+            return tag;
+
+        var lower = name.ToLower();
+        var existing = await db.Tags.FirstOrDefaultAsync(t => t.Name.ToLower() == lower);
+        tag = existing ?? new Tag { Name = name };
+        cache[name] = tag;
+        return tag;
     }
 
     // Trouve l'ingrédient par nom (insensible à la casse) ou le crée.

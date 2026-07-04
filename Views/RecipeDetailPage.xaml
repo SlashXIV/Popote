@@ -25,6 +25,18 @@
 
             <Label Text="{Binding Title}" Style="{StaticResource DisplayLabel}" />
 
+            <!-- Tags (lecture seule) -->
+            <FlexLayout BindableLayout.ItemsSource="{Binding Tags}" Wrap="Wrap" Direction="Row"
+                        IsVisible="{Binding HasTags}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="x:String">
+                        <Border Style="{StaticResource Chip}" Margin="0,0,8,8" FlexLayout.Shrink="0">
+                            <Label Text="{Binding .}" Style="{StaticResource ChipLabel}" LineBreakMode="NoWrap" />
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </FlexLayout>
+
             <!-- Portions : multiplicateur rapide + ajustement fin, recalcule les quantités -->
             <Border Style="{StaticResource CardBorder}">
                 <VerticalStackLayout Spacing="12">

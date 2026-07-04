@@ -13,6 +13,7 @@ Une feature = un fichier. Pour toute nouvelle feature, créer `docs/<nom>.md`
 - [shopping-list.md](shopping-list.md) — Liste de courses agrégée par rayon.
 - [recipe-detail.md](recipe-detail.md) — Page détail + portions ajustables (chips, étapes numérotées).
 - [recipe-photo.md](recipe-photo.md) — Photo du plat (galerie/appareil photo).
+- [recipe-tags.md](recipe-tags.md) — Tags & filtres (puces à bascule, filtre ET).
 
 ## Repères
 - Suivi des modifs au fil de l'eau → `../CHANGELOG.md`

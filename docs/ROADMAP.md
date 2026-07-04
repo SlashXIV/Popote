@@ -15,12 +15,13 @@
 - [x] Édition du rayon des ingrédients (Picker par ligne) → pastilles colorées du détail + meilleur regroupement des courses. _[DATA]_
 - [x] Liste de courses actionnable : cases à cocher pour barrer les articles. _[DEV]_
 - [x] Photo du plat (galerie/appareil photo via `MediaPicker`) : miniature en liste, photo en détail. _[DEV]_ — voir `docs/recipe-photo.md`.
+- [x] Tags et filtres (puces à bascule + filtre ET). _[DATA]_ — voir `docs/recipe-tags.md`.
 
 ## En cours
 - [ ] (rien pour l'instant)
 
 ## Prochain (par priorité)
-1. [ ] Tags et filtres (végé, rapide, batch cooking…). _[DATA]_
+- [ ] 🎉 Toutes les priorités initiales sont livrées. Prochaines pistes : voir « Plus tard / idées ».
 
 ## Plus tard / idées
 - [ ] Recherche « qu'est-ce que je peux cuisiner avec les ingrédients X, Y ».

@@ -15,11 +15,12 @@ namespace Popote.ViewModels;
 public partial class RecipeEditViewModel : ObservableObject
 {
     private readonly RecipeService _service;
+    private readonly Task _catalogsReady;
 
     public RecipeEditViewModel(RecipeService service)
     {
         _service = service;
-        _ = LoadKnownIngredientsAsync(); // suggestions du catalogue
+        _catalogsReady = LoadCatalogsAsync(); // suggestions d'ingrédients + tags
     }
 
     // Ingrédients déjà connus (catalogue : nom + rayon), proposés en chips cliquables.
@@ -28,13 +29,48 @@ public partial class RecipeEditViewModel : ObservableObject
     [ObservableProperty]
     private bool hasKnownIngredients;
 
-    private async Task LoadKnownIngredientsAsync()
+    // Tags disponibles en puces à bascule (sélectionné = présent sur la recette).
+    public ObservableCollection<TagToggleViewModel> Tags { get; } = new();
+
+    [ObservableProperty]
+    private string newTagText = string.Empty;
+
+    private async Task LoadCatalogsAsync()
     {
         var items = await _service.GetIngredientCatalogAsync();
         KnownIngredients.Clear();
         foreach (var item in items)
             KnownIngredients.Add(item);
         HasKnownIngredients = KnownIngredients.Count > 0;
+
+        var tags = await _service.GetTagsAsync();
+        Tags.Clear();
+        foreach (var name in tags)
+            Tags.Add(new TagToggleViewModel(name));
+    }
+
+    // Bascule un tag (présent/absent sur la recette).
+    [RelayCommand]
+    private void ToggleTag(TagToggleViewModel? tag)
+    {
+        if (tag is not null)
+            tag.IsSelected = !tag.IsSelected;
+    }
+
+    // Crée un nouveau tag (ou sélectionne l'existant) depuis le champ de saisie.
+    [RelayCommand]
+    private void AddNewTag()
+    {
+        var name = NewTagText?.Trim();
+        if (string.IsNullOrWhiteSpace(name)) return;
+
+        var existing = Tags.FirstOrDefault(t => string.Equals(t.Name, name, StringComparison.OrdinalIgnoreCase));
+        if (existing is not null)
+            existing.IsSelected = true;
+        else
+            Tags.Add(new TagToggleViewModel(name, isSelected: true));
+
+        NewTagText = string.Empty;
     }
 
     // Tap sur une suggestion -> ajoute une ligne pré-remplie (nom + rayon connu).
@@ -124,6 +160,12 @@ public partial class RecipeEditViewModel : ObservableObject
         Servings = r.Servings;
         PhotoPath = r.PhotoPath;
 
+        // Coche les tags de la recette (une fois le catalogue de tags chargé).
+        await _catalogsReady;
+        var recipeTags = r.RecipeTags.Select(rt => rt.Tag.Name).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        foreach (var toggle in Tags)
+            toggle.IsSelected = recipeTags.Contains(toggle.Name);
+
         Ingredients.Clear();
         foreach (var ri in r.Ingredients)
         {
@@ -170,7 +212,9 @@ public partial class RecipeEditViewModel : ObservableObject
             .Select(l => new IngredientInput(l.Name, ParseQuantity(l.QuantityText), l.Unit, l.Aisle))
             .ToList();
 
-        await _service.SaveRecipeAsync(recipe, inputs);
+        var tagNames = Tags.Where(t => t.IsSelected).Select(t => t.Name).ToList();
+
+        await _service.SaveRecipeAsync(recipe, inputs, tagNames);
         await Shell.Current.GoToAsync(".."); // ".." = retour à la page précédente (la liste)
     }
 

@@ -26,5 +26,5 @@ Créer, lister, consulter et modifier des recettes stockées localement.
 - Entité `Recipe`, avec relations vers `RecipeIngredient` et `RecipeTag` (exploitées plus tard).
 
 ## Reste à faire / limites connues
-- L'édition des ingrédients est désormais gérée (voir `recipe-ingredients.md`) ; les tags restent à faire (voir ROADMAP).
+- Ingrédients (voir `recipe-ingredients.md`) et tags (voir `recipe-tags.md`) désormais gérés à l'édition.
 - Pas de suppression depuis l'UI pour l'instant (la méthode service existe).
