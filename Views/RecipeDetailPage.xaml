@@ -40,6 +40,9 @@
             <Label Text="{Binding TimesLabel}" Style="{StaticResource CaptionLabel}"
                    IsVisible="{Binding HasTimes}" />
 
+            <Button Text="▶  Mode cuisson" Style="{StaticResource PrimaryButton}"
+                    Command="{Binding GoToCookingModeCommand}" />
+
             <!-- Portions : multiplicateur rapide + ajustement fin, recalcule les quantités -->
             <Border Style="{StaticResource CardBorder}">
                 <VerticalStackLayout Spacing="12">

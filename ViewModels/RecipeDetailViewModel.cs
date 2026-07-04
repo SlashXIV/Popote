@@ -86,15 +86,10 @@ public partial class RecipeDetailViewModel : ObservableObject
         foreach (var ri in r.Ingredients)
             _baseLines.Add(new BaseLine(ri.Ingredient.Name, ri.Ingredient.Aisle, ri.Quantity, ri.Unit));
 
-        // Préparation : une ligne non vide = une étape.
-        // On retire une éventuelle numérotation déjà tapée (« 1. », « 2) »…)
-        // pour ne pas doublonner avec le badge numéroté.
+        // Préparation : une ligne non vide = une étape (parsing partagé avec le mode cuisson).
         Steps.Clear();
         var number = 1;
-        foreach (var step in (r.Instructions ?? string.Empty)
-                     .Split('\n')
-                     .Select(s => StripLeadingNumber(s.Trim()))
-                     .Where(s => s.Length > 0))
+        foreach (var step in StepParser.Parse(r.Instructions))
             Steps.Add(new StepLine(number++, step));
 
         TargetServings = _baseServings; // déclenche le recalcul
@@ -116,10 +111,6 @@ public partial class RecipeDetailViewModel : ObservableObject
         }
     }
 
-    // Retire une numérotation en tête de ligne : « 1. », « 2) », « 3 - »…
-    private static string StripLeadingNumber(string line)
-        => Regex.Replace(line, @"^\s*\d+\s*[.)\-–]\s*", "");
-
     // Multiplie la recette par rapport aux portions de BASE (×½, ×1, ×2, ×3…).
     // Plus intuitif que de saisir un nombre absolu de portions.
     [RelayCommand]
@@ -131,6 +122,9 @@ public partial class RecipeDetailViewModel : ObservableObject
 
     [RelayCommand]
     private Task GoToEditAsync() => Shell.Current.GoToAsync($"RecipeEditPage?id={RecipeId}");
+
+    [RelayCommand]
+    private Task GoToCookingModeAsync() => Shell.Current.GoToAsync($"CookingModePage?id={RecipeId}");
 
     // Ligne d'ingrédient aux portions de base (interne).
     private record BaseLine(string Name, string? Aisle, double Quantity, string? Unit);

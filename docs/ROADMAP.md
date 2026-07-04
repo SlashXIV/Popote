@@ -23,6 +23,7 @@
 - [x] Tests unitaires (ServingsScaler + agrégation des courses, xUnit). _[DEV]_ — voir `docs/tests.md`.
 - [x] Nettoyage des API MAUI dépréciées (`DisplayAlertAsync`, `PickPhotosAsync`…). _[DEV]_
 - [x] Recherche par ingrédients (« cuisiner avec X, Y », cumul ET). _[DATA]_ — voir `docs/cook-with.md`.
+- [x] Mode cuisson : étapes défilables, écran maintenu allumé, minuteur. _[DEV]_ — voir `docs/cooking-mode.md`.
 
 ## En cours
 - [ ] (rien pour l'instant)
@@ -33,7 +34,6 @@
 - [ ] (à définir — voir « Plus tard / idées »)
 
 ## Plus tard / idées
-- [ ] Mode cuisson : étapes plein écran, écran maintenu allumé, minuteur par étape.
 - [ ] Favoris / note (étoiles) + notes perso par recette.
 - [ ] Liste de courses : ajouter un article manuel + persister les cases cochées.
 - [ ] Tri de la liste (date / titre / temps).
