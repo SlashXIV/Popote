@@ -12,5 +12,6 @@ public partial class AppShell : Shell
         // pour pouvoir y naviguer avec Shell.Current.GoToAsync("RecipeEditPage").
         Routing.RegisterRoute("RecipeEditPage", typeof(RecipeEditPage));
         Routing.RegisterRoute("RecipeDetailPage", typeof(RecipeDetailPage));
+        Routing.RegisterRoute("CookWithPage", typeof(CookWithPage));
     }
 }

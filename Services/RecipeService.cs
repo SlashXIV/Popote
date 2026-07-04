@@ -43,6 +43,24 @@ public class RecipeService
             .ToListAsync();
     }
 
+    // --- Lecture : recettes contenant TOUS les ingrédients donnés (cumul ET) ---
+    // « Qu'est-ce que je peux cuisiner avec X, Y ? »
+    public async Task<List<Recipe>> FindRecipesByIngredientsAsync(IReadOnlyList<string> ingredientNames)
+    {
+        using var db = await _factory.CreateDbContextAsync();
+
+        var query = db.Recipes.AsQueryable();
+        foreach (var ingredient in ingredientNames)
+        {
+            var name = ingredient; // capture par itération
+            query = query.Where(r => r.Ingredients.Any(ri => ri.Ingredient.Name == name));
+        }
+
+        return await query
+            .OrderByDescending(r => r.CreatedAt)
+            .ToListAsync();
+    }
+
     // --- Lecture : tous les tags (pour l'édition et le filtre) ---
     public async Task<List<string>> GetTagsAsync()
     {

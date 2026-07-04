@@ -49,6 +49,9 @@ public static class MauiProgram
         // Détail (consultation) : transient.
         builder.Services.AddTransient<RecipeDetailViewModel>();
         builder.Services.AddTransient<RecipeDetailPage>();
+        // Cuisiner avec… (recherche par ingrédients) : transient.
+        builder.Services.AddTransient<CookWithViewModel>();
+        builder.Services.AddTransient<CookWithPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

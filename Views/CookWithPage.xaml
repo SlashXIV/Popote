@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Popote.ViewModels"
+             xmlns:models="clr-namespace:Popote.Models;assembly=Popote.Data"
+             x:Class="Popote.Views.CookWithPage"
+             x:DataType="vm:CookWithViewModel"
+             x:Name="Page"
+             Title="Cuisiner avec…">
+
+    <Grid RowDefinitions="Auto,Auto,*" Padding="16" RowSpacing="12">
+
+        <Label Grid.Row="0" Text="Coche les ingrédients que tu as" Style="{StaticResource SubtitleLabel}" />
+
+        <!-- Ingrédients du catalogue (défilement si nombreux) -->
+        <ScrollView Grid.Row="1" Orientation="Vertical" MaximumHeightRequest="200">
+            <FlexLayout BindableLayout.ItemsSource="{Binding Ingredients}" Wrap="Wrap" Direction="Row">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="vm:TagToggleViewModel">
+                        <Border Margin="0,0,8,8" FlexLayout.Shrink="0" StrokeThickness="0"
+                                Padding="12,6" StrokeShape="RoundRectangle 999"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryContainerLight}, Dark={StaticResource PrimaryContainerDark}}">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding BindingContext.ToggleCommand, Source={x:Reference Page}}"
+                                    CommandParameter="{Binding .}" />
+                            </Border.GestureRecognizers>
+                            <Label Text="{Binding Name}" FontFamily="InterMedium" FontSize="13"
+                                   TextColor="{AppThemeBinding Light={StaticResource PrimaryLight}, Dark={StaticResource PrimaryDark}}">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
+                                        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource OnAccentLight}, Dark={StaticResource OnAccentDark}}" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                            <Border.Triggers>
+                                <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
+                                    <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource AccentLight}, Dark={StaticResource AccentDark}}" />
+                                </DataTrigger>
+                            </Border.Triggers>
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </FlexLayout>
+        </ScrollView>
+
+        <!-- Résultats -->
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Results}" SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Recipe">
+                    <Border Style="{StaticResource CardBorder}" Margin="0,4">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Command="{Binding BindingContext.GoToDetailCommand, Source={x:Reference Page}}"
+                                CommandParameter="{Binding .}" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="{Binding Title}" Style="{StaticResource SubtitleLabel}" />
+                            <Label Text="{Binding Servings, StringFormat='{0} portions'}" Style="{StaticResource CaptionLabel}" />
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            <CollectionView.EmptyView>
+                <Label Text="Coche des ingrédients pour voir les recettes possibles."
+                       Style="{StaticResource CaptionLabel}" HorizontalOptions="Center" Margin="24" />
+            </CollectionView.EmptyView>
+        </CollectionView>
+    </Grid>
+</ContentPage>

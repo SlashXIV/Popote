@@ -84,6 +84,10 @@ public partial class RecipeListViewModel : ObservableObject
         await Shell.Current.GoToAsync(route);
     }
 
+    // Ouvre « Cuisiner avec… » (recherche par ingrédients).
+    [RelayCommand]
+    private async Task GoToCookWithAsync() => await Shell.Current.GoToAsync("CookWithPage");
+
     // Tap sur une recette -> page de consultation (détail).
     [RelayCommand]
     private async Task GoToDetailAsync(Recipe? recipe)

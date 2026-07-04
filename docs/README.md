@@ -17,6 +17,7 @@ Une feature = un fichier. Pour toute nouvelle feature, créer `docs/<nom>.md`
 - [recipe-photo.md](recipe-photo.md) — Photo du plat (galerie/appareil photo).
 - [recipe-tags.md](recipe-tags.md) — Tags & filtres (puces à bascule, filtre ET).
 - [meal-planner.md](meal-planner.md) — Planificateur de repas (semaine → liste de courses).
+- [cook-with.md](cook-with.md) — Recherche par ingrédients (« Cuisiner avec… »).
 
 ## Repères
 - Suivi des modifs au fil de l'eau → `../CHANGELOG.md`

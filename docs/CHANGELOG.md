@@ -34,6 +34,7 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 - **Suppression d'une recette** depuis la liste : balayage vers la gauche + confirmation.
 - **Temps de préparation / cuisson** : éditables sur la recette, affichés au détail (« Prépa 15 min · Cuisson 20 min »).
 - **Planificateur de repas** : onglet « Semaine », recettes par jour (navigation entre semaines), et génération de la liste de courses de la semaine.
+- **Recherche par ingrédients** (« Cuisiner avec… ») : cocher des ingrédients → recettes qui les contiennent tous.
 
 ### Tests
 - Projet `Popote.Tests` (xUnit) : `ServingsScaler` et l'agrégation des courses

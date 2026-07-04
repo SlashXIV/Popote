@@ -10,6 +10,7 @@
 
     <!-- Bouton "Ajouter" dans la barre du haut -->
     <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Cuisiner" Command="{Binding GoToCookWithCommand}" />
         <ToolbarItem Text="Ajouter" Command="{Binding GoToEditCommand}" />
     </ContentPage.ToolbarItems>
 

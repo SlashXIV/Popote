@@ -22,6 +22,7 @@
 - [x] Planificateur de repas (semaine → liste de courses). _[DATA + DEV]_ — voir `docs/meal-planner.md`.
 - [x] Tests unitaires (ServingsScaler + agrégation des courses, xUnit). _[DEV]_ — voir `docs/tests.md`.
 - [x] Nettoyage des API MAUI dépréciées (`DisplayAlertAsync`, `PickPhotosAsync`…). _[DEV]_
+- [x] Recherche par ingrédients (« cuisiner avec X, Y », cumul ET). _[DATA]_ — voir `docs/cook-with.md`.
 
 ## En cours
 - [ ] (rien pour l'instant)
@@ -34,7 +35,6 @@
 ## Plus tard / idées
 - [ ] Mode cuisson : étapes plein écran, écran maintenu allumé, minuteur par étape.
 - [ ] Favoris / note (étoiles) + notes perso par recette.
-- [ ] Recherche « qu'est-ce que je peux cuisiner avec les ingrédients X, Y ».
 - [ ] Liste de courses : ajouter un article manuel + persister les cases cochées.
 - [ ] Tri de la liste (date / titre / temps).
 - [ ] Import d'une recette (URL ou texte collé) ; import de mes notes existantes.
