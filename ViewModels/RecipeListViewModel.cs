@@ -91,4 +91,20 @@ public partial class RecipeListViewModel : ObservableObject
         if (recipe is null) return;
         await Shell.Current.GoToAsync($"RecipeDetailPage?id={recipe.Id}");
     }
+
+    // Supprime une recette (balayage) après confirmation, puis recharge la liste.
+    [RelayCommand]
+    private async Task DeleteRecipeAsync(Recipe? recipe)
+    {
+        if (recipe is null) return;
+
+        var confirm = await Shell.Current.DisplayAlert(
+            "Supprimer la recette ?",
+            $"« {recipe.Title} » sera définitivement supprimée.",
+            "Supprimer", "Annuler");
+        if (!confirm) return;
+
+        await _service.DeleteRecipeAsync(recipe.Id);
+        await LoadAsync();
+    }
 }

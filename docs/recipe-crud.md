@@ -27,4 +27,4 @@ Créer, lister, consulter et modifier des recettes stockées localement.
 
 ## Reste à faire / limites connues
 - Ingrédients (voir `recipe-ingredients.md`) et tags (voir `recipe-tags.md`) désormais gérés à l'édition.
-- Pas de suppression depuis l'UI pour l'instant (la méthode service existe).
+- Suppression depuis l'UI : balayage vers la gauche sur une recette (+ confirmation).

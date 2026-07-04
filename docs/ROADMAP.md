@@ -16,6 +16,7 @@
 - [x] Liste de courses actionnable : cases à cocher pour barrer les articles. _[DEV]_
 - [x] Photo du plat (galerie/appareil photo via `MediaPicker`) : miniature en liste, photo en détail. _[DEV]_ — voir `docs/recipe-photo.md`.
 - [x] Tags et filtres (puces à bascule + filtre ET). _[DATA]_ — voir `docs/recipe-tags.md`.
+- [x] Suppression d'une recette depuis l'UI (balayage + confirmation). _[DEV]_
 
 ## En cours
 - [ ] (rien pour l'instant)
@@ -23,9 +24,8 @@
 > 🎉 Toutes les priorités **initiales** sont livrées. Nouvelle vague ci-dessous.
 
 ## Prochain (par priorité)
-1. [ ] Supprimer une recette depuis l'UI (swipe / menu) — `DeleteRecipeAsync` existe déjà, non branché. _[DEV]_
-2. [ ] Temps de prépa / cuisson : édition + affichage (badges au détail). Champs `PrepMinutes`/`CookMinutes` déjà là. _[DEV + DATA]_
-3. [ ] Planificateur de repas (semaine) → génère la liste de courses. Feature fédératrice. _[DATA + DEV]_
+1. [ ] Temps de prépa / cuisson : édition + affichage (badges au détail). Champs `PrepMinutes`/`CookMinutes` déjà là. _[DEV + DATA]_
+2. [ ] Planificateur de repas (semaine) → génère la liste de courses. Feature fédératrice. _[DATA + DEV]_
 
 ## Plus tard / idées
 - [ ] Mode cuisson : étapes plein écran, écran maintenu allumé, minuteur par étape.

@@ -31,6 +31,7 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 - Liste de courses : **cases à cocher** pour barrer les articles au fur et à mesure des courses (état éphémère, réinitialisé à chaque génération).
 - **Photo du plat** : ajout via galerie ou appareil photo (`MediaPicker`), copiée en stockage privé ; miniature en liste, photo en tête du détail.
 - **Tags & filtres** : tags à bascule sur une recette (+ création), affichés au détail, et filtre de la liste par tags (cumul ET).
+- **Suppression d'une recette** depuis la liste : balayage vers la gauche + confirmation.
 - Design system (brief `docs/design-system.md`) : base neutre chaude + accents
   « earthy naturals » (teal principal) en tokens (`AppColors.xaml`), styles de
   composants (`AppStyles.xaml`), police Inter, thème clair forcé. Chrome dé-violetté

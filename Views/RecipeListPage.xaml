@@ -62,17 +62,27 @@
 
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:Recipe">
-                        <Border Style="{StaticResource CardBorder}" Margin="0,4">
-                            <!-- Tap sur la carte = éditer cette recette.
-                                 On vise la commande du ViewModel de la page via x:Reference,
-                                 car ici le BindingContext local est une Recipe, pas le VM. -->
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer
-                                    Command="{Binding BindingContext.GoToDetailCommand, Source={x:Reference Page}}"
-                                    CommandParameter="{Binding .}" />
-                            </Border.GestureRecognizers>
+                        <!-- Balayer vers la gauche = supprimer (avec confirmation). -->
+                        <SwipeView Margin="0,4">
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItem Text="Supprimer"
+                                               BackgroundColor="{StaticResource PaletteBrick}"
+                                               Command="{Binding BindingContext.DeleteRecipeCommand, Source={x:Reference Page}}"
+                                               CommandParameter="{Binding .}" />
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <Border Style="{StaticResource CardBorder}">
+                                <!-- Tap sur la carte = ouvrir le détail.
+                                     On vise la commande du ViewModel de la page via x:Reference,
+                                     car ici le BindingContext local est une Recipe, pas le VM. -->
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding BindingContext.GoToDetailCommand, Source={x:Reference Page}}"
+                                        CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
 
-                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
                                 <Border Grid.Column="0"
                                         IsVisible="{Binding PhotoPath, Converter={StaticResource HasText}}"
                                         WidthRequest="56" HeightRequest="56" StrokeThickness="0"
@@ -84,8 +94,9 @@
                                     <Label Text="{Binding Servings, StringFormat='{0} portions'}"
                                            Style="{StaticResource CaptionLabel}" />
                                 </VerticalStackLayout>
-                            </Grid>
-                        </Border>
+                                </Grid>
+                            </Border>
+                        </SwipeView>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
 
