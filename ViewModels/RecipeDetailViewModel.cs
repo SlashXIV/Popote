@@ -36,6 +36,13 @@ public partial class RecipeDetailViewModel : ObservableObject
     [ObservableProperty]
     private bool hasTags;
 
+    // Temps (ex. « Prépa 15 min · Cuisson 20 min »), vide si non renseigné.
+    [ObservableProperty]
+    private string timesLabel = string.Empty;
+
+    [ObservableProperty]
+    private bool hasTimes;
+
     // Rappel des portions de base (libellé d'aide).
     [ObservableProperty]
     private string baseServingsLabel = string.Empty;
@@ -65,6 +72,12 @@ public partial class RecipeDetailViewModel : ObservableObject
         foreach (var rt in r.RecipeTags)
             Tags.Add(rt.Tag.Name);
         HasTags = Tags.Count > 0;
+
+        var times = new List<string>();
+        if (r.PrepMinutes is int p && p > 0) times.Add($"Prépa {p} min");
+        if (r.CookMinutes is int c && c > 0) times.Add($"Cuisson {c} min");
+        TimesLabel = string.Join("  ·  ", times);
+        HasTimes = times.Count > 0;
 
         _baseServings = r.Servings <= 0 ? 1 : r.Servings;
         BaseServingsLabel = $"Recette de base : {_baseServings} portion" + (_baseServings > 1 ? "s" : "");

@@ -37,6 +37,9 @@
                 </BindableLayout.ItemTemplate>
             </FlexLayout>
 
+            <Label Text="{Binding TimesLabel}" Style="{StaticResource CaptionLabel}"
+                   IsVisible="{Binding HasTimes}" />
+
             <!-- Portions : multiplicateur rapide + ajustement fin, recalcule les quantités -->
             <Border Style="{StaticResource CardBorder}">
                 <VerticalStackLayout Spacing="12">

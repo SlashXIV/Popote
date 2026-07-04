@@ -97,6 +97,13 @@ public partial class RecipeEditViewModel : ObservableObject
     [ObservableProperty]
     private string? photoPath;
 
+    // Temps en minutes (saisis en texte ; vide = non renseigné).
+    [ObservableProperty]
+    private string prepMinutesText = string.Empty;
+
+    [ObservableProperty]
+    private string cookMinutesText = string.Empty;
+
     // Les lignes d'ingrédients éditables (nom + quantité + unité).
     public ObservableCollection<IngredientLineViewModel> Ingredients { get; } = new();
 
@@ -159,6 +166,8 @@ public partial class RecipeEditViewModel : ObservableObject
         Instructions = r.Instructions;
         Servings = r.Servings;
         PhotoPath = r.PhotoPath;
+        PrepMinutesText = r.PrepMinutes?.ToString() ?? string.Empty;
+        CookMinutesText = r.CookMinutes?.ToString() ?? string.Empty;
 
         // Coche les tags de la recette (une fois le catalogue de tags chargé).
         await _catalogsReady;
@@ -203,7 +212,9 @@ public partial class RecipeEditViewModel : ObservableObject
             Title = Title.Trim(),
             Instructions = Instructions,
             Servings = Servings,
-            PhotoPath = PhotoPath
+            PhotoPath = PhotoPath,
+            PrepMinutes = ParseMinutes(PrepMinutesText),
+            CookMinutes = ParseMinutes(CookMinutesText)
         };
 
         // On ne garde que les lignes avec un nom ; la quantité est parsée ici.
@@ -217,6 +228,10 @@ public partial class RecipeEditViewModel : ObservableObject
         await _service.SaveRecipeAsync(recipe, inputs, tagNames);
         await Shell.Current.GoToAsync(".."); // ".." = retour à la page précédente (la liste)
     }
+
+    // Minutes : entier positif, sinon null (non renseigné).
+    private static int? ParseMinutes(string? text)
+        => int.TryParse(text?.Trim(), out var m) && m > 0 ? m : null;
 
     // Tolère la virgule ou le point comme séparateur décimal ; renvoie 0 si vide/invalide.
     private static double ParseQuantity(string? text)

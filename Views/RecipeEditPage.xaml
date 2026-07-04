@@ -39,6 +39,18 @@
             <Label Text="Les quantités d'ingrédients ci-dessous sont pour ce nombre de portions. Pas besoin d'être exact — au détail, on pourra multiplier la recette."
                    Style="{StaticResource CaptionLabel}" />
 
+            <Label Text="Temps (minutes)" Style="{StaticResource SubtitleLabel}" />
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                <VerticalStackLayout Grid.Column="0" Spacing="4">
+                    <Label Text="Préparation" Style="{StaticResource CaptionLabel}" />
+                    <Entry Text="{Binding PrepMinutesText}" Keyboard="Numeric" Placeholder="min" />
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="1" Spacing="4">
+                    <Label Text="Cuisson" Style="{StaticResource CaptionLabel}" />
+                    <Entry Text="{Binding CookMinutesText}" Keyboard="Numeric" Placeholder="min" />
+                </VerticalStackLayout>
+            </Grid>
+
             <Label Text="Ingrédients" Style="{StaticResource SubtitleLabel}" />
             <!-- Liste éditable : une ligne = nom + quantité + unité + bouton supprimer.
                  BindableLayout suffit (peu de lignes, pas besoin de virtualisation). -->
