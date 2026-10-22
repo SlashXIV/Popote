@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -20,6 +20,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Popote.Data\Popote.Data.csproj" />
+  </ItemGroup>
+
+  <!-- Code de présentation pur (sans type MAUI) lié depuis l'app, pour le tester sans
+       référencer le projet MAUI. Les XAML et le resx sont relus comme du XML par les tests. -->
+  <ItemGroup>
+    <Compile Include="..\Motion\CubicBezier.cs" Link="Linked\CubicBezier.cs" />
+    <Compile Include="..\Motion\MotionLevel.cs" Link="Linked\MotionLevel.cs" />
+    <Compile Include="..\Services\QuantityFormat.cs" Link="Linked\QuantityFormat.cs" />
   </ItemGroup>
 
 </Project>
