@@ -33,9 +33,102 @@
 - [x] Tri de la liste des recettes (Favoris / Récent / Titre / Temps). _[DATA]_
 - [x] **Refonte « Mise en place » — Fondations (1.1.0)** : métaphore du bol, base safran/aubergine, thème sombre, Réglages, typo, jetons, contrôles maison, textes externalisés, logo. _[DESIGN + DEV]_ — voir `docs/redesign-foundations.md` et `docs/design-system.md`.
 
+## Reprise (prochaine session)
+> À lire en premier dans une conversation neuve. État au 22/10/2026.
+
+**Où on en est**
+- `refonte/fondations` **fusionnée dans `main`** le 22/10/2026 (ni poussée, ni taguée) ; les Moments
+  se développent sur la branche **`refonte/moments`**. `Popote.csproj` est déjà en **1.1.0 (code 2)** ; la Release 1.1.0 n'est pas publiée.
+- Lire d'abord `docs/design-system.md` (le système codé) et `docs/redesign-foundations.md`
+  (choix, mesures, limites). Planche validée : https://claude.ai/code/artifact/f73a7898-93b7-4c17-bea9-41e47c58afe5
+- Rien n'a changé dans `Popote.Data` ni dans le schéma (aucune migration).
+
+**Environnement (poste de l'auteur)**
+- `global.json` **local, hors dépôt** (`.git/info/exclude`) : épingle le SDK **10.0.303** — la charge
+  MAUI n'existe que pour la bande 10.0.300 (un SDK 10.0.402 est aussi installé, sans MAUI).
+  `dotnet workload update` lancé le 22/10 (runtime Mono et compilateur AOT en 10.0.11).
+- **Release sans AOT** (`RunAOTCompilation=false`) : l'AOT exige le trimming, exclu pour EF Core ;
+  AOT sans trimming = plantage au démarrage (assertion Mono `class-init.c:2474`), y compris pour le
+  code d'avant la refonte. Ne pas réactiver l'AOT sans trimming testé avec EF Core.
+- Outils de vérification **locaux** dans `.claude/outils/` (voir `LISEZMOI.md`) : pilotage d'appareil
+  et captures (`ui.py`, `tour.sh`, `sheet.py`), mesures (`bench.sh`), jeu de démo (`seed/`,
+  `mkphotos.py`), calculs de palette, ajout de chaînes au resx (`str.py`), source de la planche.
+- Appareils : **émulateur** `emulator-5554` pour captures, TalkBack (`uiautomator dump --compressed`),
+  police 200 %, densité ; **téléphone** (Xiaomi 2506BPN68G, Android 17) pour **toutes les mesures** :
+  l'émulateur varie trop. Le Xiaomi demande d'accepter chaque installation USB à l'écran.
+  Une copie de mesure `onl.nci.popote.perf` (jeu de démo) est installée à côté de l'app réelle ;
+  l'app réelle est encore la 1.0 Debug, ses données sont sauvegardées hors dépôt.
+- **Depuis le 22/10/2026 : téléphone débranché.** On code et on vérifie sur l'émulateur ; tout ce qui
+  exige le téléphone (mesures de performance, démarrage de l'APK Release signé) est **mis de côté**
+  et noté « à mesurer au retour du téléphone » dans le jalon concerné, jamais extrapolé de l'émulateur.
+
+**Prochaines étapes, dans l'ordre**
+1. **Livrer 1.1.0** : ~~fusionner dans `main`~~ (fait), tag `v1.1.0` sur le commit de fusion,
+   APK signé (`dotnet publish -c Release … -p:AndroidSigningKeyPass=… -p:AndroidSigningStorePass=…`,
+   mots de passe par l'auteur), vérifier qu'il **démarre sur le téléphone**, Release GitHub. Installer
+   par-dessus la 1.0 réelle : même clé ? sinon sauvegarde / restauration des données d'abord.
+   *En attente du téléphone* (vérification du démarrage) ; le reste peut avancer sans lui.
+2. **Refonte — Moments (1.2.0)**, voir le jalon ci-dessous — sur l'émulateur, mesures au retour du téléphone.
+3. **Import par IA (1.3.0)**, voir le jalon ci-dessous.
+4. **Vitrine** (en tout dernier, roadmap finie) : refaire le README, voir le jalon ci-dessous.
+
 ## En cours
-- [ ] **Refonte — Moments (1.2.0)** : la mise en place (ouverture d'une recette), le passage au poste, l'étape suivante, le minuteur fini, l'article coché, la recette enregistrée, transitions de page. _[DESIGN + DEV]_
-- [ ] **Vitrine** : README illustré (logo + 4 captures). _[DESIGN]_
+- [ ] **Refonte — Moments (1.2.0)** _[DESIGN + DEV]_ — planche, section 07. Briques déjà prêtes :
+  `Motion/MotionTokens` (durées, courbes, `Level`), `Motion/Entrances` (`RiseInAsync`,
+  `PressAsync`, `PressScaleBehavior`, encore inutilisés), `Controls/Bowl.FillProgress` (le bol se
+  remplit), `Motion/Haptics` (`Tick`, `Confirm`).
+  1. *La mise en place* (ouverture d'une recette) : photo 1,04 → 1 en fondu, titre posé lettre à
+     lettre (un seul nœud TalkBack), bols d'ingrédients en cascade (50 ms, 8 au plus).
+  2. *Passage au poste* (« Cuisiner ») : ouverture du poste en fondu, bols de progression qui
+     apparaissent, haptique `Confirm`.
+  3. *Étape suivante* : numéro qui roule (seul le chiffre qui change), bol de l'étape faite qui se
+     remplit ; le texte de l'étape ne bouge jamais.
+  4. *Minuteur fini* : bol-minuteur qui « déborde » 3 fois puis s'arrête, `Confirm` ; une seule
+     annonce TalkBack (déjà en place). Profiter du jalon pour baisser le coût du minuteur (1,09 s CPU/min).
+  5. *Article coché* : le bol se remplit (courbe Release), le trait barre le libellé, `Tick`.
+  6. *Recette enregistrée* : le bouton se change en coche (0,4 s), `Confirm`, puis retour.
+  7. *Transitions de page* : entrée maison fondu + montée sous contrôle du niveau de mouvement
+     (`Shell.PresentationMode=NotAnimated` sur les routes poussées) ; revenir au push natif si flash.
+  - Critères : tout est interruptible et déclenché par un événement (jamais de boucle) ; Sobre =
+    fondus de 150 ms ; « Supprimer les animations » = état final direct ; aucune gêne à la saisie ;
+    rien ne bouge pendant la lecture d'une étape ; mesures téléphone avant / après (même build,
+    Ambiance Expressive puis Sobre) sans régression de la liste ni du carrousel ; doc `docs/redesign-moments.md`.
+- [ ] **Import par IA (1.3.0)** _[DATA + DEV]_ — préparer, dans l'app, un **copier-coller du format
+  attendu** pour qu'une IA externe (ChatGPT, Claude…) crée ou remodèle une recette à importer.
+  - Bouton « Copier les consignes pour une IA » (Réglages ou écran d'import) : met dans le
+    presse-papiers les consignes + le gabarit + les **listes autorisées** (unités de
+    `IngredientLineViewModel.UnitOptions`, rayons de `AisleOptions`, tags existants).
+  - L'utilisateur colle ces consignes dans l'IA avec sa recette (texte, photo, lien), récupère le bloc,
+    puis « Importer une recette » : coller → **aperçu** (mise en place, étapes) → corriger → Enregistrer.
+  - Format proposé (lisible, tolérant, sans JSON à échapper) :
+    ```
+    # Crêpes de la Chandeleur
+    Portions : 4
+    Préparation : 10 min
+    Cuisson : 20 min
+    Tags : Dessert, Rapide
+    ## Ingrédients
+    - 250 g | Farine | Épicerie
+    - 4 pièce | Œufs | Crèmerie
+    ## Étapes
+    1. Verser la farine dans un saladier…
+    ## Notes
+    Moins de sucre la prochaine fois.
+    ```
+  - Analyseur **pur** dans `Popote.Data` (ex. `RecipeTextParser`), testé (champs manquants,
+    unités synonymes « gr » → « g », rayon inconnu → « Divers » avec avertissement, quantités
+    « 1,5 » / « ½ »), réutilisant `SaveRecipeAsync` (pas de migration). Même format en sortie pour
+    « Partager » : aller-retour garanti. Remplace l'idée « Import d'une recette (URL ou texte collé) ».
+- [ ] **Vitrine — refaire le README** _[DESIGN]_ — **en dernier**, quand le reste de la roadmap est
+  fini (les captures doivent montrer l'app finale). Même format que les autres apps de l'auteur,
+  modèle propre : [dromos](https://github.com/SlashXIV/dromos) (voir aussi
+  [kalos-app](https://github.com/SlashXIV/kalos-app), dont seul l'en-tête suit le format) :
+  - en-tête centré : icône 112 px (`design/icon/popote-icon.svg`), titre `<h1>`, accroche en gras
+    + une ligne de traits (« 100 % hors ligne · sans compte ni cloud · … ») ;
+  - 4 captures WebP côte à côte (`width="200"`, `alt` descriptif en français) dans
+    `design/screenshots/` : liste, détail, mode cuisson, courses — jeu de démo, barres système retirées ;
+  - `---`, un paragraphe d'intro, puis Fonctionnalités (groupées), Installer (APK de la dernière
+    Release, mise à jour par-dessus sans perte), Vie privée, Compiler, Crédits (polices OFL), Licence.
 
 ### Refonte — preuves
 | Jalon | Version | Preuve |
@@ -56,7 +149,9 @@
 | Mesures sur téléphone uniquement | l'émulateur varie trop d'un passage à l'autre pour comparer |
 
 ## Plus tard / idées
-- [ ] Import d'une recette (URL ou texte collé) ; import de mes notes existantes.
+- [ ] Import de mes notes existantes (après l'import par IA, qui couvre le texte collé).
+- [ ] Miniatures des photos à l'import si la liste réelle grossit (PSS ≈ 346 Mo avec des photos 4000 × 3000).
+- [ ] Habiller les dialogues natifs restants (alertes, sélecteur, feuille d'actions de la Semaine).
 - [ ] Corriger l'alerte NU1903 (`SQLitePCLRaw` transitif) quand une version corrigée sera tirable par EF Core.
 
 ## Non-objectifs (pour ne pas se disperser)
