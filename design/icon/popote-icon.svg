@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  POPOTE — icône source (référence ; les calques MAUI en dérivent : Resources/AppIcon/*.svg).
+
+  Même grammaire que les autres applications de l'auteur (Kalos, Dromos, Topo, Brut) : une
+  lettre dessinée, un fin trait d'accent dessous, les couleurs de la DA, et UN détail qui
+  raconte l'application.
+
+  Le détail : LA PANSE DU « P » EST UN BOL VU DE DESSUS. C'est la métaphore de toute l'app
+  (« la mise en place » : un ingrédient = un bol). Le creux du bol est découpé dans la lettre
+  (il laisse voir le fond), le contenu est émaillé safran. Le trait sous la lettre est le
+  BORD DU PLAN DE TRAVAIL.
+
+  Canevas 108×108 (icône adaptative Android) ; seul le cercle central de diamètre 66
+  (centre 54,54, rayon 33) est garanti visible, quel que soit le masque du lanceur.
+  ZONE D'EXCLUSION (lettre + trait) : x 38..72, y 31..81,6. Point le plus éloigné du centre :
+  extrémités du trait (40 ; 81,6) et (68 ; 81,6), à 30,9 du centre (< 33).
+
+  Couches dérivées :
+  - background : fond aubergine plein (Resources/AppIcon/appicon.svg) ;
+  - foreground : lettre crème à creux découpé, contenu safran, trait safran
+    (Resources/AppIcon/appiconfg.svg) ;
+  - monochrome (icônes à thème, Android 13+) : générée par MAUI depuis l'alpha du premier plan ;
+    le creux découpé garde le bol lisible en une seule couleur ;
+  - splash : premier plan sur fond aubergine (MauiSplashScreen).
+
+  Palette : fond #4B1F45 (aubergine), lettre #FBF3E6 (crème), contenu et trait #F2A516 (safran).
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="108" height="108" viewBox="0 0 108 108">
+  <rect width="108" height="108" fill="#4B1F45"/>
+  <!-- « P » : fût 38..47,5 ; panse = cercle (58,45) r14 ; creux du bol r9 découpé (evenodd) -->
+  <path fill="#FBF3E6" fill-rule="evenodd"
+        d="M38 31 H58 A14 14 0 0 1 58 59 H47.5 V74 H38 Z M67 45 A9 9 0 1 0 49 45 A9 9 0 1 0 67 45 Z"/>
+  <!-- Contenu du bol, émaillé safran -->
+  <circle cx="58" cy="45" r="6.2" fill="#F2A516"/>
+  <!-- Bord du plan de travail -->
+  <rect x="40" y="79" width="28" height="2.6" rx="1.3" fill="#F2A516"/>
+</svg>
