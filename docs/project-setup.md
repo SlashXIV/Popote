@@ -20,7 +20,7 @@ coquille MAUI minimale pour que `dotnet build -f net10.0-android` réussisse.
   `Microsoft.EntityFrameworkCore.Sqlite` (10.0.9), `Microsoft.Extensions.Logging.Debug` (10.0.9).
 - `App.xaml(.cs)` — classe `Application` ; `CreateWindow` retourne `new Window(new AppShell())`.
 - `Platforms/Android/` — `MainActivity`, `MainApplication`, `AndroidManifest.xml`, `colors.xml`.
-- `Resources/` — polices OpenSans (réelles), icône, splash, styles, images.
+- `Resources/` — polices (Bricolage Grotesque, Inter), icône, splash, styles et jetons, textes (`Strings/AppResources.resx`), icônes d'onglets.
 - Réorganisation en dossiers : `Models/`, `Data/`, `Services/`, `ViewModels/`, `Views/`.
 - Restent à la racine : `App`, `AppShell`, `MauiProgram.cs`, `Popote.csproj`.
 

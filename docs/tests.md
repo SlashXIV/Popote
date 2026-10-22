@@ -11,12 +11,25 @@ apprendre les tests en .NET.
   égales, garde-fou division par zéro).
 - `ShoppingListBuilder.Aggregate` : regroupement/somme des ingrédients (même
   unité sommée, unités différentes séparées, rayon absent → « Divers », tri).
+- `StepParser` : découpage des étapes.
+- **Interface (depuis la 1.1.0)** :
+  - `ThemeContrastTests` : relit `AppColors.xaml` ; contrastes WCAG (texte 7:1, accents 4,5:1,
+    graphiques 3:1) dans les deux thèmes, émaux de rayon distincts en protan / deutan
+    (Machado 2009, ΔE OKLab ≥ 8), chaque rôle présent en clair et en sombre.
+  - `HardcodedUiTextTests` : aucun texte d'interface en dur dans `Views/*.xaml` ni dans le C#
+    d'interface (exception : commentaire « texte-technique : <raison> »).
+  - `ResxTests` : chaque clé utilisée existe, aucune clé orpheline, typographie française.
+  - `MotionTests` : niveaux de mouvement, courbes de Bézier (bornes, monotonie, rebond).
+  - `QuantityFormatTests` : pluriels, virgule décimale, espace insécable, lecture TalkBack.
 
 ## Où
 - Projet `Popote.Tests` (xUnit, `net10.0`) référence `Popote.Data`.
 - Pour être testable depuis un projet desktop, la **logique pure** a été extraite
   dans `Popote.Data/Services/` (`ServingsScaler`, `ShoppingListBuilder`) — hors du
   projet app Android. `RecipeService.BuildShoppingListAsync` délègue à `ShoppingListBuilder`.
+- Le code de présentation pur (`Motion/CubicBezier.cs`, `Motion/MotionLevel.cs`,
+  `Services/QuantityFormat.cs`) est **lié** dans le projet de test ; XAML et resx sont relus
+  comme du XML depuis la racine du dépôt (`RepoFiles`).
 
 ## Lancer les tests
 ```sh

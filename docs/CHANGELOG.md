@@ -6,6 +6,41 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 
 ## [Unreleased]
 
+## [1.1.0] — 2026-10-22 — Refonte « Mise en place » : fondations
+
+### Added
+- **Identité « Mise en place »** : le bol vu de dessus comme unité visuelle (ingrédients,
+  courses, progression du mode cuisson, repas de la semaine) ; base crème, safran pour agir,
+  aubergine pour la sélection ; émaux de céramique pour les rayons.
+- **Thème sombre** réellement utilisable, **Système** par défaut, réglable.
+- **Page Réglages** : apparence, Ambiance (Expressive / Sobre), vibrations, sauvegarde et
+  restauration (déplacées depuis le menu ⋮).
+- **Nouveau logo** (« P » à panse-bol, filet safran), icône monochrome Android 13+, splash.
+- Polices **Bricolage Grotesque** + Inter, **chiffres tabulaires** pour quantités et minuteur.
+- Contrôles maison accessibles : en-tête, boutons icônes, champs, stepper de portions,
+  case-bol, chips, sélecteur segmenté, interrupteur.
+- Système de mouvement centralisé (jetons, courbes, niveaux Full / Reduced / None, réglage
+  Android « Supprimer les animations » respecté) et haptique désactivable.
+- Tests : contrastes WCAG + daltonisme (protan / deutan) des deux thèmes, aucun texte en dur,
+  cohérence du resx et typographie française, courbes et niveaux de mouvement, format des quantités.
+
+### Changed
+- Toutes les pages redessinées (liste, détail, mode cuisson, édition, Cuisiner avec, semaine, courses).
+- Textes de l'interface externalisés dans `Resources/Strings/AppResources.resx`.
+- Quantités accordées (« 4 pièces »), décimales et dates en français, espace insécable avant l'unité.
+- Libellés TalkBack complets (« Farine, 250 grammes, rayon Épicerie »), titres de niveau 1 et 2.
+- Release compilé sans AOT (voir `docs/redesign-foundations.md`).
+
+### Fixed
+- Jours de la semaine affichés en anglais selon la langue du téléphone.
+- Chips tronqués dans « Cuisiner avec… » (« Carott »).
+- Enregistrer une recette sans titre ne faisait rien : un message explique quoi corriger.
+- Les vibrations faisaient planter l'app (permission `VIBRATE` manquante).
+
+### Removed
+- Restes du modèle MAUI (OpenSans, `dotnet_bot.png`, `Colors.xaml`, `Styles.xaml`),
+  `AisleToColorConverter` (couleurs en dur).
+
 ### Added
 - Squelette initial : CRUD recettes (titre, portions, préparation).
 - Couche données EF Core / SQLite : entités `Recipe`, `Ingredient`, `RecipeIngredient`, `Tag`, `RecipeTag`.

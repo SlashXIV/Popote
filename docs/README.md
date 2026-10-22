@@ -4,7 +4,9 @@ Une feature = un fichier. Pour toute nouvelle feature, créer `docs/<nom>.md`
 à partir de `_TEMPLATE.md`, et tenir le fichier à jour quand la feature évolue.
 
 ## Design
-- [design-system.md](design-system.md) — Brief de design : palette, typo, espacements, composants. **À suivre pour toute UI.**
+- [design-system.md](design-system.md) — Système « Mise en place » : métaphore du bol, couleurs testées, typo, jetons, contrôles maison, mouvement, accessibilité. **À suivre pour toute UI.**
+- [redesign-foundations.md](redesign-foundations.md) — Refonte, jalon Fondations (1.1.0).
+- `licences/` — licences OFL des polices embarquées.
 
 ## Features documentées
 - [project-setup.md](project-setup.md) — Coquille MAUI compilable (csproj, App, Platforms, Resources).

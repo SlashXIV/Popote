@@ -1,101 +1,152 @@
-# Design system — Popote
+# Design system — Popote « Mise en place »
 
-Brief de design à suivre pour toute UI. Objectif : une app **cohérente, calme et
-intentionnelle**, pas une accumulation de contrôles. La cohérence prime sur l'effet.
+Référence de toute l'interface depuis la 1.1.0. Planche validée le 22/10/2026 (artifact
+« Popote, mise en place ») ; ce document décrit ce qui est réellement codé. Objectif : une app
+**cohérente, chaleureuse et pétillante**, qui ne fait plus « contrôles Android par défaut ».
+La cohérence d'une seule métaphore prime sur la quantité d'effets.
 
-## Direction visuelle : « épuré, base neutre chaude + accents naturels »
+## La métaphore : la mise en place
+En cuisine, la mise en place consiste à peser, couper et ranger chaque ingrédient dans son bol
+avant d'allumer le feu. Dans Popote, **le bol vu de dessus est l'unité visuelle** : un bord
+émaillé, un creux, un contenu (`Controls/Bowl.cs`). Ses trois états racontent l'avancement :
 
-Ambiance claire, calme et confortable (esprit Notion / Bear / Things) — **jamais
-de blanc pur ni de noir pur** (contraste adouci pour le confort visuel).
-**Base neutre chaude** : fond blanc cassé, cartes papier, filets très légers, texte espresso.
-**Palette d'accents « earthy naturals »** (olive, or, sable, teal, brique) utilisée
-avec parcimonie : un accent principal (**teal**) pour les actions, les autres pour
-**coder la donnée** (pastilles de rayon, tags). La couleur porte du sens, pas de la déco.
+| État | Sens | Où |
+|---|---|---|
+| vide | à acheter, à venir | liste de courses, étapes à venir, état vide |
+| posé | présent, en cours | ingrédient d'une recette, étape en cours |
+| plein | coché, fait, planifié | article pris, étape faite, repas posé |
 
-**Élément signature** : la carte recette utilise un ruban d'étapes numérotées
-(la numérotation est justifiée : une recette EST une séquence) et les ingrédients
-sont affichés en « chips » avec une pastille de couleur codant le rayon en magasin.
-Cette pastille relie le visuel au modèle de données (`Ingredient.Aisle`) : c'est du
-sens, pas de la déco.
+- **Détail** : la liste d'ingrédients est la *mise en place* — un bol par ingrédient sur un
+  *plan de travail* (surface `Worktop`, bord supérieur safran).
+- **Courses** : la case à cocher est un bol qui se remplit (`Controls/BowlCheck.cs`).
+- **Mode cuisson** : le *poste de travail* — un numéro géant, une rangée de bols de progression.
+- **Semaine** : un repas posé = un bol plein.
+- **Logo** : le « P » dont la panse est un bol (voir `design/icon/popote-icon.svg`).
 
 ## Règles d'or
-- Dépenser l'audace à UN seul endroit (l'élément signature) ; garder le reste discret.
-- Préférer des filets fins (1px) à des ombres lourdes ; une seule ombre douce pour les cartes.
-- Espacement généreux, hiérarchie typographique claire. Le vide fait partie du design.
-- Tout passe par des styles (`Styles.xaml`) + des tokens (`AppColors.xaml`). Aucune couleur
-  ni taille « en dur » dans une page.
-- Clair ET sombre via `AppThemeBinding` sur chaque couleur.
+- Pas de blanc pur ni de noir pur ; base crème chaude (clair) ou aubergine très sombre (sombre).
+- **Safran** = l'action principale (un bouton plein par écran, au plus) ; **aubergine** = texte
+  d'action, sélection, focus. Les émaux de rayon **codent une donnée**, jamais de la déco.
+- La couleur n'est jamais la seule information : le libellé du rayon accompagne toujours le bol.
+- Aucune couleur, taille, rayon ni espacement en dur dans une page : jetons et styles uniquement.
+- Aucun texte d'interface en dur : `Resources/Strings/AppResources.resx` (testé).
+- Filets fins (1) plutôt qu'ombres ; une seule ombre douce au plus.
+- Le vide fait partie du design ; un écran vide invite à agir (bol vide + phrase + bouton).
 
-## Couleurs (tokens — voir Resources/Styles/AppColors.xaml)
+## Couleurs — `Resources/Styles/AppColors.xaml`
+Chaque rôle existe en paire `<Rôle>Light` / `<Rôle>Dark`. `ThemeContrastTests` relit le fichier.
 
-| Rôle | Clair | Sombre |
+| Rôle | Clair | Sombre | Usage | Exigence testée |
+|---|---|---|---|---|
+| Background | `#FBF3E6` | `#1C1620` | fond de page | — |
+| Surface | `#FFF9F0` | `#261E2A` | cartes, champs, barre d'onglets | — |
+| Worktop | `#F7E6C8` | `#2F2533` | plan de travail, pastilles tonales | — |
+| Line | `#EAD8BC` | `#40344A` | filets, bordures | — |
+| Ink | `#2A1F2A` | `#F4ECEF` | texte | ≥ 7:1 sur tous les fonds |
+| Mute | `#66575F` | `#BCAAB7` | texte secondaire | ≥ 4,5:1 |
+| Accent (aubergine) | `#7A2F6B` | `#E3A6D3` | texte d'action, sélection, focus | ≥ 4,5:1 |
+| OnAccent | `#FFF9F0` | `#2A1626` | texte sur aubergine | ≥ 4,5:1 |
+| AccentSoft | `#F2DCEA` | `#3D2939` | boutons secondaires | Accent ≥ 4,5:1 dessus |
+| Highlight (safran) | `#F2A516` | `#F5B53A` | bouton principal, bord du plan de travail | OnHighlight ≥ 4,5:1 |
+| OnHighlight | `#2A1F2A` | `#241A10` | texte sur safran | — |
+| Favorite | `#A86A00` | `#F5C04A` | étoile | ≥ 3:1 |
+| Danger | `#B0303A` | `#FF8E8E` | suppression, erreur | ≥ 4,5:1 |
+| Scrim | `#E6FFF9F0` | `#E6261E2A` | pastilles posées sur photo | — |
+
+**Émaux de rayon** (céramique) — donnée codée par la couleur :
+
+| Rayon | Clair | Sombre |
 |---|---|---|
-| Primary / Accent (teal) | `#5B8E7D` | `#7FB3A2` |
-| PrimaryContainer (chips) | `#E4EDE9` | `#2A3F38` |
-| OnAccent (texte sur accent) | `#FFFFFF` | `#10221C` |
-| Background | `#F7F4EE` | `#15191A` |
-| Surface / carte | `#FCFAF4` | `#1E2422` |
-| TextPrimary | `#2B2926` | `#ECEAE4` |
-| TextSecondary | `#6F6A61` | `#A6A29A` |
-| Border / filet | `#E8E2D5` | `#2C322F` |
+| Fruits & légumes (olive) | `#4A8F2A` | `#74A030` |
+| Crèmerie (miel) | `#7A5A10` | `#F2D35A` |
+| Épicerie (terre cuite) | `#6E3A0C` | `#EFA968` |
+| Viande & poisson (sang-de-bœuf) | `#5A1A1E` | `#F27482` |
+| Surgelés (cobalt) | `#2477B5` | `#3DAEEF` |
+| Divers (ardoise) | `#5C6463` | `#CADBD8` |
 
-Palette d'accents « earthy naturals » (tags, signature, pastilles) :
-Olive `#8CB369` · Or `#F4E285` · Sable `#F4A259` · Teal `#5B8E7D` · Brique `#BC4B51`.
+Chaque émail tient ≥ 3:1 sur Background, Surface et Worktop, et les six restent distincts deux à
+deux pour un œil protanope ou deutéranope (simulation Machado 2009, ΔE OKLab ≥ 8 ; minimum
+mesuré : 8,2 en clair, 8,6 en sombre). La correspondance rayon → émail est dans
+`AislePalette.RoleFor` (`Controls/Bowl.cs`).
 
-Pastilles de rayon : Fruits & légumes = Olive · Crèmerie = Or · Épicerie = Sable ·
-Surgelés = Teal · Divers = gris `#9AA8A2`. Brique réservé aux actions fortes / tags.
+Thème : **Système** par défaut, réglable Clair / Sombre dans Réglages (`SettingsService`,
+`Preferences`), appliqué à chaud ; barres système assorties (`Platforms/Android/SystemBars.cs`).
 
-> L'app démarre en **thème clair forcé** (`UserAppTheme = Light`). Les tokens sombres
-> restent définis pour une réactivation future.
+## Typographie — `Resources/Fonts/` (OFL, licences dans `docs/licences/`)
+- **Bricolage Grotesque** (instances statiques générées depuis la police variable :
+  `Bricolage` = Bold 700 opsz 24, `BricolageHeavy` = ExtraBold 800 opsz 72) : affiche, titres, boutons.
+- **Inter** (`Inter`, `InterMedium`, `InterSemiBold`) : texte.
+- **Chiffres tabulaires** : `Controls/NumberLabel` + handler Android `FontFeatureSettings = "tnum"`
+  (quantités, portions, minuteur, numéros d'étape ne « dansent » pas).
 
-Pastilles de rayon (codage data, mêmes valeurs clair/sombre) :
-Fruits & légumes `#6FA85B` · Crèmerie `#E8C25A` · Épicerie `#C98A4B` ·
-Surgelés `#5B8DA8` · Divers `#9AA8A2`.
+Styles nommés par usage (`Resources/Styles/AppStyles.xaml`) :
 
-## Typographie
-Polices à ajouter dans `Resources/Fonts/` puis à enregistrer dans `MauiProgram`
-(`fonts.AddFont(...)`). Toutes dispo gratuitement sur Google Fonts.
-- **Display / titres** : `Bricolage Grotesque` (caractère, utilisé avec retenue). PAS de serif.
-- **Corps** : `Inter` (lisible, neutre).
-- **Données / quantités** : `IBM Plex Mono` (les nombres et unités en mono = lisibles et
-  ça souligne discrètement le côté « data »). Optionnel.
-
-Échelle (mobile) :
-
-| Style | Taille | Poids |
+| Style | Police / taille | Usage |
 |---|---|---|
-| Display | 28 | 600 |
-| Title | 22 | 600 |
-| Subtitle | 17 | 600 |
-| Body | 15 | 400 |
-| Caption | 13 | 400 |
-| Data (mono) | 14 | 500 |
+| `Poster` | Bricolage ExtraBold 32 | titre de recette |
+| `StepNumber` | Bricolage ExtraBold 112, aubergine | numéro d'étape (mode cuisson) |
+| `Title` | Bricolage Bold 26 | titre de page (`PageHeader`) |
+| `Heading` | Bricolage Bold 19 (titre de niveau 2) | section |
+| `CardTitle` | Bricolage Bold 16,5 | titre de carte |
+| `Eyebrow` / `EyebrowAccent` | Inter SemiBold 11, capitales espacées | surtitres, rayons |
+| `Body`, `BodyStrong`, `StepText` (23), `Caption` (13) | Inter | texte |
+| `Quantity`, `QuantityMute`, `Counter`, `Timer` (48) | sur `NumberLabel` | chiffres |
 
-## Espacements & formes
-- Échelle d'espacement (base 8) : `4, 8, 12, 16, 24, 32`. Ne pas inventer d'autres valeurs.
-- Rayons : carte `16`, champ/bouton `12`, chip `pilule (arrondi total)`.
-- Padding de page : `16`. Espacement vertical entre blocs : `16` à `24`.
+Boutons : style implicite = action principale (safran) ; `SecondaryButton`, `QuietButton`,
+`DangerButton`, `CompactButton`, `LargeButton`, `LargeQuietButton`, `ChipAction`. Les libellés
+passent à la ligne (police 200 %, écran étroit) au lieu d'être coupés.
 
-## Composants (styles à créer dans Styles.xaml)
-- `CardBorder` : Surface, rayon 16, filet 1px Border, ombre douce unique.
-- `TitleLabel` / `SubtitleLabel` / `BodyLabel` / `CaptionLabel` : applique la police + l'échelle.
-- `PrimaryButton` : fond Accent, texte clair, rayon 12, hauteur 48, état pressé plus foncé.
-- `Chip` : pilule, fond PrimaryContainer, texte Primary, + pastille rayon optionnelle.
-- États vides et chargement soignés (jamais d'écran nu).
+## Jetons de dimension — `Resources/Styles/Tokens.xaml`
+- Espacements `Space4/8/12/16/24/32`, marges nommées (`PagePadding`, `Gutter`, `GutterBand`…).
+- Rayons : carte 16, champ 12, bouton 14, chip en pilule.
+- Tailles : cible tactile **48**, bouton 50 (64 en mode cuisson), champ 46, bols 12/18/24/30.
+- Icônes au trait (grille 24, tracé 1,9) : clés `Icon…`, dessinées par `Controls/Icon.cs`.
+- Les formes sont créées par contrôle (`Tokens.Rounded`) : une instance de forme ne se partage
+  pas entre deux `Border`.
 
-## Plancher qualité (non négociable)
-- Cibles tactiles ≥ 44px de haut.
-- Contraste texte/fond suffisant (lisible en clair et sombre).
-- Respecter « réduire les animations » du système ; animations rares et utiles.
-- Écran vide = invitation à agir (texte + bouton), jamais un blanc muet.
+## Contrôles maison — `Controls/`
+Tous accessibles : description TalkBack, rôle Android (`A11y.Role` → `Platforms/Android/Handlers.cs`),
+activation au double toucher (`IActivatable`), cible ≥ 48.
 
-## Voix / copy de l'interface
-- Verbes d'action explicites : « Enregistrer », pas « Soumettre ».
-- Un libellé reste le même dans tout le flux (le bouton « Ajouter » mène à un écran cohérent).
-- Erreurs : dire ce qui s'est passé et comment corriger, sans s'excuser ni rester vague.
+| Contrôle | Remplace | Rôle TalkBack |
+|---|---|---|
+| `PageHeader` | barre de navigation Shell + ToolbarItems + menu ⋮ | titre de niveau 1 |
+| `IconButton` | ToolbarItem, boutons « ✕ » en texte | bouton |
+| `Field` (+ `Error`, `Suffix`, `ShowChevron`, `Leading`) | Entry / Editor / Picker soulignés | champ libellé |
+| `PortionStepper` | Stepper natif gris | un nœud « 4 portions » + 2 boutons |
+| `BowlCheck` | CheckBox | case à cocher, état annoncé |
+| `ToggleChip` | 3 copies de chips à bascule | bouton bascule |
+| `Segmented` | — (Réglages) | case d'option |
+| `ToggleSwitch` | Switch Material | bouton bascule |
+| `Bowl`, `Icon` | pastilles `Border`, glyphes texte | décoratifs (hors arbre) |
+| `NumberLabel` | Label | — |
 
-## Librairies autorisées
-- **UraniumUI** (Apache 2.0) : finition Material + icônes, sans lock-in. Préféré.
-- **CommunityToolkit.Maui** : popups, behaviors, convertisseurs.
-- **Syncfusion.Maui.Toolkit** (MIT, gratuit) : charts/datagrid pour le futur dashboard data.
-- Pas de kit payant (Grial, Telerik, DevExpress) sans validation explicite.
+Handlers Android : Entry / Editor / Picker sans soulignement ni fond Material ; onglets Shell
+au rendu maison (`PopoteShellRenderer` : pas de pilule ni d'ondulation, libellés Inter,
+icônes `Resources/Images/tab_*.svg`).
+
+## Mouvement — `Motion/`
+Jetons (`MotionTokens`) : Enter 420 ms `cubic-bezier(.2,.7,.2,1)`, Transition 480 ms
+`(.65,0,.35,1)`, Release 560 ms `(.2,.9,.2,1.2)` ; décalage 50 ms par élément (8 au plus),
+40 ms par lettre. Niveau (`MotionLevels.Of`, testé) : **Full** (Ambiance Expressive),
+**Reduced** (Sobre : fondus de 150 ms), **None** (réglage Android « Supprimer les animations »,
+toujours prioritaire, relu au retour au premier plan). Toute animation est déclenchée par un
+événement, annulable, jamais en boucle. Haptique centralisée (`Haptics.Tick` / `Confirm`),
+coupée par le réglage Vibrations. Les « moments » (jalon 1.2.0) s'appuient sur ces briques.
+
+## Accessibilité (plancher non négociable)
+- Une phrase par élément composé (« Farine, 250 grammes, rayon Épicerie », « Lait, 50 centilitres »),
+  enfants hors de l'arbre ; formes parlées des unités (`QuantityFormat.SpokenLabel`, testé).
+- Titres de page en niveau 1, sections en niveau 2.
+- Cibles ≥ 48 ; hauteurs minimales, jamais fixes, pour ce qui contient du texte ; vérifié à la
+  police 200 % et en densité d'écran forcée.
+- Le minuteur annonce sa fin une seule fois, jamais chaque seconde.
+
+## Voix et typographie française
+Verbes d'action explicites (« Enregistrer », « Cuisiner »), erreurs qui disent quoi corriger,
+apostrophe ’, guillemets « » avec insécables, espace fine insécable avant ; ! ?, insécable
+entre nombre et unité (« 250 g ») — vérifié par `ResxTests`.
+
+## Dépendances
+Aucune bibliothèque d'interface : MAUI seul (+ polices OFL embarquées). CommunityToolkit.Maui,
+Lottie, UraniumUI : non retenus (le système maison couvre le besoin).

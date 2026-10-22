@@ -31,11 +31,29 @@
 - [x] Liste de courses **persistante** : article manuel + cases cochées persistées + retrait/vidage. _[DATA]_ — voir `docs/shopping-list.md`.
 - [x] Partage d'une recette en texte (feuille de partage système). _[DEV]_
 - [x] Tri de la liste des recettes (Favoris / Récent / Titre / Temps). _[DATA]_
+- [x] **Refonte « Mise en place » — Fondations (1.1.0)** : métaphore du bol, base safran/aubergine, thème sombre, Réglages, typo, jetons, contrôles maison, textes externalisés, logo. _[DESIGN + DEV]_ — voir `docs/redesign-foundations.md` et `docs/design-system.md`.
 
 ## En cours
-- [ ] (rien pour l'instant)
+- [ ] **Refonte — Moments (1.2.0)** : la mise en place (ouverture d'une recette), le passage au poste, l'étape suivante, le minuteur fini, l'article coché, la recette enregistrée, transitions de page. _[DESIGN + DEV]_
+- [ ] **Vitrine** : README illustré (logo + 4 captures). _[DESIGN]_
 
-> 🎉 Toute la roadmap est livrée. Idées ouvertes ci-dessous.
+### Refonte — preuves
+| Jalon | Version | Preuve |
+|---|---|---|
+| Fondations | 1.1.0 | 50 tests verts (dont contrastes/daltonisme des 2 thèmes, aucun texte en dur) ; build sans avertissement nouveau ; émulateur : 8 pages en clair et en sombre, police 200 %, densité 600, arbre TalkBack ; téléphone (Release) : démarrage 1,76 s, liste p90 7 ms, carrousel p90 5 ms |
+
+### Journal des décisions (refonte)
+| Décision | Raison |
+|---|---|
+| Métaphore unique : la mise en place (le bol) | la cohérence d'une métaphore, pas la quantité d'effets, fait l'identité |
+| Planche validée avant le code | on juge l'ensemble avant de coder écran par écran |
+| Base safran + aubergine (pas blanc/vert) | demande explicite : plus « pétillant » |
+| Émaux de rayon calculés et testés | donnée codée par la couleur : 3:1 + distincts en protan/deutan |
+| Aucune dépendance d'interface | MAUI + contrôles maison suffisent ; pas de lock-in |
+| Barre d'onglets Shell gardée, rendu maison | navigation, retour et TalkBack natifs gratuits |
+| `Bowl` / `Icon` en GraphicsView | mesuré : les formes MAUI empilées coûtaient des images au défilement |
+| Release sans AOT | AOT sans trimming = plantage au démarrage ; trimming exclu pour EF Core |
+| Mesures sur téléphone uniquement | l'émulateur varie trop d'un passage à l'autre pour comparer |
 
 ## Plus tard / idées
 - [ ] Import d'une recette (URL ou texte collé) ; import de mes notes existantes.

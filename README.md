@@ -52,7 +52,10 @@ dotnet publish -c Release -f net10.0-android -p:AndroidPackageFormat=apk `
 ```
 → `bin/Release/net10.0-android/publish/onl.nci.popote-Signed.apk`.
 Installer : `adb install <chemin>.apk` (désinstaller d'abord une version Debug : signature différente).
-> Trimming désactivé en Release (`AndroidLinkMode=None`) car EF Core utilise la réflexion.
+> Trimming désactivé en Release (`AndroidLinkMode=None`) car EF Core utilise la réflexion,
+> et donc **AOT désactivé** (`RunAOTCompilation=false`) : l'AOT exige le trimming, et sans lui
+> l'app plante au démarrage. Après une mise à jour du SDK .NET, aligner les charges de travail :
+> `dotnet workload update`.
 
 ## Arborescence
 ```
@@ -60,13 +63,17 @@ Popote.csproj      Projet MAUI (cible net10.0-android)
 App.xaml(.cs)           Application ; ouvre AppShell
 AppShell.xaml(.cs)      Navigation Shell + routes
 MauiProgram.cs          DI, EF Core, création de la base au démarrage
-Models/                 Entités (Recipe, Ingredient, RecipeIngredient, Tag, RecipeTag)
-Data/                   AppDbContext (EF Core / SQLite)
-Services/               RecipeService, ServingsScaler
+Popote.Data/            Entités, AppDbContext, migrations, logique pure (portions, courses, étapes)
+Popote.Tests/           Tests xUnit (logique + couleurs, textes, mouvement)
+Services/               RecipeService, SettingsService, QuantityFormat
 ViewModels/             Un ViewModel par page (CommunityToolkit.Mvvm)
-Views/                  Pages XAML (RecipeListPage, RecipeEditPage)
-Platforms/Android/      MainActivity, MainApplication, manifest
-Resources/              Polices, icône, splash, styles
+Views/                  Pages XAML (liste, détail, édition, cuisson, Cuisiner avec, semaine, courses, réglages)
+Controls/               Contrôles maison (bol, champ, en-tête, stepper, chips…)
+Motion/                 Système de mouvement et haptique
+Converters/             Convertisseurs de liaison
+Platforms/Android/      MainActivity, handlers, rendu des onglets, barres système
+Resources/              Polices, icône, splash, styles et jetons, textes (Strings/AppResources.resx)
+design/icon/            Source commentée du logo
 docs/                   Documentation (une feature = un fichier)
 ```
 
