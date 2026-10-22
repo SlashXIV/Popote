@@ -51,12 +51,14 @@ public class BowlCheck : ContentView, IActivatable
     public void Activate()
     {
         IsChecked = !IsChecked;
+        if (IsChecked) _ = _bowl.FillAsync(); // seulement au geste : jamais au recyclage d'une cellule
         Motion.Haptics.Tick();
         Toggled?.Invoke(this, EventArgs.Empty);
     }
 
     private void Update()
     {
+        _bowl.StopFill();
         _bowl.State = IsChecked ? BowlState.Full : BowlState.Empty;
         _bowl.Size = Tokens.Size("BowlCheck");
         _check.IsVisible = IsChecked;

@@ -157,7 +157,19 @@
                     <Editor Text="{Binding Notes}" Placeholder="{x:Static res:AppResources.Edit_NotesPlaceholder}" />
                 </controls:Field>
 
-                <Button Text="{x:Static res:AppResources.Edit_Save}" Command="{Binding SaveCommand}" />
+                <Grid>
+                    <Button Text="{x:Static res:AppResources.Edit_Save}" Command="{Binding SaveCommand}"
+                            IsVisible="{Binding IsSaved, Converter={StaticResource Not}}" />
+                    <Border x:Name="SavedBadge" IsVisible="{Binding IsSaved}" StrokeThickness="0"
+                            MinimumHeightRequest="{StaticResource ButtonHeight}"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource HighlightLight}, Dark={StaticResource HighlightDark}}"
+                            SemanticProperties.Description="{x:Static res:AppResources.Edit_Saved}">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="{StaticResource RadiusButton}" />
+                        </Border.StrokeShape>
+                        <controls:Icon Glyph="IconCheck" Role="OnHighlight" StrokeThickness="3" />
+                    </Border>
+                </Grid>
             </VerticalStackLayout>
         </ScrollView>
     </Grid>

@@ -205,6 +205,9 @@
   <data name="Edit_Save" xml:space="preserve">
     <value>Enregistrer</value>
   </data>
+  <data name="Edit_Saved" xml:space="preserve">
+    <value>Recette enregistrée</value>
+  </data>
   <data name="Edit_Steps" xml:space="preserve">
     <value>Préparation</value>
   </data>

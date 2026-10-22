@@ -69,6 +69,7 @@
    par-dessus la 1.0 réelle : même clé ? sinon sauvegarde / restauration des données d'abord.
    *En attente du téléphone* (vérification du démarrage) ; le reste peut avancer sans lui.
 2. **Refonte — Moments (1.3.0)**, voir le jalon ci-dessous — sur l'émulateur, mesures au retour du téléphone.
+   Faits : 5 et 6 (branche `refonte/moments`). Suite : 3, 4, puis 2, 1, 7 — voir `docs/redesign-moments.md`.
 3. **Import par IA (1.4.0)**, voir le jalon ci-dessous.
 4. **Vitrine** (en tout dernier, roadmap finie) : refaire le README, voir le jalon ci-dessous.
 
@@ -85,8 +86,8 @@
      remplit ; le texte de l'étape ne bouge jamais.
   4. *Minuteur fini* : bol-minuteur qui « déborde » 3 fois puis s'arrête, `Confirm` ; une seule
      annonce TalkBack (déjà en place). Profiter du jalon pour baisser le coût du minuteur (1,09 s CPU/min).
-  5. *Article coché* : le bol se remplit (courbe Release), le trait barre le libellé, `Tick`.
-  6. *Recette enregistrée* : le bouton se change en coche (0,4 s), `Confirm`, puis retour.
+  5. ~~*Article coché*~~ (fait) : le bol se remplit (courbe Release), `Tick` ; libellé barré d'un coup.
+  6. ~~*Recette enregistrée*~~ (fait) : le bouton se change en coche (0,4 s), `Confirm`, puis retour.
   7. *Transitions de page* : entrée maison fondu + montée sous contrôle du niveau de mouvement
      (`Shell.PresentationMode=NotAnimated` sur les routes poussées) ; revenir au push natif si flash.
   - Critères : tout est interruptible et déclenché par un événement (jamais de boucle) ; Sobre =

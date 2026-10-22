@@ -1,3 +1,5 @@
+using Popote.Motion;
+
 namespace Popote.Controls;
 
 public enum BowlState { Empty, Placed, Full }
@@ -46,6 +48,29 @@ public class Bowl : GraphicsView, IDrawable
         WidthRequest = HeightRequest = Size;
         AutomationProperties.SetIsInAccessibleTree(this, false);
         UpdateGlaze();
+    }
+
+    private const string FillAnimation = "Fill";
+
+    // Le bol se remplit (« article coché », « étape faite ») selon le niveau de mouvement :
+    // rebond Release, fondu court en Sobre, plein d'emblée si les animations sont coupées.
+    public Task FillAsync()
+    {
+        StopFill();
+        if (MotionTokens.Level == MotionLevel.None) return Task.CompletedTask;
+        var full = MotionTokens.Level == MotionLevel.Full;
+        var done = new TaskCompletionSource();
+        new Animation(v => FillProgress = v, 0, 1, full ? MotionTokens.Release : Easing.Linear)
+            .Commit(this, FillAnimation, length: full ? MotionTokens.ReleaseMs : MotionTokens.ReducedMs,
+                finished: (_, _) => { FillProgress = 1; done.TrySetResult(); });
+        return done.Task;
+    }
+
+    // Coupe un remplissage en cours (cellule recyclée, état changé ailleurs) : bol plein.
+    public void StopFill()
+    {
+        this.AbortAnimation(FillAnimation);
+        FillProgress = 1;
     }
 
     private void UpdateGlaze()

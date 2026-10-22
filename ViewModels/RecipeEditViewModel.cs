@@ -222,6 +222,11 @@ public partial class RecipeEditViewModel : ObservableObject
             Ingredients.Remove(line);
     }
 
+    private const int SavedPauseMs = 400;
+
+    [ObservableProperty]
+    private bool isSaved;
+
     [RelayCommand]
     private async Task SaveAsync()
     {
@@ -253,6 +258,12 @@ public partial class RecipeEditViewModel : ObservableObject
         var tagNames = Tags.Where(t => t.IsSelected).Select(t => t.Name).ToList();
 
         await _service.SaveRecipeAsync(recipe, inputs, tagNames);
+
+        // Moment « recette enregistrée » : le bouton devient une coche, le temps de la voir.
+        IsSaved = true;
+        Motion.Haptics.Confirm();
+        if (Motion.MotionTokens.Level != Motion.MotionLevel.None)
+            await Task.Delay(SavedPauseMs);
         await Shell.Current.GoToAsync(".."); // ".." = retour à la page précédente (la liste)
     }
 
