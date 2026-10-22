@@ -168,16 +168,21 @@ public class RecipeService
             });
         }
 
-        // Tags : même stratégie (on vide et on recrée les liaisons).
-        target.RecipeTags.Clear();
+        // Tags : on garde les liaisons encore voulues et on n'ajoute que les nouvelles
+        // (vider puis recréer ferait suivre deux fois la clé (RecipeId, TagId) : exception EF).
         var tagCache = new Dictionary<string, Tag>(StringComparer.OrdinalIgnoreCase);
+        var wanted = new List<Tag>();
         foreach (var raw in tags)
         {
             if (string.IsNullOrWhiteSpace(raw))
                 continue;
             var tag = await GetOrCreateTagAsync(db, tagCache, raw.Trim());
-            target.RecipeTags.Add(new RecipeTag { Recipe = target, Tag = tag });
+            if (!wanted.Contains(tag)) wanted.Add(tag);
         }
+        foreach (var link in target.RecipeTags.Where(l => !wanted.Any(t => t.Id == l.TagId)).ToList())
+            target.RecipeTags.Remove(link);
+        foreach (var tag in wanted.Where(t => t.Id == 0 || !target.RecipeTags.Any(l => l.TagId == t.Id)))
+            target.RecipeTags.Add(new RecipeTag { Recipe = target, Tag = tag });
 
         await db.SaveChangesAsync();
     }

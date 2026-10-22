@@ -36,6 +36,8 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 - Chips tronqués dans « Cuisiner avec… » (« Carott »).
 - Enregistrer une recette sans titre ne faisait rien : un message explique quoi corriger.
 - Les vibrations faisaient planter l'app (permission `VIBRATE` manquante).
+- Réenregistrer une recette **qui a des tags** faisait planter l'app (liaison recette-tag
+  suivie deux fois par EF Core). Présent depuis l'ajout des tags.
 
 ### Removed
 - Restes du modèle MAUI (OpenSans, `dotnet_bot.png`, `Colors.xaml`, `Styles.xaml`),
