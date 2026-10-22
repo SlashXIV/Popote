@@ -2,119 +2,139 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Popote.ViewModels"
-             xmlns:conv="clr-namespace:Popote.Converters"
+             xmlns:controls="clr-namespace:Popote.Controls"
+             xmlns:res="clr-namespace:Popote.Resources.Strings"
              x:Class="Popote.Views.RecipeDetailPage"
              x:DataType="vm:RecipeDetailViewModel"
-             Title="Recette">
+             Title="{Binding Title}">
 
-    <ContentPage.Resources>
-        <conv:AisleToColorConverter x:Key="AisleToColor" />
-    </ContentPage.Resources>
+    <Grid>
+        <ScrollView x:Name="Scroller">
+            <VerticalStackLayout Spacing="{StaticResource Space24}" Padding="{StaticResource ScrollEnd}">
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="{Binding FavoriteToggleText}" Command="{Binding ToggleFavoriteCommand}" />
-        <ToolbarItem Text="Éditer" Command="{Binding GoToEditCommand}" />
-        <ToolbarItem Text="Partager" Order="Secondary" Command="{Binding ShareCommand}" />
-    </ContentPage.ToolbarItems>
+                <!-- Photo en pleine largeur ; sans photo, un simple espace sous la barre d'actions -->
+                <Image x:Name="Hero" Source="{Binding PhotoPath}" Aspect="AspectFill"
+                       HeightRequest="{StaticResource HeroHeight}" IsVisible="{Binding HasPhoto}"
+                       AutomationProperties.IsInAccessibleTree="False" />
+                <BoxView HeightRequest="{StaticResource TouchTarget}" Color="Transparent"
+                         IsVisible="{Binding HasPhoto, Converter={StaticResource Not}}" />
 
-    <ScrollView>
-        <VerticalStackLayout Padding="16" Spacing="24">
+                <VerticalStackLayout x:Name="Body" Padding="{StaticResource Gutter}" Spacing="{StaticResource Space24}">
 
-            <Border IsVisible="{Binding PhotoPath, Converter={StaticResource HasText}}"
-                    StrokeThickness="0" StrokeShape="RoundRectangle 16" HeightRequest="220">
-                <Image Source="{Binding PhotoPath}" Aspect="AspectFill" />
-            </Border>
+                    <VerticalStackLayout Spacing="{StaticResource Space12}">
+                        <Label x:Name="TitleLabel" Text="{Binding Title}" Style="{StaticResource Poster}"
+                               SemanticProperties.HeadingLevel="Level1" />
+                        <FlexLayout BindableLayout.ItemsSource="{Binding Tags}" Wrap="Wrap" Direction="Row"
+                                    AlignItems="Center" IsVisible="{Binding HasTags}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="x:String">
+                                    <Border Style="{StaticResource Chip}" Margin="{StaticResource ChipMargin}" FlexLayout.Shrink="0">
+                                        <Label Text="{Binding .}" Style="{StaticResource ChipLabel}" />
+                                    </Border>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </FlexLayout>
+                        <controls:NumberLabel Text="{Binding TimesLabel}" Style="{StaticResource Caption}"
+                                              IsVisible="{Binding HasTimes}" />
+                    </VerticalStackLayout>
 
-            <Label Text="{Binding Title}" Style="{StaticResource DisplayLabel}" />
+                    <Button Text="{x:Static res:AppResources.Detail_Cook_Action}"
+                            Command="{Binding GoToCookingModeCommand}" />
 
-            <!-- Tags (lecture seule) -->
-            <FlexLayout BindableLayout.ItemsSource="{Binding Tags}" Wrap="Wrap" Direction="Row"
-                        IsVisible="{Binding HasTags}">
-                <BindableLayout.ItemTemplate>
-                    <DataTemplate x:DataType="x:String">
-                        <Border Style="{StaticResource Chip}" Margin="0,0,8,8" FlexLayout.Shrink="0">
-                            <Label Text="{Binding .}" Style="{StaticResource ChipLabel}" LineBreakMode="NoWrap" />
+                    <!-- Portions : réglage fin + multiplicateurs, recalcule les quantités -->
+                    <VerticalStackLayout Spacing="{StaticResource Space8}">
+                        <controls:PortionStepper Value="{Binding TargetServings}" Caption="{Binding BaseServingsLabel}" />
+                        <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="{StaticResource Space8}"
+                              SemanticProperties.Description="{x:Static res:AppResources.Detail_Multiplier}">
+                            <Button Text="{x:Static res:AppResources.Multiplier_Half}" Style="{StaticResource CompactButton}"
+                                    SemanticProperties.Description="{x:Static res:AppResources.Multiplier_HalfSpoken}"
+                                    Command="{Binding MultiplyCommand}" CommandParameter="0.5" />
+                            <Button Grid.Column="1" Text="{x:Static res:AppResources.Multiplier_One}" Style="{StaticResource CompactButton}"
+                                    SemanticProperties.Description="{x:Static res:AppResources.Multiplier_OneSpoken}"
+                                    Command="{Binding MultiplyCommand}" CommandParameter="1" />
+                            <Button Grid.Column="2" Text="{x:Static res:AppResources.Multiplier_Two}" Style="{StaticResource CompactButton}"
+                                    SemanticProperties.Description="{x:Static res:AppResources.Multiplier_TwoSpoken}"
+                                    Command="{Binding MultiplyCommand}" CommandParameter="2" />
+                            <Button Grid.Column="3" Text="{x:Static res:AppResources.Multiplier_Three}" Style="{StaticResource CompactButton}"
+                                    SemanticProperties.Description="{x:Static res:AppResources.Multiplier_ThreeSpoken}"
+                                    Command="{Binding MultiplyCommand}" CommandParameter="3" />
+                        </Grid>
+                    </VerticalStackLayout>
+
+                    <!-- Mise en place : un bol par ingrédient, sur le plan de travail -->
+                    <VerticalStackLayout Spacing="{StaticResource Space8}">
+                        <Label Text="{x:Static res:AppResources.Detail_MiseEnPlace}" Style="{StaticResource Heading}" />
+                        <Border Style="{StaticResource Worktop}">
+                            <VerticalStackLayout>
+                                <BoxView Style="{StaticResource WorktopEdge}" />
+                                <VerticalStackLayout x:Name="Ingredients" Padding="{StaticResource WorktopPadding}"
+                                                     BindableLayout.ItemsSource="{Binding Ingredients}">
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate x:DataType="vm:ScaledIngredient">
+                                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="{StaticResource Space12}"
+                                                  MinimumHeightRequest="{StaticResource TouchTarget}" Padding="{StaticResource RowPadding}"
+                                                  SemanticProperties.Description="{Binding Spoken}">
+                                                <controls:Bowl Aisle="{Binding Aisle}" Size="{StaticResource Bowl}" />
+                                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center"
+                                                                     AutomationProperties.IsInAccessibleTree="False">
+                                                    <Label Text="{Binding Name}" Style="{StaticResource BodyStrong}" />
+                                                    <Label Text="{Binding Aisle}" Style="{StaticResource Caption}" />
+                                                </VerticalStackLayout>
+                                                <controls:NumberLabel Grid.Column="2" Text="{Binding QuantityLabel}" Style="{StaticResource Quantity}"
+                                                                      VerticalOptions="Center" HorizontalTextAlignment="End"
+                                                                      AutomationProperties.IsInAccessibleTree="False" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
                         </Border>
-                    </DataTemplate>
-                </BindableLayout.ItemTemplate>
-            </FlexLayout>
+                    </VerticalStackLayout>
 
-            <Label Text="{Binding TimesLabel}" Style="{StaticResource CaptionLabel}"
-                   IsVisible="{Binding HasTimes}" />
+                    <!-- Préparation : étapes numérotées (une recette est une séquence) -->
+                    <VerticalStackLayout Spacing="{StaticResource Space12}">
+                        <Label Text="{x:Static res:AppResources.Detail_Steps}" Style="{StaticResource Heading}" />
+                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding Steps}" Spacing="{StaticResource Space16}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="vm:StepLine">
+                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="{StaticResource Space12}"
+                                          SemanticProperties.Description="{Binding Spoken}">
+                                        <Border WidthRequest="{StaticResource StepBadge}" HeightRequest="{StaticResource StepBadge}" StrokeThickness="2" VerticalOptions="Start"
+                                                StrokeShape="RoundRectangle 999"
+                                                Stroke="{AppThemeBinding Light={StaticResource AccentLight}, Dark={StaticResource AccentDark}}"
+                                                AutomationProperties.IsInAccessibleTree="False">
+                                            <controls:NumberLabel Text="{Binding Number}" FontFamily="Bricolage" FontSize="{StaticResource StepBadgeText}"
+                                                                  HorizontalOptions="Center" VerticalOptions="Center"
+                                                                  TextColor="{AppThemeBinding Light={StaticResource AccentLight}, Dark={StaticResource AccentDark}}" />
+                                        </Border>
+                                        <Label Grid.Column="1" Text="{Binding Text}" Style="{StaticResource Body}"
+                                               VerticalOptions="Center" AutomationProperties.IsInAccessibleTree="False" />
+                                    </Grid>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
 
-            <Button Text="▶  Mode cuisson" Style="{StaticResource PrimaryButton}"
-                    Command="{Binding GoToCookingModeCommand}" />
-
-            <!-- Portions : multiplicateur rapide + ajustement fin, recalcule les quantités -->
-            <Border Style="{StaticResource CardBorder}">
-                <VerticalStackLayout Spacing="12">
-                    <HorizontalStackLayout Spacing="12">
-                        <Stepper Minimum="1" Maximum="50" Increment="1"
-                                 Value="{Binding TargetServings}" VerticalOptions="Center" />
-                        <Label Text="{Binding TargetServings, StringFormat='{0} portions'}"
-                               Style="{StaticResource TitleLabel}" VerticalOptions="Center" />
-                    </HorizontalStackLayout>
-                    <Label Text="{Binding BaseServingsLabel}" Style="{StaticResource CaptionLabel}" />
-                    <HorizontalStackLayout Spacing="8">
-                        <Button Text="×½" Style="{StaticResource ChipButton}" Command="{Binding MultiplyCommand}" CommandParameter="0.5" />
-                        <Button Text="×1" Style="{StaticResource ChipButton}" Command="{Binding MultiplyCommand}" CommandParameter="1" />
-                        <Button Text="×2" Style="{StaticResource ChipButton}" Command="{Binding MultiplyCommand}" CommandParameter="2" />
-                        <Button Text="×3" Style="{StaticResource ChipButton}" Command="{Binding MultiplyCommand}" CommandParameter="3" />
-                    </HorizontalStackLayout>
-                </VerticalStackLayout>
-            </Border>
-
-            <!-- Ingrédients en chips (avec pastille de rayon) -->
-            <VerticalStackLayout Spacing="8">
-                <Label Text="Ingrédients" Style="{StaticResource SubtitleLabel}" />
-                <FlexLayout BindableLayout.ItemsSource="{Binding Ingredients}" Wrap="Wrap" Direction="Row">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate x:DataType="vm:ScaledIngredient">
-                            <Border Style="{StaticResource Chip}" Margin="0,0,8,8" FlexLayout.Shrink="0">
-                                <HorizontalStackLayout Spacing="8">
-                                    <!-- Pastille de rayon -->
-                                    <Border WidthRequest="10" HeightRequest="10" StrokeThickness="0"
-                                            VerticalOptions="Center"
-                                            StrokeShape="RoundRectangle 5"
-                                            BackgroundColor="{Binding Aisle, Converter={StaticResource AisleToColor}}" />
-                                    <Label Text="{Binding Name}" Style="{StaticResource ChipLabel}" LineBreakMode="NoWrap" />
-                                    <Label Text="{Binding QuantityLabel}" Style="{StaticResource ChipLabel}" Opacity="0.7" LineBreakMode="NoWrap" />
-                                </HorizontalStackLayout>
-                            </Border>
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </FlexLayout>
-            </VerticalStackLayout>
-
-            <!-- Préparation en étapes numérotées -->
-            <VerticalStackLayout Spacing="12">
-                <Label Text="Préparation" Style="{StaticResource SubtitleLabel}" />
-                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Steps}" Spacing="12">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate x:DataType="vm:StepLine">
-                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
-                                <Border Grid.Column="0" WidthRequest="28" HeightRequest="28"
-                                        StrokeThickness="0" VerticalOptions="Start"
-                                        StrokeShape="RoundRectangle 14"
-                                        BackgroundColor="{AppThemeBinding Light={StaticResource AccentLight}, Dark={StaticResource AccentDark}}">
-                                    <Label Text="{Binding Number}" FontSize="13" FontFamily="InterSemiBold"
-                                           HorizontalOptions="Center" VerticalOptions="Center"
-                                           TextColor="{AppThemeBinding Light={StaticResource OnAccentLight}, Dark={StaticResource OnAccentDark}}" />
-                                </Border>
-                                <Label Grid.Column="1" Text="{Binding Text}" Style="{StaticResource BodyLabel}"
-                                       VerticalOptions="Center" />
-                            </Grid>
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
+                    <VerticalStackLayout Spacing="{StaticResource Space8}" IsVisible="{Binding HasNotes}">
+                        <Label Text="{x:Static res:AppResources.Detail_Notes}" Style="{StaticResource Heading}" />
+                        <Label Text="{Binding Notes}" Style="{StaticResource Body}" />
+                    </VerticalStackLayout>
                 </VerticalStackLayout>
             </VerticalStackLayout>
+        </ScrollView>
 
-            <!-- Notes perso -->
-            <VerticalStackLayout Spacing="8" IsVisible="{Binding HasNotes}">
-                <Label Text="Notes" Style="{StaticResource SubtitleLabel}" />
-                <Label Text="{Binding Notes}" Style="{StaticResource BodyLabel}" />
-            </VerticalStackLayout>
-
-        </VerticalStackLayout>
-    </ScrollView>
+        <!-- Barre d'actions flottante, sur pastilles (lisible sur la photo) -->
+        <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="{StaticResource Space4}"
+              Padding="{StaticResource FloatingBarPadding}" VerticalOptions="Start">
+            <controls:IconButton Glyph="IconBack" Look="OnPhoto" Description="{x:Static res:AppResources.Action_Back}"
+                                 Command="{Binding GoBackCommand}" />
+            <controls:IconButton Grid.Column="2" Glyph="IconStar" Look="OnPhoto" IconRole="Favorite"
+                                 Filled="{Binding IsFavorite}" Description="{Binding FavoriteActionText}"
+                                 Command="{Binding ToggleFavoriteCommand}" />
+            <controls:IconButton Grid.Column="3" Glyph="IconShare" Look="OnPhoto"
+                                 Description="{x:Static res:AppResources.Detail_Share}" Command="{Binding ShareCommand}" />
+            <controls:IconButton Grid.Column="4" Glyph="IconEdit" Look="OnPhoto"
+                                 Description="{x:Static res:AppResources.Detail_Edit}" Command="{Binding GoToEditCommand}" />
+        </Grid>
+    </Grid>
 </ContentPage>

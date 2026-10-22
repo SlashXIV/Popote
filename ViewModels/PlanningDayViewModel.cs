@@ -13,6 +13,9 @@ public class PlanningDayViewModel
     }
 
     public DateTime Date { get; }
-    public string Label { get; }
+    public string Label { get; }                                // « Lundi 19 » (titres, TalkBack)
+    public string DayName => Date.ToString("ddd");              // « lun. »
+    public string DayNumber => Date.Day.ToString();             // « 19 »
+    public bool IsToday => Date.Date == DateTime.Today;
     public ObservableCollection<PlannedMeal> Meals { get; } = new();
 }

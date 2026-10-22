@@ -4,6 +4,7 @@ using System.Text;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.ApplicationModel.DataTransfer;
+using Popote.Resources.Strings;
 using Popote.Services;
 
 namespace Popote.ViewModels;
@@ -29,13 +30,16 @@ public partial class RecipeDetailViewModel : ObservableObject
     private string title = string.Empty;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasPhoto))]
     private string? photoPath;
 
+    public bool HasPhoto => !string.IsNullOrWhiteSpace(PhotoPath);
+
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(FavoriteToggleText))]
+    [NotifyPropertyChangedFor(nameof(FavoriteActionText))]
     private bool isFavorite;
 
-    public string FavoriteToggleText => IsFavorite ? "★ Favori" : "☆ Favori";
+    public string FavoriteActionText => IsFavorite ? AppResources.Detail_Unfavorite : AppResources.Detail_Favorite;
 
     [ObservableProperty]
     private string? notes;
@@ -90,13 +94,13 @@ public partial class RecipeDetailViewModel : ObservableObject
         HasTags = Tags.Count > 0;
 
         var times = new List<string>();
-        if (r.PrepMinutes is int p && p > 0) times.Add($"Prépa {p} min");
-        if (r.CookMinutes is int c && c > 0) times.Add($"Cuisson {c} min");
-        TimesLabel = string.Join("  ·  ", times);
+        if (r.PrepMinutes is int p && p > 0) times.Add(string.Format(AppResources.Detail_Prep, p));
+        if (r.CookMinutes is int c && c > 0) times.Add(string.Format(AppResources.Detail_Cook, c));
+        TimesLabel = string.Join(" · ", times);
         HasTimes = times.Count > 0;
 
         _baseServings = r.Servings <= 0 ? 1 : r.Servings;
-        BaseServingsLabel = $"Recette de base : {_baseServings} portion" + (_baseServings > 1 ? "s" : "");
+        BaseServingsLabel = string.Format(AppResources.Detail_BaseServings, _baseServings);
 
         _baseLines.Clear();
         foreach (var ri in r.Ingredients)
@@ -121,9 +125,12 @@ public partial class RecipeDetailViewModel : ObservableObject
         foreach (var b in _baseLines)
         {
             var qty = ServingsScaler.Scale(b.Quantity, _baseServings, target);
-            var qtyText = qty.ToString("0.##", CultureInfo.InvariantCulture);
-            var label = string.IsNullOrWhiteSpace(b.Unit) ? qtyText : $"{qtyText} {b.Unit}";
-            Ingredients.Add(new ScaledIngredient(b.Name, b.Aisle, label));
+            var aisle = string.IsNullOrWhiteSpace(b.Aisle) ? AppResources.Aisle_Other : b.Aisle;
+            var spoken = QuantityFormat.SpokenLabel(qty, b.Unit);
+            var sentence = spoken.Length == 0
+                ? string.Format(AppResources.Ingredient_SpokenNoQty, b.Name, aisle)
+                : string.Format(AppResources.Ingredient_Spoken, spoken, b.Name, aisle);
+            Ingredients.Add(new ScaledIngredient(b.Name, aisle, QuantityFormat.Label(qty, b.Unit), sentence));
         }
     }
 
@@ -135,6 +142,9 @@ public partial class RecipeDetailViewModel : ObservableObject
         if (double.TryParse(factor, NumberStyles.Any, CultureInfo.InvariantCulture, out var f) && f > 0)
             TargetServings = Math.Max(1, (int)Math.Round(_baseServings * f));
     }
+
+    [RelayCommand]
+    private Task GoBackAsync() => Shell.Current.GoToAsync("..");
 
     [RelayCommand]
     private Task GoToEditAsync() => Shell.Current.GoToAsync($"RecipeEditPage?id={RecipeId}");
@@ -156,17 +166,17 @@ public partial class RecipeDetailViewModel : ObservableObject
         var sb = new StringBuilder();
         sb.AppendLine(Title);
         if (HasTimes) sb.AppendLine(TimesLabel);
-        sb.AppendLine($"Pour {TargetServings} portion(s)");
+        sb.AppendLine(string.Format(TargetServings > 1 ? AppResources.Share_ForMany : AppResources.Share_ForOne, TargetServings));
 
         sb.AppendLine();
-        sb.AppendLine("Ingrédients :");
+        sb.AppendLine(AppResources.Share_Ingredients);
         foreach (var i in Ingredients)
-            sb.AppendLine(string.IsNullOrEmpty(i.QuantityLabel) ? $"- {i.Name}" : $"- {i.Name} : {i.QuantityLabel}");
+            sb.AppendLine(string.IsNullOrEmpty(i.QuantityLabel) ? $"- {i.Name}" : string.Format(AppResources.Share_IngredientLine, i.Name, i.QuantityLabel));
 
         if (Steps.Count > 0)
         {
             sb.AppendLine();
-            sb.AppendLine("Préparation :");
+            sb.AppendLine(AppResources.Share_Steps);
             foreach (var s in Steps)
                 sb.AppendLine($"{s.Number}. {s.Text}");
         }
@@ -174,11 +184,11 @@ public partial class RecipeDetailViewModel : ObservableObject
         if (HasNotes)
         {
             sb.AppendLine();
-            sb.AppendLine($"Notes : {Notes}");
+            sb.AppendLine(string.Format(AppResources.Share_Notes, Notes));
         }
 
         sb.AppendLine();
-        sb.AppendLine("— partagé depuis Popote");
+        sb.AppendLine(AppResources.Share_Footer);
 
         await Share.Default.RequestAsync(new ShareTextRequest
         {
@@ -192,8 +202,12 @@ public partial class RecipeDetailViewModel : ObservableObject
     private record BaseLine(string Name, string? Aisle, double Quantity, string? Unit);
 }
 
-// Étape de préparation numérotée (affichage).
-public record StepLine(int Number, string Text);
+// Étape de préparation numérotée (affichage) ; Spoken = lecture TalkBack (« Étape 2. … »).
+public record StepLine(int Number, string Text)
+{
+    public string Spoken => string.Format(AppResources.Step_Spoken, Number, Text);
+}
 
-// Ingrédient avec quantité déjà mise à l'échelle (affichage).
-public record ScaledIngredient(string Name, string? Aisle, string QuantityLabel);
+// Ingrédient avec quantité déjà mise à l'échelle (affichage) ; Spoken = une seule phrase
+// TalkBack (« Farine, 200 grammes, rayon Épicerie »).
+public record ScaledIngredient(string Name, string Aisle, string QuantityLabel, string Spoken);

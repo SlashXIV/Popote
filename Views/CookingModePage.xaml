@@ -2,49 +2,79 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Popote.ViewModels"
+             xmlns:controls="clr-namespace:Popote.Controls"
+             xmlns:res="clr-namespace:Popote.Resources.Strings"
              x:Class="Popote.Views.CookingModePage"
              x:DataType="vm:CookingModeViewModel"
-             Title="Mode cuisson">
+             x:Name="Page"
+             Title="{x:Static res:AppResources.Cook_Title}">
 
-    <Grid RowDefinitions="Auto,*,Auto,Auto" Padding="16" RowSpacing="12">
+    <!-- Le poste de travail : lisible à un mètre, mains sales. Rien ne bouge pendant la lecture. -->
+    <Grid RowDefinitions="Auto,Auto,*,Auto,Auto" Padding="{StaticResource CookBottom}" RowSpacing="{StaticResource Space12}">
 
-        <Label Grid.Row="0" Text="{Binding Title}" Style="{StaticResource TitleLabel}" />
+        <Grid ColumnDefinitions="Auto,*" Padding="{StaticResource CookHeaderPadding}">
+            <controls:IconButton Glyph="IconBack" Description="{x:Static res:AppResources.Cook_Exit}"
+                                 Command="{Binding ExitCommand}" />
+            <Label Grid.Column="1" Text="{Binding Title}" Style="{StaticResource Caption}" VerticalOptions="Center"
+                   LineBreakMode="TailTruncation" SemanticProperties.HeadingLevel="Level1" />
+        </Grid>
 
-        <!-- Étapes défilables -->
-        <CarouselView Grid.Row="1" ItemsSource="{Binding Steps}" IndicatorView="indicator" Loop="False">
+        <!-- Progression : un bol par étape -->
+        <HorizontalStackLayout Grid.Row="1" Spacing="{StaticResource TightSpacing}" Padding="{StaticResource Gutter}"
+                               BindableLayout.ItemsSource="{Binding Progress}"
+                               SemanticProperties.Description="{Binding ProgressSpoken}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate x:DataType="vm:StepProgress">
+                    <controls:Bowl UseAccent="True" State="{Binding State}" Size="{StaticResource BowlProgress}" />
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </HorizontalStackLayout>
+
+        <!-- Étapes, une par écran, défilables au doigt -->
+        <CarouselView Grid.Row="2" ItemsSource="{Binding Steps}" Position="{Binding Position}" Loop="False"
+                      HorizontalScrollBarVisibility="Never">
             <CarouselView.ItemTemplate>
                 <DataTemplate x:DataType="vm:StepLine">
-                    <Border Style="{StaticResource CardBorder}" Margin="4">
-                        <VerticalStackLayout VerticalOptions="Center" Spacing="16">
-                            <Label Text="{Binding Number, StringFormat='Étape {0}'}"
-                                   Style="{StaticResource SubtitleLabel}" HorizontalOptions="Center"
-                                   TextColor="{AppThemeBinding Light={StaticResource AccentLight}, Dark={StaticResource AccentDark}}" />
-                            <Label Text="{Binding Text}" Style="{StaticResource TitleLabel}"
-                                   HorizontalTextAlignment="Center" />
+                    <ScrollView>
+                        <VerticalStackLayout Padding="{StaticResource StepPadding}" Spacing="{StaticResource Space16}"
+                                             SemanticProperties.Description="{Binding Spoken}">
+                            <HorizontalStackLayout Spacing="{StaticResource Space12}" AutomationProperties.IsInAccessibleTree="False">
+                                <controls:NumberLabel Text="{Binding Number}" Style="{StaticResource StepNumber}" />
+                                <Label Text="{Binding BindingContext.StepOfLabel, Source={x:Reference Page}}"
+                                       Style="{StaticResource Caption}" VerticalOptions="End" Margin="{StaticResource StepOfOffset}" />
+                            </HorizontalStackLayout>
+                            <Label Text="{Binding Text}" Style="{StaticResource StepText}"
+                                   AutomationProperties.IsInAccessibleTree="False" />
                         </VerticalStackLayout>
-                    </Border>
+                    </ScrollView>
                 </DataTemplate>
             </CarouselView.ItemTemplate>
         </CarouselView>
 
-        <IndicatorView Grid.Row="2" x:Name="indicator" HorizontalOptions="Center"
-                       IndicatorColor="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}"
-                       SelectedIndicatorColor="{AppThemeBinding Light={StaticResource AccentLight}, Dark={StaticResource AccentDark}}" />
-
         <!-- Minuteur -->
-        <Border Grid.Row="3" Style="{StaticResource CardBorder}">
-            <VerticalStackLayout Spacing="8">
-                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
-                    <Entry Grid.Column="0" Text="{Binding TimerMinutes}" Keyboard="Numeric" Placeholder="minuteur (min)" />
-                    <Button Grid.Column="1" Text="Démarrer" Style="{StaticResource ChipButton}"
-                            Command="{Binding StartTimerCommand}" />
-                    <Button Grid.Column="2" Text="Arrêter" Style="{StaticResource ChipButton}"
-                            Command="{Binding StopTimerCommand}" IsVisible="{Binding IsTimerRunning}" />
-                </Grid>
-                <Label Text="{Binding TimerDisplay}" Style="{StaticResource DisplayLabel}"
-                       HorizontalOptions="Center"
-                       IsVisible="{Binding TimerDisplay, Converter={StaticResource HasText}}" />
-            </VerticalStackLayout>
+        <Border Grid.Row="3" Style="{StaticResource Card}" Margin="{StaticResource Gutter}">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="{StaticResource Space12}">
+                <controls:Field IsVisible="{Binding IsTimerRunning, Converter={StaticResource Not}}"
+                                Suffix="{x:Static res:AppResources.Unit_Minutes}" VerticalOptions="Center">
+                    <Entry Text="{Binding TimerMinutes}" Keyboard="Numeric"
+                           Placeholder="{x:Static res:AppResources.Cook_Timer}"
+                           SemanticProperties.Description="{x:Static res:AppResources.Cook_TimerMinutes}" />
+                </controls:Field>
+                <controls:NumberLabel Text="{Binding TimerDisplay}" Style="{StaticResource Timer}"
+                                      IsVisible="{Binding IsTimerRunning}" VerticalOptions="Center" />
+                <Button Grid.Column="1" Text="{x:Static res:AppResources.Cook_TimerStart}" Style="{StaticResource SecondaryButton}"
+                        Command="{Binding StartTimerCommand}"
+                        IsVisible="{Binding IsTimerRunning, Converter={StaticResource Not}}" />
+                <Button Grid.Column="1" Text="{x:Static res:AppResources.Cook_TimerStop}" Style="{StaticResource QuietButton}"
+                        Command="{Binding StopTimerCommand}" IsVisible="{Binding IsTimerRunning}" />
+            </Grid>
         </Border>
+
+        <Grid Grid.Row="4" ColumnDefinitions="*,*" ColumnSpacing="{StaticResource Space12}" Padding="{StaticResource Gutter}">
+            <Button Text="{x:Static res:AppResources.Cook_Previous}" Style="{StaticResource LargeQuietButton}"
+                    Command="{Binding PreviousCommand}" IsEnabled="{Binding CanGoPrevious}" />
+            <Button Grid.Column="1" Text="{x:Static res:AppResources.Cook_Next}" Style="{StaticResource LargeButton}"
+                    Command="{Binding NextCommand}" IsEnabled="{Binding CanGoNext}" />
+        </Grid>
     </Grid>
 </ContentPage>

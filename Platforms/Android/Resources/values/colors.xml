@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Couleurs du thème Android natif (dialogues, sélecteurs, fond avant la première page).
+     Mêmes valeurs que Resources/Styles/AppColors.xaml (thème clair) ; values-night/ pour le sombre. -->
 <resources>
-    <color name="colorPrimary">#F7F4EE</color>
-    <color name="colorPrimaryDark">#F7F4EE</color>
-    <color name="colorAccent">#5B8E7D</color>
+    <color name="colorPrimary">#FBF3E6</color>
+    <color name="colorPrimaryDark">#FBF3E6</color>
+    <color name="colorAccent">#7A2F6B</color>
 </resources>

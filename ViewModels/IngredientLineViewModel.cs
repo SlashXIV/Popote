@@ -31,7 +31,7 @@ public partial class IngredientLineViewModel : ObservableObject
         "pièce", "pincée", "gousse", "tranche", "sachet"
     };
 
-    // Rayons proposés (chacun a une couleur de pastille, cf. AisleToColorConverter).
+    // Rayons proposés (chacun a son émail de bol, cf. Controls/Bowl.cs, AislePalette).
     public IReadOnlyList<string> Aisles { get; } = AisleOptions;
 
     public static readonly string[] AisleOptions =

@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.Media;
 using Microsoft.Maui.Storage;
 using Popote.Models;
+using Popote.Resources.Strings;
 using Popote.Services;
 
 namespace Popote.ViewModels;
@@ -82,10 +83,22 @@ public partial class RecipeEditViewModel : ObservableObject
     }
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(PageTitle))]
     private int recipeId;            // 0 = création, >0 = édition
+
+    public string PageTitle => RecipeId > 0 ? AppResources.Edit_TitleEdit : AppResources.Edit_TitleNew;
 
     [ObservableProperty]
     private string title = string.Empty;
+
+    // Message sous le champ Titre quand on tente d'enregistrer sans titre.
+    [ObservableProperty]
+    private string? titleError;
+
+    partial void OnTitleChanged(string value)
+    {
+        if (!string.IsNullOrWhiteSpace(value)) TitleError = null;
+    }
 
     [ObservableProperty]
     private string? instructions;
@@ -213,7 +226,10 @@ public partial class RecipeEditViewModel : ObservableObject
     private async Task SaveAsync()
     {
         if (string.IsNullOrWhiteSpace(Title))
-            return; // garde-fou minimal : pas de recette sans titre
+        {
+            TitleError = AppResources.Edit_TitleRequired; // pas de recette sans titre
+            return;
+        }
 
         var recipe = new Recipe
         {

@@ -1,22 +1,20 @@
 <?xml version = "1.0" encoding = "UTF-8" ?>
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:Popote"
              xmlns:conv="clr-namespace:Popote.Converters"
              x:Class="Popote.App">
     <Application.Resources>
         <ResourceDictionary>
+            <!-- Système maison (docs/design-system.md) : jetons, couleurs, styles par usage. -->
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
-                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
-                <!-- Design system maison (priorité sur les défauts du template). -->
+                <ResourceDictionary Source="Resources/Styles/Tokens.xaml" />
                 <ResourceDictionary Source="Resources/Styles/AppColors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/AppStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <!-- Converters globaux -->
             <conv:HasTextConverter x:Key="HasText" />
-            <conv:AisleToColorConverter x:Key="AisleToColor" />
+            <conv:InvertBoolConverter x:Key="Not" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

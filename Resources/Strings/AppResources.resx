@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Textes de l'interface de Popote, en français (langue de référence).
+     Une clé = un texte ; XAML : {x:Static res:AppResources.Clé}, C# : AppResources.Clé.
+     Typographie : apostrophe ’, guillemets « », insécable (U+00A0) avant : et les unités, fine insécable (U+202F) avant ; ! ?. -->
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Action_AddRecipe" xml:space="preserve">
+    <value>Ajouter une recette</value>
+  </data>
+  <data name="Action_Back" xml:space="preserve">
+    <value>Retour</value>
+  </data>
+  <data name="Action_Cancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="Action_CookWith" xml:space="preserve">
+    <value>Cuisiner avec…</value>
+  </data>
+  <data name="Action_Delete" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="Action_Ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Aisle_Other" xml:space="preserve">
+    <value>Divers</value>
+  </data>
+  <data name="App_Name" xml:space="preserve">
+    <value>Popote</value>
+  </data>
+  <data name="Backup_Empty" xml:space="preserve">
+    <value>Aucune donnée à sauvegarder.</value>
+  </data>
+  <data name="Backup_ShareTitle" xml:space="preserve">
+    <value>Sauvegarde Popote</value>
+  </data>
+  <data name="Backup_Title" xml:space="preserve">
+    <value>Sauvegarde</value>
+  </data>
+  <data name="CookWith_Empty" xml:space="preserve">
+    <value>Coche des ingrédients pour voir les recettes possibles.</value>
+  </data>
+  <data name="CookWith_Help" xml:space="preserve">
+    <value>Coche ce que tu as sous la main : on te montre les recettes qui utilisent tout.</value>
+  </data>
+  <data name="CookWith_NoMatch" xml:space="preserve">
+    <value>Aucune recette n’utilise tous ces ingrédients.</value>
+  </data>
+  <data name="CookWith_Results" xml:space="preserve">
+    <value>Recettes possibles</value>
+  </data>
+  <data name="CookWith_Title" xml:space="preserve">
+    <value>Cuisiner avec…</value>
+  </data>
+  <data name="Cook_Exit" xml:space="preserve">
+    <value>Quitter le mode cuisson</value>
+  </data>
+  <data name="Cook_Next" xml:space="preserve">
+    <value>Étape suivante</value>
+  </data>
+  <data name="Cook_Previous" xml:space="preserve">
+    <value>Précédente</value>
+  </data>
+  <data name="Cook_ProgressSpoken" xml:space="preserve">
+    <value>Étape {0} sur {1}</value>
+  </data>
+  <data name="Cook_StepOf" xml:space="preserve">
+    <value>sur {0}</value>
+  </data>
+  <data name="Cook_Timer" xml:space="preserve">
+    <value>Minuteur</value>
+  </data>
+  <data name="Cook_TimerAlertMessage" xml:space="preserve">
+    <value>C’est prêt !</value>
+  </data>
+  <data name="Cook_TimerDone" xml:space="preserve">
+    <value>Terminé !</value>
+  </data>
+  <data name="Cook_TimerDoneSpoken" xml:space="preserve">
+    <value>Minuteur terminé</value>
+  </data>
+  <data name="Cook_TimerMinutes" xml:space="preserve">
+    <value>Durée du minuteur, en minutes</value>
+  </data>
+  <data name="Cook_TimerStart" xml:space="preserve">
+    <value>Démarrer</value>
+  </data>
+  <data name="Cook_TimerStop" xml:space="preserve">
+    <value>Arrêter</value>
+  </data>
+  <data name="Cook_Title" xml:space="preserve">
+    <value>Mode cuisson</value>
+  </data>
+  <data name="Delete_ConfirmMessage" xml:space="preserve">
+    <value>« {0} » sera définitivement supprimée.</value>
+  </data>
+  <data name="Delete_ConfirmTitle" xml:space="preserve">
+    <value>Supprimer la recette ?</value>
+  </data>
+  <data name="Detail_BaseServings" xml:space="preserve">
+    <value>recette de base : {0}</value>
+  </data>
+  <data name="Detail_Cook" xml:space="preserve">
+    <value>Cuisson {0} min</value>
+  </data>
+  <data name="Detail_Cook_Action" xml:space="preserve">
+    <value>Cuisiner</value>
+  </data>
+  <data name="Detail_Edit" xml:space="preserve">
+    <value>Modifier</value>
+  </data>
+  <data name="Detail_Favorite" xml:space="preserve">
+    <value>Ajouter aux favoris</value>
+  </data>
+  <data name="Detail_MiseEnPlace" xml:space="preserve">
+    <value>Mise en place</value>
+  </data>
+  <data name="Detail_Multiplier" xml:space="preserve">
+    <value>Multiplier la recette</value>
+  </data>
+  <data name="Detail_Notes" xml:space="preserve">
+    <value>Notes</value>
+  </data>
+  <data name="Detail_Prep" xml:space="preserve">
+    <value>Prépa {0} min</value>
+  </data>
+  <data name="Detail_Share" xml:space="preserve">
+    <value>Partager</value>
+  </data>
+  <data name="Detail_Steps" xml:space="preserve">
+    <value>Préparation</value>
+  </data>
+  <data name="Detail_Unfavorite" xml:space="preserve">
+    <value>Retirer des favoris</value>
+  </data>
+  <data name="Edit_AddIngredient" xml:space="preserve">
+    <value>Ajouter un ingrédient</value>
+  </data>
+  <data name="Edit_AddTag" xml:space="preserve">
+    <value>Ajouter</value>
+  </data>
+  <data name="Edit_Aisle" xml:space="preserve">
+    <value>Rayon</value>
+  </data>
+  <data name="Edit_Cook" xml:space="preserve">
+    <value>Cuisson</value>
+  </data>
+  <data name="Edit_Favorite" xml:space="preserve">
+    <value>Favori</value>
+  </data>
+  <data name="Edit_FavoriteHelp" xml:space="preserve">
+    <value>En tête de la liste des recettes</value>
+  </data>
+  <data name="Edit_FieldTitle" xml:space="preserve">
+    <value>Titre</value>
+  </data>
+  <data name="Edit_IngredientName" xml:space="preserve">
+    <value>Ingrédient</value>
+  </data>
+  <data name="Edit_Ingredients" xml:space="preserve">
+    <value>Ingrédients</value>
+  </data>
+  <data name="Edit_Known" xml:space="preserve">
+    <value>Déjà utilisés · touche pour ajouter</value>
+  </data>
+  <data name="Edit_NewTag" xml:space="preserve">
+    <value>Nouveau tag</value>
+  </data>
+  <data name="Edit_Notes" xml:space="preserve">
+    <value>Notes perso</value>
+  </data>
+  <data name="Edit_NotesPlaceholder" xml:space="preserve">
+    <value>Ex. : la prochaine fois, moins de sel</value>
+  </data>
+  <data name="Edit_Photo" xml:space="preserve">
+    <value>Photo</value>
+  </data>
+  <data name="Edit_PhotoCamera" xml:space="preserve">
+    <value>Appareil photo</value>
+  </data>
+  <data name="Edit_PhotoGallery" xml:space="preserve">
+    <value>Galerie</value>
+  </data>
+  <data name="Edit_PhotoRemove" xml:space="preserve">
+    <value>Retirer</value>
+  </data>
+  <data name="Edit_Portions" xml:space="preserve">
+    <value>Portions</value>
+  </data>
+  <data name="Edit_PortionsHelp" xml:space="preserve">
+    <value>Les quantités ci-dessous sont pour ce nombre de portions. Au détail, tu pourras multiplier la recette.</value>
+  </data>
+  <data name="Edit_Prep" xml:space="preserve">
+    <value>Préparation</value>
+  </data>
+  <data name="Edit_Quantity" xml:space="preserve">
+    <value>Qté</value>
+  </data>
+  <data name="Edit_RemoveIngredient" xml:space="preserve">
+    <value>Retirer l’ingrédient</value>
+  </data>
+  <data name="Edit_Save" xml:space="preserve">
+    <value>Enregistrer</value>
+  </data>
+  <data name="Edit_Steps" xml:space="preserve">
+    <value>Préparation</value>
+  </data>
+  <data name="Edit_StepsPlaceholder" xml:space="preserve">
+    <value>Une étape par ligne…</value>
+  </data>
+  <data name="Edit_Tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="Edit_TitleEdit" xml:space="preserve">
+    <value>Modifier la recette</value>
+  </data>
+  <data name="Edit_TitleNew" xml:space="preserve">
+    <value>Nouvelle recette</value>
+  </data>
+  <data name="Edit_TitlePlaceholder" xml:space="preserve">
+    <value>Ex. : curry de pois chiches</value>
+  </data>
+  <data name="Edit_TitleRequired" xml:space="preserve">
+    <value>Donne un titre à la recette pour l’enregistrer.</value>
+  </data>
+  <data name="Edit_Unit" xml:space="preserve">
+    <value>Unité</value>
+  </data>
+  <data name="Ingredient_Spoken" xml:space="preserve">
+    <value>{1}, {0}, rayon {2}</value>
+  </data>
+  <data name="Ingredient_SpokenNoQty" xml:space="preserve">
+    <value>{0}, rayon {1}</value>
+  </data>
+  <data name="List_Empty" xml:space="preserve">
+    <value>Aucune recette pour l’instant</value>
+  </data>
+  <data name="List_EmptyHint" xml:space="preserve">
+    <value>Ajoute ta première recette : titre, ingrédients, étapes. Le reste viendra tout seul.</value>
+  </data>
+  <data name="List_OpenHint" xml:space="preserve">
+    <value>Ouvre la recette</value>
+  </data>
+  <data name="List_SearchPlaceholder" xml:space="preserve">
+    <value>Rechercher une recette</value>
+  </data>
+  <data name="List_Sort" xml:space="preserve">
+    <value>Trier</value>
+  </data>
+  <data name="Minutes_Short" xml:space="preserve">
+    <value>{0} min</value>
+  </data>
+  <data name="Minutes_Spoken" xml:space="preserve">
+    <value>{0} minutes</value>
+  </data>
+  <data name="Multiplier_Half" xml:space="preserve">
+    <value>×½</value>
+  </data>
+  <data name="Multiplier_HalfSpoken" xml:space="preserve">
+    <value>Moitié</value>
+  </data>
+  <data name="Multiplier_One" xml:space="preserve">
+    <value>×1</value>
+  </data>
+  <data name="Multiplier_OneSpoken" xml:space="preserve">
+    <value>Recette de base</value>
+  </data>
+  <data name="Multiplier_Three" xml:space="preserve">
+    <value>×3</value>
+  </data>
+  <data name="Multiplier_ThreeSpoken" xml:space="preserve">
+    <value>Triple</value>
+  </data>
+  <data name="Multiplier_Two" xml:space="preserve">
+    <value>×2</value>
+  </data>
+  <data name="Multiplier_TwoSpoken" xml:space="preserve">
+    <value>Double</value>
+  </data>
+  <data name="Portions_Add" xml:space="preserve">
+    <value>Ajouter une portion</value>
+  </data>
+  <data name="Portions_Many" xml:space="preserve">
+    <value>{0} portions</value>
+  </data>
+  <data name="Portions_One" xml:space="preserve">
+    <value>{0} portion</value>
+  </data>
+  <data name="Portions_Remove" xml:space="preserve">
+    <value>Retirer une portion</value>
+  </data>
+  <data name="Portions_Word_Many" xml:space="preserve">
+    <value>portions</value>
+  </data>
+  <data name="Portions_Word_One" xml:space="preserve">
+    <value>portion</value>
+  </data>
+  <data name="Recipe_FavoriteSpoken" xml:space="preserve">
+    <value>favori</value>
+  </data>
+  <data name="Restore_ConfirmAccept" xml:space="preserve">
+    <value>Restaurer</value>
+  </data>
+  <data name="Restore_ConfirmMessage" xml:space="preserve">
+    <value>Tes données actuelles seront remplacées par le fichier choisi.</value>
+  </data>
+  <data name="Restore_ConfirmTitle" xml:space="preserve">
+    <value>Restaurer une sauvegarde ?</value>
+  </data>
+  <data name="Restore_DoneMessage" xml:space="preserve">
+    <value>Redémarre l’app pour voir tes données restaurées.</value>
+  </data>
+  <data name="Restore_DoneTitle" xml:space="preserve">
+    <value>Restauration effectuée</value>
+  </data>
+  <data name="Restore_PickerTitle" xml:space="preserve">
+    <value>Choisis une sauvegarde Popote (.db3)</value>
+  </data>
+  <data name="Settings_Ambiance" xml:space="preserve">
+    <value>Ambiance</value>
+  </data>
+  <data name="Settings_AmbianceExpressive" xml:space="preserve">
+    <value>Expressive</value>
+  </data>
+  <data name="Settings_AmbianceHelp" xml:space="preserve">
+    <value>Sobre retire les mouvements décoratifs et garde de simples fondus. Le réglage Android « Supprimer les animations » coupe tout.</value>
+  </data>
+  <data name="Settings_AmbianceSober" xml:space="preserve">
+    <value>Sobre</value>
+  </data>
+  <data name="Settings_Appearance" xml:space="preserve">
+    <value>Apparence</value>
+  </data>
+  <data name="Settings_Backup" xml:space="preserve">
+    <value>Sauvegarder</value>
+  </data>
+  <data name="Settings_BackupHelp" xml:space="preserve">
+    <value>Exporter recettes, semaine et courses (.db3)</value>
+  </data>
+  <data name="Settings_Data" xml:space="preserve">
+    <value>Données</value>
+  </data>
+  <data name="Settings_Haptics" xml:space="preserve">
+    <value>Vibrations</value>
+  </data>
+  <data name="Settings_HapticsHelp" xml:space="preserve">
+    <value>Coche, enregistrement, fin du minuteur</value>
+  </data>
+  <data name="Settings_Restore" xml:space="preserve">
+    <value>Restaurer une sauvegarde</value>
+  </data>
+  <data name="Settings_RestoreHelp" xml:space="preserve">
+    <value>Remplace les données actuelles</value>
+  </data>
+  <data name="Settings_ThemeDark" xml:space="preserve">
+    <value>Sombre</value>
+  </data>
+  <data name="Settings_ThemeLight" xml:space="preserve">
+    <value>Clair</value>
+  </data>
+  <data name="Settings_ThemeSystem" xml:space="preserve">
+    <value>Système</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Réglages</value>
+  </data>
+  <data name="Settings_Version" xml:space="preserve">
+    <value>Popote {0} · 100 % hors ligne</value>
+  </data>
+  <data name="Share_Footer" xml:space="preserve">
+    <value>— partagé depuis Popote</value>
+  </data>
+  <data name="Share_ForMany" xml:space="preserve">
+    <value>Pour {0} portions</value>
+  </data>
+  <data name="Share_ForOne" xml:space="preserve">
+    <value>Pour {0} portion</value>
+  </data>
+  <data name="Share_IngredientLine" xml:space="preserve">
+    <value>- {0} : {1}</value>
+  </data>
+  <data name="Share_Ingredients" xml:space="preserve">
+    <value>Ingrédients :</value>
+  </data>
+  <data name="Share_Notes" xml:space="preserve">
+    <value>Notes : {0}</value>
+  </data>
+  <data name="Share_Steps" xml:space="preserve">
+    <value>Préparation :</value>
+  </data>
+  <data name="Shopping_AddPlaceholder" xml:space="preserve">
+    <value>Ajouter un article (ex. : sopalin)</value>
+  </data>
+  <data name="Shopping_Clear" xml:space="preserve">
+    <value>Vider la liste</value>
+  </data>
+  <data name="Shopping_ClearAccept" xml:space="preserve">
+    <value>Vider</value>
+  </data>
+  <data name="Shopping_ClearMessage" xml:space="preserve">
+    <value>Tous les articles seront retirés.</value>
+  </data>
+  <data name="Shopping_ClearTitle" xml:space="preserve">
+    <value>Vider la liste ?</value>
+  </data>
+  <data name="Shopping_Empty" xml:space="preserve">
+    <value>La liste est vide</value>
+  </data>
+  <data name="Shopping_EmptyHint" xml:space="preserve">
+    <value>Choisis des recettes en haut à droite, ou ajoute un article à la main.</value>
+  </data>
+  <data name="Shopping_FromRecipes" xml:space="preserve">
+    <value>Choisir des recettes</value>
+  </data>
+  <data name="Shopping_FromRecipesHelp" xml:space="preserve">
+    <value>Coche les recettes à cuisiner : leurs ingrédients rejoignent la liste. Tes articles ajoutés à la main sont gardés.</value>
+  </data>
+  <data name="Shopping_Generate" xml:space="preserve">
+    <value>Générer la liste</value>
+  </data>
+  <data name="Shopping_NoRecipes" xml:space="preserve">
+    <value>Aucune recette à choisir pour l’instant.</value>
+  </data>
+  <data name="Shopping_Remaining" xml:space="preserve">
+    <value>{0} sur {1} à prendre</value>
+  </data>
+  <data name="Shopping_RemoveItem" xml:space="preserve">
+    <value>Retirer {0}</value>
+  </data>
+  <data name="Shopping_Title" xml:space="preserve">
+    <value>Courses</value>
+  </data>
+  <data name="Sort_Favorites" xml:space="preserve">
+    <value>Favoris d’abord</value>
+  </data>
+  <data name="Sort_Recent" xml:space="preserve">
+    <value>Récentes</value>
+  </data>
+  <data name="Sort_Time" xml:space="preserve">
+    <value>Plus rapides</value>
+  </data>
+  <data name="Sort_Title" xml:space="preserve">
+    <value>Titre</value>
+  </data>
+  <data name="Step_Spoken" xml:space="preserve">
+    <value>Étape {0}. {1}</value>
+  </data>
+  <data name="Tab_Recipes" xml:space="preserve">
+    <value>Recettes</value>
+  </data>
+  <data name="Tab_Shopping" xml:space="preserve">
+    <value>Courses</value>
+  </data>
+  <data name="Tab_Week" xml:space="preserve">
+    <value>Semaine</value>
+  </data>
+  <data name="Unit_Minutes" xml:space="preserve">
+    <value>min</value>
+  </data>
+  <data name="Week_AddMeal" xml:space="preserve">
+    <value>Ajouter</value>
+  </data>
+  <data name="Week_AddMealTo" xml:space="preserve">
+    <value>Ajouter un repas le {0}</value>
+  </data>
+  <data name="Week_AddTo" xml:space="preserve">
+    <value>Ajouter — {0}</value>
+  </data>
+  <data name="Week_Next" xml:space="preserve">
+    <value>Semaine suivante</value>
+  </data>
+  <data name="Week_NoRecipesMessage" xml:space="preserve">
+    <value>Crée d’abord une recette.</value>
+  </data>
+  <data name="Week_NoRecipesTitle" xml:space="preserve">
+    <value>Aucune recette</value>
+  </data>
+  <data name="Week_Previous" xml:space="preserve">
+    <value>Semaine précédente</value>
+  </data>
+  <data name="Week_Range" xml:space="preserve">
+    <value>{0} – {1}</value>
+  </data>
+  <data name="Week_RangeSameMonth" xml:space="preserve">
+    <value>{0} – {1}</value>
+  </data>
+  <data name="Week_RemoveMeal" xml:space="preserve">
+    <value>Retirer {0}</value>
+  </data>
+  <data name="Week_Shopping" xml:space="preserve">
+    <value>Courses de la semaine</value>
+  </data>
+  <data name="Week_ShoppingTitle" xml:space="preserve">
+    <value>À acheter cette semaine</value>
+  </data>
+  <data name="Week_Title" xml:space="preserve">
+    <value>Semaine</value>
+  </data>
+</root>

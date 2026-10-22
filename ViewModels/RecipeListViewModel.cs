@@ -1,9 +1,8 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Maui.ApplicationModel.DataTransfer;
-using Microsoft.Maui.Storage;
 using Popote.Models;
+using Popote.Resources.Strings;
 using Popote.Services;
 
 namespace Popote.ViewModels;
@@ -28,7 +27,7 @@ public partial class RecipeListViewModel : ObservableObject
     private bool hasTags;
 
     // Tri (l'ordre doit correspondre à l'enum RecipeSort : Favoris, Récent, Titre, Temps).
-    public string[] SortOptions { get; } = { "Favoris", "Récent", "Titre", "Temps" };
+    public string[] SortOptions { get; } = { AppResources.Sort_Favorites, AppResources.Sort_Recent, AppResources.Sort_Title, AppResources.Sort_Time };
 
     [ObservableProperty]
     private int sortIndex;
@@ -113,65 +112,16 @@ public partial class RecipeListViewModel : ObservableObject
         if (recipe is null) return;
 
         var confirm = await Shell.Current.DisplayAlertAsync(
-            "Supprimer la recette ?",
-            $"« {recipe.Title} » sera définitivement supprimée.",
-            "Supprimer", "Annuler");
+            AppResources.Delete_ConfirmTitle,
+            string.Format(AppResources.Delete_ConfirmMessage, recipe.Title),
+            AppResources.Action_Delete, AppResources.Action_Cancel);
         if (!confirm) return;
 
         await _service.DeleteRecipeAsync(recipe.Id);
         await LoadAsync();
     }
 
-    // Exporte la base (.db3) et la partage (Drive, Fichiers, mail…).
+    // Réglages (thème, Ambiance, vibrations, sauvegarde) : remplace le menu ⋮.
     [RelayCommand]
-    private async Task BackupAsync()
-    {
-        await _service.CheckpointAsync(); // WAL -> .db3 (sauvegarde en un seul fichier)
-
-        var dbPath = Path.Combine(FileSystem.AppDataDirectory, "recettes.db3");
-        if (!File.Exists(dbPath))
-        {
-            await Shell.Current.DisplayAlertAsync("Sauvegarde", "Aucune donnée à sauvegarder.", "OK");
-            return;
-        }
-
-        var backup = Path.Combine(FileSystem.CacheDirectory, $"popote-sauvegarde-{DateTime.Now:yyyyMMdd-HHmm}.db3");
-        File.Copy(dbPath, backup, overwrite: true);
-
-        await Share.Default.RequestAsync(new ShareFileRequest
-        {
-            Title = "Sauvegarde Popote",
-            File = new ShareFile(backup)
-        });
-    }
-
-    // Restaure la base depuis un fichier de sauvegarde choisi.
-    [RelayCommand]
-    private async Task RestoreAsync()
-    {
-        var confirm = await Shell.Current.DisplayAlertAsync(
-            "Restaurer une sauvegarde ?",
-            "Tes données actuelles seront remplacées par le fichier choisi.",
-            "Restaurer", "Annuler");
-        if (!confirm) return;
-
-        var file = await FilePicker.Default.PickAsync(new PickOptions { PickerTitle = "Choisis une sauvegarde Popote (.db3)" });
-        if (file is null) return;
-
-        var dbPath = Path.Combine(FileSystem.AppDataDirectory, "recettes.db3");
-        using (var src = await file.OpenReadAsync())
-        using (var dst = File.Create(dbPath))
-            await src.CopyToAsync(dst);
-
-        // Supprime les journaux WAL périmés de l'ancienne base.
-        foreach (var ext in new[] { "-wal", "-shm" })
-        {
-            var p = dbPath + ext;
-            if (File.Exists(p)) File.Delete(p);
-        }
-
-        await _service.MigrateAsync(); // aligne le schéma si la sauvegarde est plus ancienne
-        await Shell.Current.DisplayAlertAsync("Restauration effectuée",
-            "Redémarre l'app pour voir tes données restaurées.", "OK");
-    }
+    private Task GoToSettingsAsync() => Shell.Current.GoToAsync("SettingsPage");
 }

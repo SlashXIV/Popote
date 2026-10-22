@@ -14,5 +14,6 @@ public partial class AppShell : Shell
         Routing.RegisterRoute("RecipeDetailPage", typeof(RecipeDetailPage));
         Routing.RegisterRoute("CookWithPage", typeof(CookWithPage));
         Routing.RegisterRoute("CookingModePage", typeof(CookingModePage));
+        Routing.RegisterRoute("SettingsPage", typeof(SettingsPage));
     }
 }

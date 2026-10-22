@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Popote.Models;
+using Popote.Resources.Strings;
 using Popote.Services;
 
 namespace Popote.ViewModels;
@@ -17,11 +18,17 @@ public partial class CookWithViewModel : ObservableObject
     // Ingrédients du catalogue en puces à bascule.
     public ObservableCollection<TagToggleViewModel> Ingredients { get; } = new();
 
+    // Les mêmes puces, rangées par rayon pour l'affichage (au lieu d'un mur de chips).
+    public ObservableCollection<AisleToggleGroup> Groups { get; } = new();
+
     // Recettes correspondant à la sélection.
     public ObservableCollection<Recipe> Results { get; } = new();
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(EmptyMessage))]
     private bool hasSelection;
+
+    public string EmptyMessage => HasSelection ? AppResources.CookWith_NoMatch : AppResources.CookWith_Empty;
 
     [RelayCommand]
     private async Task LoadAsync()
@@ -31,8 +38,15 @@ public partial class CookWithViewModel : ObservableObject
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
         Ingredients.Clear();
-        foreach (var item in await _service.GetIngredientCatalogAsync())
-            Ingredients.Add(new TagToggleViewModel(item.Name, selected.Contains(item.Name)));
+        Groups.Clear();
+        var catalog = await _service.GetIngredientCatalogAsync();
+        foreach (var group in catalog.GroupBy(i => string.IsNullOrWhiteSpace(i.Aisle) ? AppResources.Aisle_Other : i.Aisle!)
+                                     .OrderBy(g => g.Key))
+        {
+            var toggles = group.Select(i => new TagToggleViewModel(i.Name, selected.Contains(i.Name))).ToList();
+            foreach (var t in toggles) Ingredients.Add(t);
+            Groups.Add(new AisleToggleGroup(group.Key, toggles));
+        }
 
         await SearchAsync();
     }
@@ -65,3 +79,6 @@ public partial class CookWithViewModel : ObservableObject
         await Shell.Current.GoToAsync($"RecipeDetailPage?id={recipe.Id}");
     }
 }
+
+// Ingrédients d'un même rayon (« Cuisiner avec… »).
+public record AisleToggleGroup(string Aisle, IReadOnlyList<TagToggleViewModel> Items);

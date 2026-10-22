@@ -14,7 +14,8 @@ public partial class ShoppingItemViewModel : ObservableObject
     {
         Name = item.Name;
         Aisle = item.Aisle;
-        QuantityLabel = item.QuantityLabel;
+        QuantityLabel = QuantityFormat.Label(item.Quantity, item.Unit);
+        Spoken = SpokenFor(Name, item.Quantity, item.Unit);
     }
 
     // Article persistant (onglet Courses) — la coche est persistée via onToggle.
@@ -23,9 +24,8 @@ public partial class ShoppingItemViewModel : ObservableObject
         Id = item.Id;
         Name = item.Name;
         Aisle = item.Aisle ?? "Divers";
-        QuantityLabel = item.Quantity <= 0
-            ? string.Empty
-            : (string.IsNullOrWhiteSpace(item.Unit) ? item.Quantity.ToString() : $"{item.Quantity} {item.Unit}");
+        QuantityLabel = QuantityFormat.Label(item.Quantity, item.Unit);
+        Spoken = SpokenFor(Name, item.Quantity, item.Unit);
         IsManual = item.IsManual;
         isChecked = item.IsChecked; // init sans notification (pas de persistance à la construction)
         _onToggle = onToggle;
@@ -35,10 +35,18 @@ public partial class ShoppingItemViewModel : ObservableObject
     public string Name { get; } = string.Empty;
     public string Aisle { get; } = "Divers";
     public string QuantityLabel { get; } = string.Empty;
+    // Phrase TalkBack de la case : « Lait, 50 centilitres »
+    public string Spoken { get; } = string.Empty;
     public bool IsManual { get; }
 
     [ObservableProperty]
     private bool isChecked;
 
     partial void OnIsCheckedChanged(bool value) => _ = _onToggle?.Invoke(Id, value);
+
+    private static string SpokenFor(string name, double quantity, string? unit)
+    {
+        var qty = QuantityFormat.SpokenLabel(quantity, unit);
+        return qty.Length == 0 ? name : $"{name}, {qty}";
+    }
 }

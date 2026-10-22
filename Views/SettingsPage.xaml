@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Popote.ViewModels"
+             xmlns:controls="clr-namespace:Popote.Controls"
+             xmlns:res="clr-namespace:Popote.Resources.Strings"
+             x:Class="Popote.Views.SettingsPage"
+             x:DataType="vm:SettingsViewModel"
+             Title="{x:Static res:AppResources.Settings_Title}">
+
+    <Grid RowDefinitions="Auto,*">
+        <controls:PageHeader Title="{x:Static res:AppResources.Settings_Title}" ShowBack="True" />
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="{StaticResource PagePadding}" Spacing="{StaticResource Space24}">
+
+                <VerticalStackLayout Spacing="{StaticResource Space8}">
+                    <Label Text="{x:Static res:AppResources.Settings_Appearance}" Style="{StaticResource Eyebrow}"
+                           SemanticProperties.HeadingLevel="Level2" />
+                    <controls:Segmented Items="{Binding ThemeOptions}" SelectedIndex="{Binding ThemeIndex}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="{StaticResource Space8}">
+                    <Label Text="{x:Static res:AppResources.Settings_Ambiance}" Style="{StaticResource Eyebrow}"
+                           SemanticProperties.HeadingLevel="Level2" />
+                    <controls:Segmented Items="{Binding AmbianceOptions}" SelectedIndex="{Binding AmbianceIndex}" />
+                    <Label Text="{x:Static res:AppResources.Settings_AmbianceHelp}" Style="{StaticResource Caption}" />
+                </VerticalStackLayout>
+
+                <Border Style="{StaticResource Card}">
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="{StaticResource Space12}">
+                        <VerticalStackLayout VerticalOptions="Center" AutomationProperties.IsInAccessibleTree="False">
+                            <Label Text="{x:Static res:AppResources.Settings_Haptics}" Style="{StaticResource BodyStrong}" />
+                            <Label Text="{x:Static res:AppResources.Settings_HapticsHelp}" Style="{StaticResource Caption}" />
+                        </VerticalStackLayout>
+                        <controls:ToggleSwitch Grid.Column="1" IsToggled="{Binding HapticsEnabled}"
+                                              Description="{x:Static res:AppResources.Settings_Haptics}" />
+                    </Grid>
+                </Border>
+
+                <VerticalStackLayout Spacing="{StaticResource Space8}">
+                    <Label Text="{x:Static res:AppResources.Settings_Data}" Style="{StaticResource Eyebrow}"
+                           SemanticProperties.HeadingLevel="Level2" />
+                    <Button Text="{x:Static res:AppResources.Settings_Backup}" Style="{StaticResource SecondaryButton}"
+                            Command="{Binding BackupCommand}"
+                            SemanticProperties.Hint="{x:Static res:AppResources.Settings_BackupHelp}" />
+                    <Label Text="{x:Static res:AppResources.Settings_BackupHelp}" Style="{StaticResource Caption}"
+                           AutomationProperties.IsInAccessibleTree="False" />
+                    <Button Text="{x:Static res:AppResources.Settings_Restore}" Style="{StaticResource QuietButton}"
+                            Command="{Binding RestoreCommand}"
+                            SemanticProperties.Hint="{x:Static res:AppResources.Settings_RestoreHelp}" />
+                    <Label Text="{x:Static res:AppResources.Settings_RestoreHelp}" Style="{StaticResource Caption}"
+                           AutomationProperties.IsInAccessibleTree="False" />
+                </VerticalStackLayout>
+
+                <Label Text="{Binding VersionLabel}" Style="{StaticResource Caption}" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

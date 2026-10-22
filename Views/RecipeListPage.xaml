@@ -3,123 +3,134 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Popote.ViewModels"
              xmlns:models="clr-namespace:Popote.Models;assembly=Popote.Data"
+             xmlns:controls="clr-namespace:Popote.Controls"
+             xmlns:conv="clr-namespace:Popote.Converters"
+             xmlns:res="clr-namespace:Popote.Resources.Strings"
              x:Class="Popote.Views.RecipeListPage"
              x:DataType="vm:RecipeListViewModel"
              x:Name="Page"
-             Title="Mes recettes">
+             Title="{x:Static res:AppResources.Tab_Recipes}">
 
-    <!-- Bouton "Ajouter" dans la barre du haut -->
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Cuisiner" Command="{Binding GoToCookWithCommand}" />
-        <ToolbarItem Text="Ajouter" Command="{Binding GoToEditCommand}" />
-        <ToolbarItem Text="Sauvegarder les données" Order="Secondary" Command="{Binding BackupCommand}" />
-        <ToolbarItem Text="Restaurer une sauvegarde" Order="Secondary" Command="{Binding RestoreCommand}" />
-    </ContentPage.ToolbarItems>
+    <ContentPage.Resources>
+        <conv:RecipeCardConverter x:Key="RecipeCard" />
+    </ContentPage.Resources>
 
-    <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="16" RowSpacing="12">
+    <Grid RowDefinitions="Auto,Auto,Auto,*">
 
-        <!-- Barre de recherche : déclenche LoadCommand à la validation -->
-        <SearchBar Grid.Row="0"
-                   Placeholder="Rechercher une recette..."
-                   Text="{Binding SearchText}"
-                   SearchCommand="{Binding LoadCommand}" />
+        <controls:PageHeader Title="{x:Static res:AppResources.Tab_Recipes}"
+                             Eyebrow="{x:Static res:AppResources.App_Name}">
+            <controls:IconButton Glyph="IconPot" Command="{Binding GoToCookWithCommand}"
+                                 Description="{x:Static res:AppResources.Action_CookWith}" />
+            <controls:IconButton Glyph="IconPlus" Command="{Binding GoToEditCommand}"
+                                 Description="{x:Static res:AppResources.Action_AddRecipe}" />
+            <controls:IconButton Glyph="IconGear" Command="{Binding GoToSettingsCommand}"
+                                 Description="{x:Static res:AppResources.Settings_Title}" />
+        </controls:PageHeader>
 
-        <!-- Tri -->
-        <HorizontalStackLayout Grid.Row="1" Spacing="8" VerticalOptions="Center">
-            <Label Text="Trier :" Style="{StaticResource CaptionLabel}" VerticalOptions="Center" />
-            <Picker ItemsSource="{Binding SortOptions}" SelectedIndex="{Binding SortIndex}" WidthRequest="150" />
-        </HorizontalStackLayout>
+        <!-- Recherche (validée au clavier) -->
+        <controls:Field Grid.Row="1" Margin="{StaticResource GutterBand}">
+            <controls:Field.Leading>
+                <controls:Icon Glyph="IconSearch" Size="{StaticResource IconSmall}" Role="Mute" />
+            </controls:Field.Leading>
+            <Entry Text="{Binding SearchText}" ReturnType="Search" ReturnCommand="{Binding LoadCommand}"
+                   Placeholder="{x:Static res:AppResources.List_SearchPlaceholder}" />
+        </controls:Field>
 
-        <!-- Filtre par tags (défilement horizontal) -->
-        <ScrollView Grid.Row="2" Orientation="Horizontal" HorizontalScrollBarVisibility="Never"
-                    IsVisible="{Binding HasTags}">
-            <HorizontalStackLayout BindableLayout.ItemsSource="{Binding FilterTags}" Spacing="8">
-                <BindableLayout.ItemTemplate>
-                    <DataTemplate x:DataType="vm:TagToggleViewModel">
-                        <Border StrokeThickness="0" Padding="12,6" StrokeShape="RoundRectangle 999"
-                                BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryContainerLight}, Dark={StaticResource PrimaryContainerDark}}">
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer
-                                    Command="{Binding BindingContext.ToggleFilterCommand, Source={x:Reference Page}}"
-                                    CommandParameter="{Binding .}" />
-                            </Border.GestureRecognizers>
-                            <Label Text="{Binding Name}" FontFamily="InterMedium" FontSize="13"
-                                   TextColor="{AppThemeBinding Light={StaticResource PrimaryLight}, Dark={StaticResource PrimaryDark}}">
-                                <Label.Triggers>
-                                    <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
-                                        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource OnAccentLight}, Dark={StaticResource OnAccentDark}}" />
-                                    </DataTrigger>
-                                </Label.Triggers>
-                            </Label>
-                            <Border.Triggers>
-                                <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
-                                    <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource AccentLight}, Dark={StaticResource AccentDark}}" />
-                                </DataTrigger>
-                            </Border.Triggers>
-                        </Border>
-                    </DataTemplate>
-                </BindableLayout.ItemTemplate>
+        <!-- Tri + filtres par tags (défilement horizontal) -->
+        <ScrollView Grid.Row="2" Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+            <HorizontalStackLayout Spacing="{StaticResource Space8}" Padding="{StaticResource GutterBand}">
+                <controls:Field ShowChevron="True" MinimumWidthRequest="{StaticResource SortMinWidth}">
+                    <Picker ItemsSource="{Binding SortOptions}" SelectedIndex="{Binding SortIndex}"
+                            Title="{x:Static res:AppResources.List_Sort}" />
+                </controls:Field>
+                <HorizontalStackLayout BindableLayout.ItemsSource="{Binding FilterTags}" Spacing="{StaticResource Space8}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="vm:TagToggleViewModel">
+                            <controls:ToggleChip Text="{Binding Name}" IsSelected="{Binding IsSelected}"
+                                                 Command="{Binding BindingContext.ToggleFilterCommand, Source={x:Reference Page}}"
+                                                 CommandParameter="{Binding .}" />
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </HorizontalStackLayout>
             </HorizontalStackLayout>
         </ScrollView>
 
-        <!-- Pull-to-refresh -->
-        <RefreshView Grid.Row="3"
-                     IsRefreshing="{Binding IsBusy}"
-                     Command="{Binding LoadCommand}">
-
+        <RefreshView Grid.Row="3" IsRefreshing="{Binding IsBusy}" Command="{Binding LoadCommand}">
             <CollectionView ItemsSource="{Binding Recipes}" SelectionMode="None">
-
+                <CollectionView.Header>
+                    <BoxView HeightRequest="{StaticResource Space4}" Color="Transparent" />
+                </CollectionView.Header>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:Recipe">
                         <!-- Balayer vers la gauche = supprimer (avec confirmation). -->
-                        <SwipeView Margin="0,4">
+                        <SwipeView Margin="{StaticResource ListCardMargin}">
                             <SwipeView.RightItems>
                                 <SwipeItems>
-                                    <SwipeItem Text="Supprimer"
-                                               BackgroundColor="{StaticResource PaletteBrick}"
+                                    <SwipeItem Text="{x:Static res:AppResources.Action_Delete}"
                                                Command="{Binding BindingContext.DeleteRecipeCommand, Source={x:Reference Page}}"
                                                CommandParameter="{Binding .}" />
                                 </SwipeItems>
                             </SwipeView.RightItems>
-                            <Border Style="{StaticResource CardBorder}">
-                                <!-- Tap sur la carte = ouvrir le détail.
-                                     On vise la commande du ViewModel de la page via x:Reference,
-                                     car ici le BindingContext local est une Recipe, pas le VM. -->
+                            <Border Style="{StaticResource Card}" Padding="{StaticResource CardPadding}"
+                                    SemanticProperties.Description="{Binding ., Converter={StaticResource RecipeCard}, ConverterParameter=a11y}"
+                                    SemanticProperties.Hint="{x:Static res:AppResources.List_OpenHint}">
                                 <Border.GestureRecognizers>
                                     <TapGestureRecognizer
                                         Command="{Binding BindingContext.GoToDetailCommand, Source={x:Reference Page}}"
                                         CommandParameter="{Binding .}" />
                                 </Border.GestureRecognizers>
 
-                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
-                                <Border Grid.Column="0"
-                                        IsVisible="{Binding PhotoPath, Converter={StaticResource HasText}}"
-                                        WidthRequest="56" HeightRequest="56" StrokeThickness="0"
-                                        StrokeShape="RoundRectangle 10" VerticalOptions="Center">
-                                    <Image Source="{Binding PhotoPath}" Aspect="AspectFill" />
-                                </Border>
-                                <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
-                                    <HorizontalStackLayout Spacing="6">
-                                        <Label Text="★" Style="{StaticResource SubtitleLabel}"
-                                               IsVisible="{Binding IsFavorite}"
-                                               TextColor="{AppThemeBinding Light={StaticResource AccentLight}, Dark={StaticResource AccentDark}}" />
-                                        <Label Text="{Binding Title}" Style="{StaticResource SubtitleLabel}" />
-                                    </HorizontalStackLayout>
-                                    <Label Text="{Binding Servings, StringFormat='{0} portions'}"
-                                           Style="{StaticResource CaptionLabel}" />
-                                </VerticalStackLayout>
+                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="{StaticResource Space12}"
+                                      AutomationProperties.IsInAccessibleTree="False">
+                                    <!-- Photo, ou plan de travail avec un bol quand il n'y en a pas -->
+                                    <Border StrokeThickness="0" StrokeShape="RoundRectangle 12"
+                                            WidthRequest="{StaticResource Thumb}" HeightRequest="{StaticResource Thumb}"
+                                            BackgroundColor="{AppThemeBinding Light={StaticResource WorktopLight}, Dark={StaticResource WorktopDark}}">
+                                        <Grid>
+                                            <controls:Bowl UseAccent="True" Size="{StaticResource BowlLarge}" State="Placed" />
+                                            <Image Source="{Binding PhotoPath}" Aspect="AspectFill"
+                                                   IsVisible="{Binding PhotoPath, Converter={StaticResource HasText}}" />
+                                        </Grid>
+                                    </Border>
+                                    <VerticalStackLayout Grid.Column="1" Spacing="{StaticResource Space4}" VerticalOptions="Center">
+                                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="{StaticResource TightSpacing}">
+                                            <controls:Icon Glyph="IconStar" Filled="True" Role="Favorite" Size="{StaticResource IconTiny}"
+                                                           VerticalOptions="Start" Margin="{StaticResource StarNudge}"
+                                                           IsVisible="{Binding IsFavorite}" />
+                                            <Label Grid.Column="1" Text="{Binding Title}" Style="{StaticResource CardTitle}"
+                                                   LineBreakMode="WordWrap" MaxLines="3" />
+                                        </Grid>
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <controls:NumberLabel Text="{Binding ., Converter={StaticResource RecipeCard}, ConverterParameter=meta}"
+                                                                  Style="{StaticResource Caption}" />
+                                            <HorizontalStackLayout Grid.Column="1" Spacing="{StaticResource BowlGap}"
+                                                                   BindableLayout.ItemsSource="{Binding ., Converter={StaticResource RecipeCard}, ConverterParameter=aisles}">
+                                                <BindableLayout.ItemTemplate>
+                                                    <DataTemplate x:DataType="x:String">
+                                                        <controls:Bowl Aisle="{Binding .}" Size="{StaticResource BowlSmall}" />
+                                                    </DataTemplate>
+                                                </BindableLayout.ItemTemplate>
+                                            </HorizontalStackLayout>
+                                        </Grid>
+                                    </VerticalStackLayout>
                                 </Grid>
                             </Border>
                         </SwipeView>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
 
+                <!-- État vide : une invitation à agir, jamais un écran muet -->
                 <CollectionView.EmptyView>
-                    <Label Text="Aucune recette. Appuie sur Ajouter pour commencer."
-                           Style="{StaticResource CaptionLabel}"
-                           HorizontalOptions="Center" Margin="24" />
+                    <VerticalStackLayout Padding="{StaticResource EmptyPadding}" Spacing="{StaticResource Space12}" VerticalOptions="Center">
+                        <controls:Bowl UseAccent="True" State="Empty" Size="{StaticResource BowlEmptyState}" />
+                        <Label Text="{x:Static res:AppResources.List_Empty}" Style="{StaticResource Heading}"
+                               HorizontalTextAlignment="Center" />
+                        <Label Text="{x:Static res:AppResources.List_EmptyHint}" Style="{StaticResource Caption}"
+                               HorizontalTextAlignment="Center" />
+                        <Button Text="{x:Static res:AppResources.Action_AddRecipe}" Command="{Binding GoToEditCommand}"
+                                HorizontalOptions="Center" />
+                    </VerticalStackLayout>
                 </CollectionView.EmptyView>
-
             </CollectionView>
         </RefreshView>
     </Grid>

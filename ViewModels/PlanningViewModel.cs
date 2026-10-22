@@ -3,6 +3,7 @@ using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Popote.Models;
+using Popote.Resources.Strings;
 using Popote.Services;
 
 namespace Popote.ViewModels;
@@ -45,7 +46,10 @@ public partial class PlanningViewModel : ObservableObject
     {
         var start = WeekStart;
         var end = start.AddDays(7);
-        WeekLabel = $"Semaine du {start:dd MMM} au {start.AddDays(6):dd MMM}";
+        var last = start.AddDays(6);
+        WeekLabel = start.Month == last.Month
+            ? string.Format(AppResources.Week_RangeSameMonth, start.Day, last.ToString("d MMMM"))
+            : string.Format(AppResources.Week_Range, start.ToString("d MMM"), last.ToString("d MMM"));
 
         var meals = await _service.GetPlannedMealsAsync(start, end);
 
@@ -88,13 +92,13 @@ public partial class PlanningViewModel : ObservableObject
         var recipes = await _service.GetRecipesAsync();
         if (recipes.Count == 0)
         {
-            await Shell.Current.DisplayAlertAsync("Aucune recette", "Crée d'abord une recette.", "OK");
+            await Shell.Current.DisplayAlertAsync(AppResources.Week_NoRecipesTitle, AppResources.Week_NoRecipesMessage, AppResources.Action_Ok);
             return;
         }
 
         var titles = recipes.Select(r => r.Title).ToArray();
-        var choice = await Shell.Current.DisplayActionSheetAsync($"Ajouter — {day.Label}", "Annuler", null, titles);
-        if (string.IsNullOrEmpty(choice) || choice == "Annuler") return;
+        var choice = await Shell.Current.DisplayActionSheetAsync(string.Format(AppResources.Week_AddTo, day.Label), AppResources.Action_Cancel, null, titles);
+        if (string.IsNullOrEmpty(choice) || choice == AppResources.Action_Cancel) return;
 
         var recipe = recipes.FirstOrDefault(r => r.Title == choice);
         if (recipe is null) return;

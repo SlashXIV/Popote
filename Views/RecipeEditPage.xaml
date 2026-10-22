@@ -3,167 +3,162 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Popote.ViewModels"
              xmlns:services="clr-namespace:Popote.Services"
+             xmlns:controls="clr-namespace:Popote.Controls"
+             xmlns:res="clr-namespace:Popote.Resources.Strings"
              x:Class="Popote.Views.RecipeEditPage"
              x:DataType="vm:RecipeEditViewModel"
              x:Name="EditPage"
-             Title="Recette">
+             Title="{Binding PageTitle}">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="16" Spacing="14">
+    <!-- Saisie : aucune animation, le clavier et le focus restent ceux du système. -->
+    <Grid RowDefinitions="Auto,*">
+        <controls:PageHeader Title="{Binding PageTitle}" ShowBack="True">
+            <controls:IconButton Glyph="IconCheck" IconRole="Accent" Command="{Binding SaveCommand}"
+                                 Description="{x:Static res:AppResources.Edit_Save}" />
+        </controls:PageHeader>
 
-            <Label Text="Titre" Style="{StaticResource SubtitleLabel}" />
-            <Entry Text="{Binding Title}"
-                   Placeholder="Ex : Curry de pois chiches" />
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="{StaticResource PagePadding}" Spacing="{StaticResource Space24}">
 
-            <HorizontalStackLayout Spacing="12">
-                <Switch IsToggled="{Binding IsFavorite}"
-                        OnColor="{AppThemeBinding Light={StaticResource AccentLight}, Dark={StaticResource AccentDark}}" />
-                <Label Text="Favori ★" Style="{StaticResource BodyLabel}" VerticalOptions="Center" />
-            </HorizontalStackLayout>
+                <controls:Field Label="{x:Static res:AppResources.Edit_FieldTitle}" Error="{Binding TitleError}">
+                    <Entry Text="{Binding Title}" Placeholder="{x:Static res:AppResources.Edit_TitlePlaceholder}" />
+                </controls:Field>
 
-            <Label Text="Photo" Style="{StaticResource SubtitleLabel}" />
-            <Border IsVisible="{Binding PhotoPath, Converter={StaticResource HasText}}"
-                    StrokeThickness="0" StrokeShape="RoundRectangle 12" HeightRequest="180">
-                <Image Source="{Binding PhotoPath}" Aspect="AspectFill" />
-            </Border>
-            <HorizontalStackLayout Spacing="8">
-                <Button Text="Galerie" Style="{StaticResource ChipButton}" Command="{Binding PickPhotoCommand}" />
-                <Button Text="Appareil photo" Style="{StaticResource ChipButton}" Command="{Binding TakePhotoCommand}" />
-                <Button Text="Retirer" Style="{StaticResource ChipButton}"
-                        Command="{Binding RemovePhotoCommand}"
-                        IsVisible="{Binding PhotoPath, Converter={StaticResource HasText}}" />
-            </HorizontalStackLayout>
-
-            <Label Text="Portions" Style="{StaticResource SubtitleLabel}" />
-            <HorizontalStackLayout Spacing="12">
-                <Stepper Minimum="1" Maximum="20" Increment="1"
-                         Value="{Binding Servings}" />
-                <Label Text="{Binding Servings, StringFormat='{0} portions'}"
-                       Style="{StaticResource BodyLabel}"
-                       VerticalOptions="Center" />
-            </HorizontalStackLayout>
-            <Label Text="Les quantités d'ingrédients ci-dessous sont pour ce nombre de portions. Pas besoin d'être exact — au détail, on pourra multiplier la recette."
-                   Style="{StaticResource CaptionLabel}" />
-
-            <Label Text="Temps (minutes)" Style="{StaticResource SubtitleLabel}" />
-            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
-                <VerticalStackLayout Grid.Column="0" Spacing="4">
-                    <Label Text="Préparation" Style="{StaticResource CaptionLabel}" />
-                    <Entry Text="{Binding PrepMinutesText}" Keyboard="Numeric" Placeholder="min" />
-                </VerticalStackLayout>
-                <VerticalStackLayout Grid.Column="1" Spacing="4">
-                    <Label Text="Cuisson" Style="{StaticResource CaptionLabel}" />
-                    <Entry Text="{Binding CookMinutesText}" Keyboard="Numeric" Placeholder="min" />
-                </VerticalStackLayout>
-            </Grid>
-
-            <Label Text="Ingrédients" Style="{StaticResource SubtitleLabel}" />
-            <!-- Liste éditable : une ligne = nom + quantité + unité + bouton supprimer.
-                 BindableLayout suffit (peu de lignes, pas besoin de virtualisation). -->
-            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Ingredients}" Spacing="14">
-                <BindableLayout.ItemTemplate>
-                    <DataTemplate x:DataType="vm:IngredientLineViewModel">
-                        <VerticalStackLayout Spacing="6">
-                            <!-- Rangée 1 : nom + supprimer -->
-                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="6">
-                                <Entry Grid.Column="0" Text="{Binding Name}" Placeholder="Ingrédient" />
-                                <!-- La ligne ne connaît pas le VM de page : on vise sa commande
-                                     via x:Reference, et on passe la ligne en paramètre. -->
-                                <Button Grid.Column="1" Text="✕"
-                                        WidthRequest="40" HeightRequest="40"
-                                        BackgroundColor="Transparent" FontSize="16"
-                                        TextColor="{AppThemeBinding Light={StaticResource TextSecondaryLight}, Dark={StaticResource TextSecondaryDark}}"
-                                        Command="{Binding BindingContext.RemoveIngredientCommand, Source={x:Reference EditPage}}"
-                                        CommandParameter="{Binding .}" />
-                            </Grid>
-                            <!-- Rangée 2 : quantité + unité + rayon -->
-                            <Grid ColumnDefinitions="Auto,Auto,*" ColumnSpacing="6">
-                                <Entry Grid.Column="0" Text="{Binding QuantityText}"
-                                       Placeholder="Qté" Keyboard="Numeric" WidthRequest="64" />
-                                <Picker Grid.Column="1" Title="Unité"
-                                        ItemsSource="{Binding Units}" SelectedItem="{Binding Unit}"
-                                        WidthRequest="104" />
-                                <Picker Grid.Column="2" Title="Rayon"
-                                        ItemsSource="{Binding Aisles}" SelectedItem="{Binding Aisle}" />
-                            </Grid>
+                <Border Style="{StaticResource Card}">
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="{StaticResource Space12}">
+                        <VerticalStackLayout VerticalOptions="Center" AutomationProperties.IsInAccessibleTree="False">
+                            <Label Text="{x:Static res:AppResources.Edit_Favorite}" Style="{StaticResource BodyStrong}" />
+                            <Label Text="{x:Static res:AppResources.Edit_FavoriteHelp}" Style="{StaticResource Caption}" />
                         </VerticalStackLayout>
-                    </DataTemplate>
-                </BindableLayout.ItemTemplate>
+                        <controls:ToggleSwitch Grid.Column="1" IsToggled="{Binding IsFavorite}"
+                                              Description="{x:Static res:AppResources.Edit_Favorite}" />
+                    </Grid>
+                </Border>
+
+                <!-- Photo -->
+                <VerticalStackLayout Spacing="{StaticResource Space8}">
+                    <Label Text="{x:Static res:AppResources.Edit_Photo}" Style="{StaticResource Eyebrow}" />
+                    <Border IsVisible="{Binding PhotoPath, Converter={StaticResource HasText}}"
+                            StrokeThickness="0" StrokeShape="RoundRectangle 16"
+                            HeightRequest="{StaticResource PhotoEditHeight}">
+                        <Image Source="{Binding PhotoPath}" Aspect="AspectFill" AutomationProperties.IsInAccessibleTree="False" />
+                    </Border>
+                    <HorizontalStackLayout Spacing="{StaticResource Space8}">
+                        <Button Text="{x:Static res:AppResources.Edit_PhotoGallery}" Style="{StaticResource CompactButton}" Command="{Binding PickPhotoCommand}" />
+                        <Button Text="{x:Static res:AppResources.Edit_PhotoCamera}" Style="{StaticResource CompactButton}" Command="{Binding TakePhotoCommand}" />
+                        <Button Text="{x:Static res:AppResources.Edit_PhotoRemove}" Style="{StaticResource QuietButton}"
+                                Command="{Binding RemovePhotoCommand}"
+                                IsVisible="{Binding PhotoPath, Converter={StaticResource HasText}}" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+
+                <!-- Portions de base et temps -->
+                <VerticalStackLayout Spacing="{StaticResource Space8}">
+                    <Label Text="{x:Static res:AppResources.Edit_Portions}" Style="{StaticResource Eyebrow}" />
+                    <controls:PortionStepper Value="{Binding Servings}" Maximum="20" />
+                    <Label Text="{x:Static res:AppResources.Edit_PortionsHelp}" Style="{StaticResource Caption}" />
+                </VerticalStackLayout>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="{StaticResource Space12}">
+                    <controls:Field Label="{x:Static res:AppResources.Edit_Prep}" Suffix="{x:Static res:AppResources.Unit_Minutes}">
+                        <Entry Text="{Binding PrepMinutesText}" Keyboard="Numeric" />
+                    </controls:Field>
+                    <controls:Field Grid.Column="1" Label="{x:Static res:AppResources.Edit_Cook}" Suffix="{x:Static res:AppResources.Unit_Minutes}">
+                        <Entry Text="{Binding CookMinutesText}" Keyboard="Numeric" />
+                    </controls:Field>
+                </Grid>
+
+                <!-- Ingrédients : une carte par ligne (nom, quantité, unité, rayon) -->
+                <VerticalStackLayout Spacing="{StaticResource Space12}">
+                    <Label Text="{x:Static res:AppResources.Edit_Ingredients}" Style="{StaticResource Heading}" />
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding Ingredients}" Spacing="{StaticResource Space12}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="vm:IngredientLineViewModel">
+                                <Border Style="{StaticResource Card}">
+                                    <VerticalStackLayout Spacing="{StaticResource Space8}">
+                                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="{StaticResource Space4}">
+                                            <controls:Field>
+                                                <Entry Text="{Binding Name}" Placeholder="{x:Static res:AppResources.Edit_IngredientName}" />
+                                            </controls:Field>
+                                            <controls:IconButton Grid.Column="1" Glyph="IconTrash" IconRole="Mute"
+                                                                 Description="{x:Static res:AppResources.Edit_RemoveIngredient}"
+                                                                 Command="{Binding BindingContext.RemoveIngredientCommand, Source={x:Reference EditPage}}"
+                                                                 CommandParameter="{Binding .}" />
+                                        </Grid>
+                                        <Grid ColumnDefinitions="*,2*" ColumnSpacing="{StaticResource Space8}">
+                                            <controls:Field>
+                                                <Entry Text="{Binding QuantityText}" Keyboard="Numeric"
+                                                       Placeholder="{x:Static res:AppResources.Edit_Quantity}" />
+                                            </controls:Field>
+                                            <controls:Field Grid.Column="1" ShowChevron="True">
+                                                <Picker Title="{x:Static res:AppResources.Edit_Unit}"
+                                                        ItemsSource="{Binding Units}" SelectedItem="{Binding Unit}" />
+                                            </controls:Field>
+                                        </Grid>
+                                        <controls:Field ShowChevron="True">
+                                            <controls:Field.Leading>
+                                                <controls:Bowl Aisle="{Binding Aisle}" Size="{StaticResource Bowl}" />
+                                            </controls:Field.Leading>
+                                            <Picker Title="{x:Static res:AppResources.Edit_Aisle}"
+                                                    ItemsSource="{Binding Aisles}" SelectedItem="{Binding Aisle}" />
+                                        </controls:Field>
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                    <Button Text="{x:Static res:AppResources.Edit_AddIngredient}" Style="{StaticResource QuietButton}"
+                            Command="{Binding AddIngredientCommand}" />
+
+                    <!-- Suggestions du catalogue : toucher ajoute une ligne pré-remplie -->
+                    <VerticalStackLayout Spacing="{StaticResource Space8}" IsVisible="{Binding HasKnownIngredients}">
+                        <Label Text="{x:Static res:AppResources.Edit_Known}" Style="{StaticResource Caption}" />
+                        <FlexLayout BindableLayout.ItemsSource="{Binding KnownIngredients}" Wrap="Wrap" Direction="Row">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="services:IngredientCatalogItem">
+                                    <Button Text="{Binding Name}" Style="{StaticResource ChipAction}" Margin="{StaticResource ChipMargin}"
+                                            FlexLayout.Shrink="0"
+                                            Command="{Binding BindingContext.AddKnownIngredientCommand, Source={x:Reference EditPage}}"
+                                            CommandParameter="{Binding .}" />
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </FlexLayout>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+
+                <!-- Tags -->
+                <VerticalStackLayout Spacing="{StaticResource Space8}">
+                    <Label Text="{x:Static res:AppResources.Edit_Tags}" Style="{StaticResource Heading}" />
+                    <FlexLayout BindableLayout.ItemsSource="{Binding Tags}" Wrap="Wrap" Direction="Row">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="vm:TagToggleViewModel">
+                                <controls:ToggleChip Text="{Binding Name}" IsSelected="{Binding IsSelected}" Margin="{StaticResource ChipMarginRow}"
+                                                     FlexLayout.Shrink="0"
+                                                     Command="{Binding BindingContext.ToggleTagCommand, Source={x:Reference EditPage}}"
+                                                     CommandParameter="{Binding .}" />
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </FlexLayout>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="{StaticResource Space8}">
+                        <controls:Field>
+                            <Entry Text="{Binding NewTagText}" Placeholder="{x:Static res:AppResources.Edit_NewTag}"
+                                   ReturnCommand="{Binding AddNewTagCommand}" />
+                        </controls:Field>
+                        <Button Grid.Column="1" Text="{x:Static res:AppResources.Edit_AddTag}" Style="{StaticResource CompactButton}"
+                                Command="{Binding AddNewTagCommand}" />
+                    </Grid>
+                </VerticalStackLayout>
+
+                <controls:Field Label="{x:Static res:AppResources.Edit_Steps}">
+                    <Editor Text="{Binding Instructions}" Placeholder="{x:Static res:AppResources.Edit_StepsPlaceholder}" />
+                </controls:Field>
+
+                <controls:Field Label="{x:Static res:AppResources.Edit_Notes}">
+                    <Editor Text="{Binding Notes}" Placeholder="{x:Static res:AppResources.Edit_NotesPlaceholder}" />
+                </controls:Field>
+
+                <Button Text="{x:Static res:AppResources.Edit_Save}" Command="{Binding SaveCommand}" />
             </VerticalStackLayout>
-            <Button Text="Ajouter un ingrédient"
-                    Command="{Binding AddIngredientCommand}" />
-
-            <!-- Suggestions du catalogue : tap pour ajouter une ligne pré-remplie -->
-            <VerticalStackLayout Spacing="6" IsVisible="{Binding HasKnownIngredients}">
-                <Label Text="Déjà utilisés (tap pour ajouter)" Style="{StaticResource CaptionLabel}" />
-                <FlexLayout BindableLayout.ItemsSource="{Binding KnownIngredients}" Wrap="Wrap" Direction="Row">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate x:DataType="services:IngredientCatalogItem">
-                            <Border Style="{StaticResource Chip}" Margin="0,0,8,8" FlexLayout.Shrink="0">
-                                <Border.GestureRecognizers>
-                                    <TapGestureRecognizer
-                                        Command="{Binding BindingContext.AddKnownIngredientCommand, Source={x:Reference EditPage}}"
-                                        CommandParameter="{Binding .}" />
-                                </Border.GestureRecognizers>
-                                <Label Text="{Binding Name}" Style="{StaticResource ChipLabel}" LineBreakMode="NoWrap" />
-                            </Border>
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </FlexLayout>
-            </VerticalStackLayout>
-
-            <Label Text="Tags" Style="{StaticResource SubtitleLabel}" />
-            <FlexLayout BindableLayout.ItemsSource="{Binding Tags}" Wrap="Wrap" Direction="Row">
-                <BindableLayout.ItemTemplate>
-                    <DataTemplate x:DataType="vm:TagToggleViewModel">
-                        <Border Margin="0,0,8,8" FlexLayout.Shrink="0" StrokeThickness="0"
-                                Padding="12,6" StrokeShape="RoundRectangle 999"
-                                BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryContainerLight}, Dark={StaticResource PrimaryContainerDark}}">
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer
-                                    Command="{Binding BindingContext.ToggleTagCommand, Source={x:Reference EditPage}}"
-                                    CommandParameter="{Binding .}" />
-                            </Border.GestureRecognizers>
-                            <Label Text="{Binding Name}" FontFamily="InterMedium" FontSize="13"
-                                   TextColor="{AppThemeBinding Light={StaticResource PrimaryLight}, Dark={StaticResource PrimaryDark}}">
-                                <Label.Triggers>
-                                    <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
-                                        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource OnAccentLight}, Dark={StaticResource OnAccentDark}}" />
-                                    </DataTrigger>
-                                </Label.Triggers>
-                            </Label>
-                            <Border.Triggers>
-                                <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
-                                    <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource AccentLight}, Dark={StaticResource AccentDark}}" />
-                                </DataTrigger>
-                            </Border.Triggers>
-                        </Border>
-                    </DataTemplate>
-                </BindableLayout.ItemTemplate>
-            </FlexLayout>
-            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="6">
-                <Entry Grid.Column="0" Text="{Binding NewTagText}" Placeholder="Nouveau tag" />
-                <Button Grid.Column="1" Text="Ajouter" Style="{StaticResource ChipButton}"
-                        Command="{Binding AddNewTagCommand}" />
-            </Grid>
-
-            <Label Text="Préparation" Style="{StaticResource SubtitleLabel}" />
-            <Editor Text="{Binding Instructions}"
-                    Placeholder="Décris les étapes..."
-                    AutoSize="TextChanges"
-                    HeightRequest="180" />
-
-            <Label Text="Notes perso" Style="{StaticResource SubtitleLabel}" />
-            <Editor Text="{Binding Notes}"
-                    Placeholder="Ex : la prochaine fois, moins de sel"
-                    AutoSize="TextChanges"
-                    HeightRequest="90" />
-
-            <Button Text="Enregistrer"
-                    Style="{StaticResource PrimaryButton}"
-                    Command="{Binding SaveCommand}"
-                    Margin="0,8,0,0" />
-
-        </VerticalStackLayout>
-    </ScrollView>
+        </ScrollView>
+    </Grid>
 </ContentPage>

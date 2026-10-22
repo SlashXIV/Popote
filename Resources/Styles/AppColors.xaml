@@ -1,53 +1,70 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
-    Palette Popote — base neutre chaude + accents "earthy naturals".
-    Base douce (pas de blanc pur) pour le confort visuel ; les couleurs vives
-    servent d'ACCENTS (actions, pastilles de rayon, tags), pas de fond.
-    À fusionner dans App.xaml (après Colors.xaml/Styles.xaml du template).
+    Couleurs de Popote (docs/design-system.md) : base crème chaude, safran pour agir,
+    aubergine pour le texte d'action et la sélection, émaux de céramique pour les rayons.
+    Chaque rôle existe en paire <Nom>Light / <Nom>Dark : les styles les lisent via
+    AppThemeBinding, et ThemeContrastTests (Popote.Tests) relit ce fichier pour vérifier
+    les contrastes WCAG et la distinction des rayons en protan/deutan. Pas de blanc ni de
+    noir purs.
 -->
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
-    <!-- Marque / accent principal = Jungle Teal -->
-    <Color x:Key="PrimaryLight">#5B8E7D</Color>
-    <Color x:Key="PrimaryDark">#7FB3A2</Color>
-    <Color x:Key="PrimaryContainerLight">#E4EDE9</Color>
-    <Color x:Key="PrimaryContainerDark">#2A3F38</Color>
+    <!-- Fonds : crème (page), carte, plan de travail (zones de mise en place) -->
+    <Color x:Key="BackgroundLight">#FBF3E6</Color>
+    <Color x:Key="BackgroundDark">#1C1620</Color>
+    <Color x:Key="SurfaceLight">#FFF9F0</Color>
+    <Color x:Key="SurfaceDark">#261E2A</Color>
+    <Color x:Key="WorktopLight">#F7E6C8</Color>
+    <Color x:Key="WorktopDark">#2F2533</Color>
+    <Color x:Key="LineLight">#EAD8BC</Color>
+    <Color x:Key="LineDark">#40344A</Color>
 
-    <!-- Accent (actions) = teal ; texte posé dessus = clair/sombre -->
-    <Color x:Key="AccentLight">#5B8E7D</Color>
-    <Color x:Key="AccentDark">#7FB3A2</Color>
-    <Color x:Key="OnAccentLight">#FFFFFF</Color>
-    <Color x:Key="OnAccentDark">#10221C</Color>
+    <!-- Texte : encre aubergine très sombre (≥ 7:1), texte secondaire (≥ 4,5:1) -->
+    <Color x:Key="InkLight">#2A1F2A</Color>
+    <Color x:Key="InkDark">#F4ECEF</Color>
+    <Color x:Key="MuteLight">#66575F</Color>
+    <Color x:Key="MuteDark">#BCAAB7</Color>
 
-    <!-- Fonds et surfaces (chauds, doux) -->
-    <Color x:Key="BackgroundLight">#F7F4EE</Color>
-    <Color x:Key="BackgroundDark">#15191A</Color>
-    <Color x:Key="SurfaceLight">#FCFAF4</Color>
-    <Color x:Key="SurfaceDark">#1E2422</Color>
+    <!-- Aubergine : texte d'action, sélection, focus, anneaux (≥ 4,5:1 sur tous les fonds) -->
+    <Color x:Key="AccentLight">#7A2F6B</Color>
+    <Color x:Key="AccentDark">#E3A6D3</Color>
+    <Color x:Key="OnAccentLight">#FFF9F0</Color>
+    <Color x:Key="OnAccentDark">#2A1626</Color>
+    <Color x:Key="AccentSoftLight">#F2DCEA</Color>
+    <Color x:Key="AccentSoftDark">#3D2939</Color>
 
-    <!-- Texte (encre douce, pas de noir pur) -->
-    <Color x:Key="TextPrimaryLight">#2B2926</Color>
-    <Color x:Key="TextPrimaryDark">#ECEAE4</Color>
-    <Color x:Key="TextSecondaryLight">#6F6A61</Color>
-    <Color x:Key="TextSecondaryDark">#A6A29A</Color>
+    <!-- Safran : bouton principal, bord du plan de travail, minuteur terminé -->
+    <Color x:Key="HighlightLight">#F2A516</Color>
+    <Color x:Key="HighlightDark">#F5B53A</Color>
+    <Color x:Key="OnHighlightLight">#2A1F2A</Color>
+    <Color x:Key="OnHighlightDark">#241A10</Color>
 
-    <!-- Filets / bordures (doux) -->
-    <Color x:Key="BorderLight">#E8E2D5</Color>
-    <Color x:Key="BorderDark">#2C322F</Color>
+    <!-- Sens : favori (étoile, ≥ 3:1), suppression (≥ 4,5:1) -->
+    <Color x:Key="FavoriteLight">#A86A00</Color>
+    <Color x:Key="FavoriteDark">#F5C04A</Color>
+    <Color x:Key="DangerLight">#B0303A</Color>
+    <Color x:Key="DangerDark">#FF8E8E</Color>
+    <Color x:Key="OnDangerLight">#FFF9F0</Color>
+    <Color x:Key="OnDangerDark">#2A1214</Color>
 
-    <!-- Palette "earthy naturals" (réutilisable : tags, signature, etc.) -->
-    <Color x:Key="PaletteOlive">#8CB369</Color>
-    <Color x:Key="PaletteGold">#F4E285</Color>
-    <Color x:Key="PaletteSand">#F4A259</Color>
-    <Color x:Key="PaletteTeal">#5B8E7D</Color>
-    <Color x:Key="PaletteBrick">#BC4B51</Color>
+    <!-- Voile des pastilles posées sur une photo -->
+    <Color x:Key="ScrimLight">#E6FFF9F0</Color>
+    <Color x:Key="ScrimDark">#E6261E2A</Color>
 
-    <!-- Pastilles de rayon (codage data, identiques clair/sombre) -->
-    <Color x:Key="AisleProduce">#8CB369</Color>
-    <Color x:Key="AisleDairy">#F4E285</Color>
-    <Color x:Key="AislePantry">#F4A259</Color>
-    <Color x:Key="AisleFrozen">#5B8E7D</Color>
-    <Color x:Key="AisleOther">#9AA8A2</Color>
+    <!-- Émaux de rayon (donnée codée par la couleur ; le libellé du rayon l'accompagne
+         toujours). ≥ 3:1 sur tous les fonds, ΔE OKLab ≥ 8 deux à deux en protan/deutan. -->
+    <Color x:Key="AisleProduceLight">#4A8F2A</Color>
+    <Color x:Key="AisleProduceDark">#74A030</Color>
+    <Color x:Key="AisleDairyLight">#7A5A10</Color>
+    <Color x:Key="AisleDairyDark">#F2D35A</Color>
+    <Color x:Key="AislePantryLight">#6E3A0C</Color>
+    <Color x:Key="AislePantryDark">#EFA968</Color>
+    <Color x:Key="AisleMeatLight">#5A1A1E</Color>
+    <Color x:Key="AisleMeatDark">#F27482</Color>
+    <Color x:Key="AisleFrozenLight">#2477B5</Color>
+    <Color x:Key="AisleFrozenDark">#3DAEEF</Color>
+    <Color x:Key="AisleOtherLight">#5C6463</Color>
+    <Color x:Key="AisleOtherDark">#CADBD8</Color>
 
 </ResourceDictionary>

@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Popote.Resources.Strings;
 using Popote.Services;
 
 namespace Popote.ViewModels;
@@ -29,6 +30,30 @@ public partial class ShoppingListViewModel : ObservableObject
     [ObservableProperty]
     private string newItemText = string.Empty;
 
+    // Section « À partir de recettes » repliée par défaut (la liste est l'essentiel).
+    [ObservableProperty]
+    private bool isPickingRecipes;
+
+    // « 5 sur 8 à prendre »
+    [ObservableProperty]
+    private string remainingLabel = string.Empty;
+
+    [RelayCommand]
+    private void ToggleRecipePicker() => IsPickingRecipes = !IsPickingRecipes;
+
+    private void UpdateRemaining()
+    {
+        var all = ShoppingList.SelectMany(g => g).ToList();
+        RemainingLabel = all.Count == 0 ? string.Empty
+            : string.Format(AppResources.Shopping_Remaining, all.Count(i => !i.IsChecked), all.Count);
+    }
+
+    private async Task OnItemToggledAsync(int id, bool isChecked)
+    {
+        await _service.SetItemCheckedAsync(id, isChecked);
+        UpdateRemaining();
+    }
+
     [RelayCommand]
     private async Task LoadAsync()
     {
@@ -54,12 +79,13 @@ public partial class ShoppingListViewModel : ObservableObject
         var items = await _service.GetShoppingListAsync();
 
         ShoppingList.Clear();
-        foreach (var group in items.GroupBy(i => i.Aisle ?? "Divers"))
+        foreach (var group in items.GroupBy(i => i.Aisle ?? AppResources.Aisle_Other))
             ShoppingList.Add(new ShoppingAisle(
                 group.Key,
-                group.Select(i => new ShoppingItemViewModel(i, _service.SetItemCheckedAsync))));
+                group.Select(i => new ShoppingItemViewModel(i, OnItemToggledAsync))));
 
         HasItems = items.Count > 0;
+        UpdateRemaining();
     }
 
     // Reconstruit les articles issus des recettes cochées (conserve les manuels).
@@ -68,6 +94,7 @@ public partial class ShoppingListViewModel : ObservableObject
     {
         var ids = Recipes.Where(r => r.IsSelected).Select(r => r.Recipe.Id).ToList();
         await _service.RebuildShoppingListAsync(ids);
+        IsPickingRecipes = false;
         await RefreshListAsync();
     }
 
@@ -92,7 +119,8 @@ public partial class ShoppingListViewModel : ObservableObject
     private async Task ClearAsync()
     {
         var confirm = await Shell.Current.DisplayAlertAsync(
-            "Vider la liste ?", "Tous les articles seront retirés.", "Vider", "Annuler");
+            AppResources.Shopping_ClearTitle, AppResources.Shopping_ClearMessage,
+            AppResources.Shopping_ClearAccept, AppResources.Action_Cancel);
         if (!confirm) return;
         await _service.ClearShoppingListAsync();
         await RefreshListAsync();

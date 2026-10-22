@@ -2,89 +2,104 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Popote.ViewModels"
+             xmlns:controls="clr-namespace:Popote.Controls"
+             xmlns:res="clr-namespace:Popote.Resources.Strings"
              x:Class="Popote.Views.ShoppingListPage"
              x:DataType="vm:ShoppingListViewModel"
              x:Name="Page"
-             Title="Liste de courses">
+             Title="{x:Static res:AppResources.Shopping_Title}">
 
-    <Grid RowDefinitions="Auto,*,Auto,Auto,Auto,*" Padding="16" RowSpacing="12">
+    <Grid RowDefinitions="Auto,*">
+        <controls:PageHeader Title="{x:Static res:AppResources.Shopping_Title}" Eyebrow="{Binding RemainingLabel}">
+            <controls:IconButton Glyph="IconRecipes" Command="{Binding ToggleRecipePickerCommand}"
+                                 Description="{x:Static res:AppResources.Shopping_FromRecipes}" />
+            <controls:IconButton Glyph="IconTrash" Command="{Binding ClearCommand}" IsVisible="{Binding HasItems}"
+                                 Description="{x:Static res:AppResources.Shopping_Clear}" />
+        </controls:PageHeader>
 
-        <!-- Sélection des recettes -->
-        <Label Grid.Row="0" Text="Choisis des recettes" Style="{StaticResource SubtitleLabel}" />
+        <!-- Articles groupés par rayon : cocher = remplir le bol -->
+        <CollectionView Grid.Row="1" ItemsSource="{Binding ShoppingList}" IsGrouped="True" SelectionMode="None">
+            <CollectionView.Header>
+                <VerticalStackLayout Padding="{StaticResource GutterBand}" Spacing="{StaticResource Space12}">
 
-        <CollectionView Grid.Row="1" ItemsSource="{Binding Recipes}" SelectionMode="None">
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="vm:SelectableRecipeViewModel">
-                    <Grid ColumnDefinitions="Auto,*" Padding="0,4" ColumnSpacing="8">
-                        <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected}"
-                                  Color="{AppThemeBinding Light={StaticResource AccentLight}, Dark={StaticResource AccentDark}}" />
-                        <Label Grid.Column="1" Text="{Binding Title}"
-                               Style="{StaticResource BodyLabel}" VerticalOptions="Center" />
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-            <CollectionView.EmptyView>
-                <Label Text="Aucune recette à sélectionner." Style="{StaticResource CaptionLabel}" Margin="0,8" />
-            </CollectionView.EmptyView>
-        </CollectionView>
+                    <!-- À partir de recettes (repliable) -->
+                    <Border Style="{StaticResource Card}" IsVisible="{Binding IsPickingRecipes}">
+                        <VerticalStackLayout Spacing="{StaticResource Space8}">
+                            <Label Text="{x:Static res:AppResources.Shopping_FromRecipes}" Style="{StaticResource Heading}" />
+                            <Label Text="{x:Static res:AppResources.Shopping_FromRecipesHelp}" Style="{StaticResource Caption}" />
+                            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Recipes}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:SelectableRecipeViewModel">
+                                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="{StaticResource Space8}">
+                                            <controls:BowlCheck IsChecked="{Binding IsSelected}" UseAccent="True"
+                                                                Description="{Binding Title}" />
+                                            <Label Grid.Column="1" Text="{Binding Title}" Style="{StaticResource Body}"
+                                                   VerticalOptions="Center" AutomationProperties.IsInAccessibleTree="False" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                                <BindableLayout.EmptyView>
+                                    <Label Text="{x:Static res:AppResources.Shopping_NoRecipes}" Style="{StaticResource Caption}" />
+                                </BindableLayout.EmptyView>
+                            </VerticalStackLayout>
+                            <Button Text="{x:Static res:AppResources.Shopping_Generate}" Command="{Binding GenerateCommand}" />
+                        </VerticalStackLayout>
+                    </Border>
 
-        <!-- Génération -->
-        <Button Grid.Row="2" Text="Générer la liste"
-                Style="{StaticResource PrimaryButton}"
-                Command="{Binding GenerateCommand}" Margin="0,4" />
+                    <!-- Ajout d'un article à la main -->
+                    <controls:Field>
+                        <controls:Field.Leading>
+                            <controls:Icon Glyph="IconPlus" Size="{StaticResource IconSmall}" Role="Mute" />
+                        </controls:Field.Leading>
+                        <Entry Text="{Binding NewItemText}" ReturnCommand="{Binding AddManualItemCommand}"
+                               Placeholder="{x:Static res:AppResources.Shopping_AddPlaceholder}" />
+                    </controls:Field>
+                </VerticalStackLayout>
+            </CollectionView.Header>
 
-        <!-- Ajout d'un article à la main -->
-        <Grid Grid.Row="3" ColumnDefinitions="*,Auto" ColumnSpacing="8">
-            <Entry Grid.Column="0" Text="{Binding NewItemText}" Placeholder="Ajouter un article (ex : sopalin)"
-                   ReturnCommand="{Binding AddManualItemCommand}" />
-            <Button Grid.Column="1" Text="Ajouter" Style="{StaticResource ChipButton}"
-                    Command="{Binding AddManualItemCommand}" />
-        </Grid>
-
-        <!-- En-tête liste + vider -->
-        <Grid Grid.Row="4" ColumnDefinitions="*,Auto" IsVisible="{Binding HasItems}">
-            <Label Grid.Column="0" Text="Liste de courses" Style="{StaticResource SubtitleLabel}" VerticalOptions="Center" />
-            <Button Grid.Column="1" Text="Vider" Style="{StaticResource ChipButton}" Command="{Binding ClearCommand}" />
-        </Grid>
-
-        <!-- Articles (groupés par rayon, cochables, persistés) -->
-        <CollectionView Grid.Row="5" ItemsSource="{Binding ShoppingList}" IsGrouped="True">
             <CollectionView.GroupHeaderTemplate>
                 <DataTemplate x:DataType="vm:ShoppingAisle">
-                    <HorizontalStackLayout Spacing="8" Padding="4,10,4,4">
-                        <Border WidthRequest="12" HeightRequest="12" StrokeThickness="0"
-                                VerticalOptions="Center" StrokeShape="RoundRectangle 6"
-                                BackgroundColor="{Binding Aisle, Converter={StaticResource AisleToColor}}" />
-                        <Label Text="{Binding Aisle}" Style="{StaticResource SubtitleLabel}" />
+                    <HorizontalStackLayout Spacing="{StaticResource Space8}" Padding="{StaticResource AisleHeaderPadding}">
+                        <controls:Bowl Aisle="{Binding Aisle}" Size="{StaticResource Bowl}" />
+                        <Label Text="{Binding Aisle}" Style="{StaticResource Eyebrow}" VerticalOptions="Center"
+                               SemanticProperties.HeadingLevel="Level2"
+                               TextColor="{AppThemeBinding Light={StaticResource InkLight}, Dark={StaticResource InkDark}}" />
                     </HorizontalStackLayout>
                 </DataTemplate>
             </CollectionView.GroupHeaderTemplate>
+
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="vm:ShoppingItemViewModel">
-                    <Grid ColumnDefinitions="Auto,*,Auto,Auto" Padding="4,2" ColumnSpacing="8">
-                        <CheckBox Grid.Column="0" IsChecked="{Binding IsChecked}" VerticalOptions="Center"
-                                  Color="{AppThemeBinding Light={StaticResource AccentLight}, Dark={StaticResource AccentDark}}" />
-                        <Label Grid.Column="1" Text="{Binding Name}" Style="{StaticResource BodyLabel}" VerticalOptions="Center">
+                    <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="{StaticResource Space4}" Padding="{StaticResource ItemPadding}">
+                        <controls:BowlCheck IsChecked="{Binding IsChecked}" Aisle="{Binding Aisle}"
+                                            Description="{Binding Spoken}" />
+                        <Label Grid.Column="1" Text="{Binding Name}" Style="{StaticResource Body}"
+                               VerticalOptions="Center" AutomationProperties.IsInAccessibleTree="False">
                             <Label.Triggers>
                                 <DataTrigger TargetType="Label" Binding="{Binding IsChecked}" Value="True">
                                     <Setter Property="TextDecorations" Value="Strikethrough" />
-                                    <Setter Property="Opacity" Value="0.45" />
+                                    <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource MuteLight}, Dark={StaticResource MuteDark}}" />
                                 </DataTrigger>
                             </Label.Triggers>
                         </Label>
-                        <Label Grid.Column="2" Text="{Binding QuantityLabel}" Style="{StaticResource CaptionLabel}" VerticalOptions="Center" />
-                        <Button Grid.Column="3" Text="✕" WidthRequest="36" HeightRequest="36"
-                                BackgroundColor="Transparent" FontSize="14"
-                                TextColor="{AppThemeBinding Light={StaticResource TextSecondaryLight}, Dark={StaticResource TextSecondaryDark}}"
-                                Command="{Binding BindingContext.RemoveItemCommand, Source={x:Reference Page}}"
-                                CommandParameter="{Binding .}" />
+                        <controls:NumberLabel Grid.Column="2" Text="{Binding QuantityLabel}" Style="{StaticResource QuantityMute}"
+                                              VerticalOptions="Center" AutomationProperties.IsInAccessibleTree="False" />
+                        <controls:IconButton Grid.Column="3" Glyph="IconClose" IconRole="Mute"
+                                             Description="{Binding Name, StringFormat={x:Static res:AppResources.Shopping_RemoveItem}}"
+                                             Command="{Binding BindingContext.RemoveItemCommand, Source={x:Reference Page}}"
+                                             CommandParameter="{Binding .}" />
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
+
             <CollectionView.EmptyView>
-                <Label Text="Coche des recettes puis « Générer », ou ajoute un article à la main."
-                       Style="{StaticResource CaptionLabel}"
-                       HorizontalOptions="Center" Margin="24" />
+                <VerticalStackLayout Padding="{StaticResource EmptyPadding}" Spacing="{StaticResource Space12}">
+                    <controls:Bowl UseAccent="True" State="Empty" Size="{StaticResource BowlEmptyState}" />
+                    <Label Text="{x:Static res:AppResources.Shopping_Empty}" Style="{StaticResource Heading}"
+                           HorizontalTextAlignment="Center" />
+                    <Label Text="{x:Static res:AppResources.Shopping_EmptyHint}" Style="{StaticResource Caption}"
+                           HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
             </CollectionView.EmptyView>
         </CollectionView>
     </Grid>

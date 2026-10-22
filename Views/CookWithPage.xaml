@@ -3,68 +3,79 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Popote.ViewModels"
              xmlns:models="clr-namespace:Popote.Models;assembly=Popote.Data"
+             xmlns:controls="clr-namespace:Popote.Controls"
+             xmlns:conv="clr-namespace:Popote.Converters"
+             xmlns:res="clr-namespace:Popote.Resources.Strings"
              x:Class="Popote.Views.CookWithPage"
              x:DataType="vm:CookWithViewModel"
              x:Name="Page"
-             Title="Cuisiner avec…">
+             Title="{x:Static res:AppResources.CookWith_Title}">
 
-    <Grid RowDefinitions="Auto,Auto,*" Padding="16" RowSpacing="12">
+    <ContentPage.Resources>
+        <conv:RecipeCardConverter x:Key="RecipeCard" />
+    </ContentPage.Resources>
 
-        <Label Grid.Row="0" Text="Coche les ingrédients que tu as" Style="{StaticResource SubtitleLabel}" />
+    <Grid RowDefinitions="Auto,*">
+        <controls:PageHeader Title="{x:Static res:AppResources.CookWith_Title}" ShowBack="True" />
 
-        <!-- Ingrédients du catalogue (défilement si nombreux) -->
-        <ScrollView Grid.Row="1" Orientation="Vertical" MaximumHeightRequest="200">
-            <FlexLayout BindableLayout.ItemsSource="{Binding Ingredients}" Wrap="Wrap" Direction="Row">
-                <BindableLayout.ItemTemplate>
-                    <DataTemplate x:DataType="vm:TagToggleViewModel">
-                        <Border Margin="0,0,8,8" FlexLayout.Shrink="0" StrokeThickness="0"
-                                Padding="12,6" StrokeShape="RoundRectangle 999"
-                                BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryContainerLight}, Dark={StaticResource PrimaryContainerDark}}">
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer
-                                    Command="{Binding BindingContext.ToggleCommand, Source={x:Reference Page}}"
-                                    CommandParameter="{Binding .}" />
-                            </Border.GestureRecognizers>
-                            <Label Text="{Binding Name}" FontFamily="InterMedium" FontSize="13"
-                                   TextColor="{AppThemeBinding Light={StaticResource PrimaryLight}, Dark={StaticResource PrimaryDark}}">
-                                <Label.Triggers>
-                                    <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
-                                        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource OnAccentLight}, Dark={StaticResource OnAccentDark}}" />
-                                    </DataTrigger>
-                                </Label.Triggers>
-                            </Label>
-                            <Border.Triggers>
-                                <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
-                                    <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource AccentLight}, Dark={StaticResource AccentDark}}" />
-                                </DataTrigger>
-                            </Border.Triggers>
-                        </Border>
-                    </DataTemplate>
-                </BindableLayout.ItemTemplate>
-            </FlexLayout>
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="{StaticResource PagePadding}" Spacing="{StaticResource Space16}">
+                <Label Text="{x:Static res:AppResources.CookWith_Help}" Style="{StaticResource Caption}" />
+
+                <!-- Ingrédients du catalogue, rangés par rayon -->
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Groups}" Spacing="{StaticResource Space12}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="vm:AisleToggleGroup">
+                            <VerticalStackLayout Spacing="{StaticResource Space4}">
+                                <HorizontalStackLayout Spacing="{StaticResource Space8}">
+                                    <controls:Bowl Aisle="{Binding Aisle}" Size="{StaticResource Bowl}" />
+                                    <Label Text="{Binding Aisle}" Style="{StaticResource Eyebrow}" VerticalOptions="Center"
+                                               SemanticProperties.HeadingLevel="Level2" />
+                                </HorizontalStackLayout>
+                                <FlexLayout BindableLayout.ItemsSource="{Binding Items}" Wrap="Wrap" Direction="Row">
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate x:DataType="vm:TagToggleViewModel">
+                                            <controls:ToggleChip Text="{Binding Name}" IsSelected="{Binding IsSelected}" Margin="{StaticResource ChipMarginRow}"
+                                                                 FlexLayout.Shrink="0"
+                                                                 Command="{Binding BindingContext.ToggleCommand, Source={x:Reference Page}}"
+                                                                 CommandParameter="{Binding .}" />
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </FlexLayout>
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+
+                <BoxView Style="{StaticResource Rule}" />
+
+                <!-- Résultats -->
+                <Label Text="{x:Static res:AppResources.CookWith_Results}" Style="{StaticResource Heading}"
+                       IsVisible="{Binding HasSelection}" />
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Results}" Spacing="{StaticResource Space8}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="models:Recipe">
+                            <Border Style="{StaticResource Card}"
+                                    SemanticProperties.Description="{Binding ., Converter={StaticResource RecipeCard}, ConverterParameter=a11y}"
+                                    SemanticProperties.Hint="{x:Static res:AppResources.List_OpenHint}">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding BindingContext.GoToDetailCommand, Source={x:Reference Page}}"
+                                                          CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+                                <VerticalStackLayout Spacing="{StaticResource Space4}" AutomationProperties.IsInAccessibleTree="False">
+                                    <Label Text="{Binding Title}" Style="{StaticResource CardTitle}" />
+                                    <controls:NumberLabel Text="{Binding ., Converter={StaticResource RecipeCard}, ConverterParameter=meta}"
+                                                          Style="{StaticResource Caption}" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                    <BindableLayout.EmptyView>
+                        <Label Style="{StaticResource Caption}" HorizontalTextAlignment="Center"
+                               Text="{Binding EmptyMessage}" />
+                    </BindableLayout.EmptyView>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
         </ScrollView>
-
-        <!-- Résultats -->
-        <CollectionView Grid.Row="2" ItemsSource="{Binding Results}" SelectionMode="None">
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:Recipe">
-                    <Border Style="{StaticResource CardBorder}" Margin="0,4">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer
-                                Command="{Binding BindingContext.GoToDetailCommand, Source={x:Reference Page}}"
-                                CommandParameter="{Binding .}" />
-                        </Border.GestureRecognizers>
-                        <VerticalStackLayout Spacing="4">
-                            <Label Text="{Binding Title}" Style="{StaticResource SubtitleLabel}" />
-                            <Label Text="{Binding Servings, StringFormat='{0} portions'}" Style="{StaticResource CaptionLabel}" />
-                        </VerticalStackLayout>
-                    </Border>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-            <CollectionView.EmptyView>
-                <Label Text="Coche des ingrédients pour voir les recettes possibles."
-                       Style="{StaticResource CaptionLabel}" HorizontalOptions="Center" Margin="24" />
-            </CollectionView.EmptyView>
-        </CollectionView>
     </Grid>
 </ContentPage>

@@ -1,3 +1,4 @@
+using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Popote.Data;
@@ -11,18 +12,33 @@ public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
     {
+        // L'app est en français : dates (« lun. 19 »), décimales (« 0,5 »).
+        var fr = CultureInfo.GetCultureInfo("fr-FR");
+        CultureInfo.DefaultThreadCurrentCulture = CultureInfo.DefaultThreadCurrentUICulture = fr;
+        CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = fr;
+
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
             .ConfigureFonts(fonts =>
             {
-                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                // Police du design system (cf. docs/design-system.md).
+                // Polices OFL embarquées (docs/design-system.md, licences dans docs/licences/).
+                fonts.AddFont("BricolageGrotesque-Bold.ttf", "Bricolage");
+                fonts.AddFont("BricolageGrotesque-ExtraBold.ttf", "BricolageHeavy");
                 fonts.AddFont("Inter-Regular.ttf", "Inter");
                 fonts.AddFont("Inter-Medium.ttf", "InterMedium");
                 fonts.AddFont("Inter-SemiBold.ttf", "InterSemiBold");
+            })
+            .ConfigureMauiHandlers(handlers =>
+            {
+#if ANDROID
+                handlers.AddHandler(typeof(Shell), typeof(PopoteShellRenderer));
+#endif
             });
+
+#if ANDROID
+        PopoteHandlers.Configure();
+#endif
 
         // --- Couche DONNÉES ---
         // FileSystem.AppDataDirectory = dossier privé de l'app (persistant) sur Android.
@@ -32,6 +48,7 @@ public static class MauiProgram
 
         // --- Services ---
         builder.Services.AddSingleton<RecipeService>();
+        builder.Services.AddSingleton<SettingsService>();
 
         // --- ViewModels + Pages (enregistrés pour l'injection de dépendances) ---
         // Liste : singleton (une seule page d'accueil).
@@ -55,6 +72,9 @@ public static class MauiProgram
         // Mode cuisson : transient.
         builder.Services.AddTransient<CookingModeViewModel>();
         builder.Services.AddTransient<CookingModePage>();
+        // Réglages (thème, Ambiance, vibrations, sauvegarde) : transient.
+        builder.Services.AddTransient<SettingsViewModel>();
+        builder.Services.AddTransient<SettingsPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

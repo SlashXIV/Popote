@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Popote.Resources.Strings;
 using Popote.Services;
 
 namespace Popote.ViewModels;
@@ -20,6 +21,48 @@ public partial class CookingModeViewModel : ObservableObject
     private string title = string.Empty;
 
     public ObservableCollection<StepLine> Steps { get; } = new();
+
+    // Progression en bols : étapes faites = pleins, étape en cours = posé, à venir = vides.
+    public ObservableCollection<StepProgress> Progress { get; } = new();
+
+    // Étape affichée (position du carrousel).
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ProgressSpoken), nameof(CanGoPrevious), nameof(CanGoNext))]
+    private int position;
+
+    public string ProgressSpoken => string.Format(AppResources.Cook_ProgressSpoken, Position + 1, Steps.Count);
+    public string StepOfLabel => string.Format(AppResources.Cook_StepOf, Steps.Count);
+    public bool CanGoPrevious => Position > 0;
+    public bool CanGoNext => Position < Steps.Count - 1;
+
+    partial void OnPositionChanged(int value) => UpdateProgress();
+
+    // Met à jour l'état des bols en place (pas de recréation de vues à chaque étape : mesuré au carrousel).
+    private void UpdateProgress()
+    {
+        if (Progress.Count != Steps.Count)
+        {
+            Progress.Clear();
+            foreach (var _ in Steps) Progress.Add(new StepProgress());
+        }
+        for (var i = 0; i < Progress.Count; i++)
+            Progress[i].State = i < Position ? Controls.BowlState.Full : i == Position ? Controls.BowlState.Placed : Controls.BowlState.Empty;
+    }
+
+    [RelayCommand]
+    private void Next()
+    {
+        if (CanGoNext) Position++;
+    }
+
+    [RelayCommand]
+    private void Previous()
+    {
+        if (CanGoPrevious) Position--;
+    }
+
+    [RelayCommand]
+    private Task ExitAsync() => Shell.Current.GoToAsync("..");
 
     // --- Minuteur ---
     private IDispatcherTimer? _timer;
@@ -50,6 +93,11 @@ public partial class CookingModeViewModel : ObservableObject
         var number = 1;
         foreach (var step in StepParser.Parse(r.Instructions))
             Steps.Add(new StepLine(number++, step));
+        OnPropertyChanged(nameof(StepOfLabel));
+        Position = 0;
+        UpdateProgress();
+        OnPropertyChanged(nameof(ProgressSpoken));
+        OnPropertyChanged(nameof(CanGoNext));
     }
 
     [RelayCommand]
@@ -84,8 +132,10 @@ public partial class CookingModeViewModel : ObservableObject
         {
             _timer?.Stop();
             IsTimerRunning = false;
-            TimerDisplay = "Terminé !";
-            _ = Shell.Current.DisplayAlertAsync("Minuteur", "C'est prêt ! ⏱", "OK");
+            TimerDisplay = AppResources.Cook_TimerDone;
+            Motion.Haptics.Confirm();
+            SemanticScreenReader.Default.Announce(AppResources.Cook_TimerDoneSpoken); // une seule annonce, à la fin
+            _ = Shell.Current.DisplayAlertAsync(AppResources.Cook_Timer, AppResources.Cook_TimerAlertMessage, AppResources.Action_Ok);
             return;
         }
         UpdateTimerDisplay();
@@ -93,4 +143,11 @@ public partial class CookingModeViewModel : ObservableObject
 
     private void UpdateTimerDisplay()
         => TimerDisplay = TimeSpan.FromSeconds(_remainingSeconds).ToString(@"mm\:ss");
+}
+
+// Bol de progression d'une étape en mode cuisson.
+public partial class StepProgress : ObservableObject
+{
+    [ObservableProperty]
+    private Controls.BowlState state;
 }

@@ -21,8 +21,8 @@
 		<ApplicationId>onl.nci.popote</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
-		<ApplicationVersion>1</ApplicationVersion>
+		<ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
+		<ApplicationVersion>2</ApplicationVersion>
 
 		<SupportedOSPlatformVersion>21.0</SupportedOSPlatformVersion>
 	</PropertyGroup>
@@ -35,21 +35,35 @@
 		<AndroidSigningKeyAlias>popote</AndroidSigningKeyAlias>
 		<!-- Pas de trimming : EF Core s'appuie sur la réflexion. -->
 		<AndroidLinkMode>None</AndroidLinkMode>
+		<!-- Pas d'AOT : il exige le trimming (XA1030) ; sans trimming, les images AOT
+		     font planter l'app au démarrage (assertion Mono class-init, vu sur téléphone
+		     et émulateur avec le SDK .NET 10.0.3xx). Code JIT, démarrage un peu plus lent. -->
+		<RunAOTCompilation>false</RunAOTCompilation>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<!-- Icône de l'app -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#8CB369" />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#4B1F45" />
 
 		<!-- Écran de démarrage -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#F7F4EE" BaseSize="128,128" />
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#4B1F45" BaseSize="128,128" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
-		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
 
 		<!-- Polices -->
 		<MauiFont Include="Resources\Fonts\*" />
+
+		<!-- Textes de l'interface (français, langue de référence) : classe AppResources générée
+		     par MSBuild à la compilation, utilisée en XAML via x:Static et en C#. -->
+		<EmbeddedResource Update="Resources\Strings\AppResources.resx">
+			<Generator>MSBuild:Compile</Generator>
+			<StronglyTypedLanguage>CSharp</StronglyTypedLanguage>
+			<StronglyTypedNamespace>Popote.Resources.Strings</StronglyTypedNamespace>
+			<StronglyTypedClassName>AppResources</StronglyTypedClassName>
+			<StronglyTypedFileName>$(IntermediateOutputPath)AppResources.Designer.cs</StronglyTypedFileName>
+			<PublicClass>true</PublicClass>
+		</EmbeddedResource>
 
 		<!-- Ressources brutes -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />

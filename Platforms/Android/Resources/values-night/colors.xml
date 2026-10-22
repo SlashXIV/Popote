@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Thème sombre : mêmes valeurs que AppColors.xaml (…Dark). -->
+<resources>
+    <color name="colorPrimary">#1C1620</color>
+    <color name="colorPrimaryDark">#1C1620</color>
+    <color name="colorAccent">#E3A6D3</color>
+</resources>

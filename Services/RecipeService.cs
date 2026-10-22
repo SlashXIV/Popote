@@ -24,6 +24,8 @@ public class RecipeService
 
         var query = db.Recipes
             .Include(r => r.RecipeTags).ThenInclude(rt => rt.Tag) // on charge aussi les tags
+            .Include(r => r.Ingredients).ThenInclude(i => i.Ingredient) // rayons : mise en place miniature des cartes
+            .AsSplitQuery()
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(search))
