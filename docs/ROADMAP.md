@@ -39,8 +39,8 @@
 > À lire en premier dans une conversation neuve. État au 23/10/2026.
 
 **Où on en est**
-- `main` = **1.4.0** (code 4), historique linéaire. Tags `v1.2.0` (poussé, Release publiée),
-  `v1.3.0` et `v1.4.0` (locaux tant que l'auteur n'a pas validé leur publication).
+- `main` = **1.4.0** (code 4), historique linéaire, poussé. Releases GitHub v1.2.0, v1.3.0 et
+  **v1.4.0** (dernière) publiées le 23/10/2026, toutes signées avec la nouvelle clé.
 - Le téléphone de l'auteur a la **1.4.0 signée** (nouvelle clé) et ses données restaurées.
 - Reste de la roadmap : la **Vitrine** (README), puis les idées « Plus tard ».
 - Lire d'abord `docs/design-system.md`, `docs/redesign-foundations.md`, `docs/redesign-moments.md`,
@@ -71,8 +71,7 @@
   désinstalle et vide la base).
 
 **Prochaines étapes**
-1. Publier `v1.3.0` et `v1.4.0` (accord de l'auteur) : push `main` + tags, deux Releases avec l'APK.
-2. **Vitrine** : refaire le README (jalon ci-dessous), captures sur l'émulateur avec le jeu de démo.
+1. **Vitrine** : refaire le README (jalon ci-dessous), captures sur l'émulateur avec le jeu de démo.
 
 ## En cours
 - [ ] **Vitrine — refaire le README** _[DESIGN]_ — **en dernier**, quand le reste de la roadmap est
