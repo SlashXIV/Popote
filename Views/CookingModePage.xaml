@@ -63,7 +63,7 @@
                            Placeholder="{x:Static res:AppResources.Cook_Timer}"
                            SemanticProperties.Description="{x:Static res:AppResources.Cook_TimerMinutes}" />
                 </controls:Field>
-                <controls:NumberLabel Grid.Column="1" Text="{Binding TimerDisplay}" Style="{StaticResource Timer}"
+                <controls:TickerLabel Grid.Column="1" Value="{Binding TimerDisplay}" Style="{StaticResource Timer}"
                                       IsVisible="{Binding IsTimerRunning}" VerticalOptions="Center" />
                 <Button Grid.Column="2" Text="{x:Static res:AppResources.Cook_TimerStart}" Style="{StaticResource SecondaryButton}"
                         Command="{Binding StartTimerCommand}"

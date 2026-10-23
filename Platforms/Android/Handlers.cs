@@ -9,7 +9,7 @@ namespace Popote;
 
 // Ajustements Android des contrôles natifs, appelés depuis MauiProgram :
 // - champs (Entry, Editor, Picker) sans soulignement ni fond Material : c'est Field qui dessine le cadre ;
-// - NumberLabel en chiffres tabulaires (fonction OpenType « tnum ») ;
+// - NumberLabel en chiffres tabulaires (fonction OpenType « tnum ») ; TickerLabel sans mise en page ;
 // - rôle TalkBack des contrôles maison (A11y.Role) et activation par double toucher.
 public static class PopoteHandlers
 {
@@ -22,6 +22,14 @@ public static class PopoteHandlers
         LabelHandler.Mapper.AppendToMapping("PopoteTabular", (h, v) =>
         {
             if (v is NumberLabel) h.PlatformView.FontFeatureSettings = "tnum";
+        });
+        LabelHandler.Mapper.AppendToMapping(nameof(TickerLabel.Value), (h, v) =>
+        {
+            if (v is not TickerLabel ticker) return;
+            var tv = h.PlatformView;
+            // Largeur min = max : setText n'appelle plus requestLayout, seulement invalidate (même hauteur).
+            if (tv.Width > 0 && tv.MinWidth != tv.Width) tv.SetWidth(tv.Width);
+            tv.Text = ticker.Value;
         });
 
         // Rejoué après chaque mise à jour de la sémantique MAUI, qui peut poser son propre délégué.

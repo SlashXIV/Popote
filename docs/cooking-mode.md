@@ -17,11 +17,19 @@ s'éteigne, avec un minuteur à portée de main.
 - `Popote.Data/Services/StepParser.cs` — parsing des étapes (partagé avec le détail, testé).
 - `ViewModels/CookingModeViewModel.cs` — étapes + minuteur (`IDispatcherTimer`).
 - `Views/CookingModePage.xaml(.cs)` — UI ; `KeepScreenOn` géré dans le code-behind.
+- `Controls/TickerLabel.cs` + `Platforms/Android/Handlers.cs` — décompte affiché sans relancer la mise en page.
 - `AppShell.xaml.cs` (route), `MauiProgram.cs` (DI), `RecipeDetailPage.xaml` (bouton).
 
 ## Choix techniques
 - **`DeviceDisplay.KeepScreenOn`** activé à l'affichage, désactivé en quittant (code-behind).
 - **`IDispatcherTimer`** (dispatcher UI) pour le décompte ; arrêté en quittant la page.
+- **Décompte sans mise en page (1.5)** : chaque changement de `Label.Text` invalidait la mesure
+  jusqu'à la page (carrousel compris), puis le `TextView` natif redemandait une mise en page.
+  Mesuré sur émulateur (Debug, 60 s de décompte, ticks CPU de 1/100 s) : 65–67 avec le libellé
+  normal, 4 sans changer le texte ; une taille fixe MAUI (`WidthRequest`) ne change rien (64).
+  `TickerLabel` pose `Value` directement sur la vue native, à largeur figée (`SetWidth` : min = max) ;
+  `setText` n'appelle alors que `invalidate` : **37** (−43 %) ; téléphone : 98 → 58. Police 200 %, arrêt / relance vérifiés.
+  Le `DispatcherTimer` (1 Hz) et l'annonce TalkBack unique de fin sont inchangés.
 - **`StepParser`** extrait dans la lib → réutilisé par le détail et le mode cuisson, et **testé** unitairement.
 
 ## Modèle de données impacté
@@ -30,3 +38,4 @@ Aucun.
 ## Reste à faire / limites connues
 - Minuteur **manuel** (pas de durée par étape : les étapes n'ont pas de temps associé).
 - Un seul minuteur à la fois.
+- Téléphone (Release, `bench.sh`, 60 s) : **0,98 → 0,58 s de CPU par minute** (objectif ≤ 0,6 atteint).
