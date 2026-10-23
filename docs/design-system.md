@@ -125,6 +125,23 @@ Handlers Android : Entry / Editor / Picker sans soulignement ni fond Material ; 
 au rendu maison (`PopoteShellRenderer` : pas de pilule ni d'ondulation, libellés Inter,
 icônes `Resources/Images/tab_*.svg`).
 
+## Fenêtres natives — `Platforms/Android/Resources/`
+Les alertes (`DisplayAlertAsync`), la feuille d'actions de la Semaine et les listes des `Picker`
+restent des fenêtres Android (TalkBack et retour natifs), **habillées** par `values/styles.xml` :
+MAUI les style par `MauiAlertDialogTheme`, que l'app redéfinit sous le même nom.
+- Fond `Surface` aux coins de 16 (`drawable/popote_dialog.xml` + forme Material), titre `Ink` en
+  Bricolage Bold, texte et éléments de liste `Ink` en Inter, boutons et boutons radio `Accent`.
+- Couleurs dans `values/colors.xml` et `values-night/colors.xml`, recopiées des jetons et **vérifiées**
+  par `ThemeContrastTests` ; le mode nuit Android suit le réglage Clair / Sombre de l'app.
+- Polices exposées en `res/font` depuis `Resources/Fonts/` (`AndroidResource` + `LogicalName` dans
+  `Popote.csproj`), sans copie.
+- Limites : le titre d'une liste de `Picker` prend son `TitleColor` (Mute) ; « Annuler » des listes suit
+  la langue du téléphone ; un bouton « Supprimer » d'alerte reste à l'accent (pas de rouge natif).
+- Balayage « Supprimer » : Android écrit le libellé en blanc, d'où le rouge `DangerLight` dans les deux
+  thèmes (≈ 6:1).
+- Restent au système, sans habillage possible : feuille de partage, sélecteurs de fichiers et de
+  photos, clavier, toast « copié » ; ils suivent le thème du téléphone.
+
 ## Mouvement — `Motion/`
 Jetons (`MotionTokens`) : Enter 420 ms `cubic-bezier(.2,.7,.2,1)`, Transition 480 ms
 `(.65,0,.35,1)`, Release 560 ms `(.2,.9,.2,1.2)` ; décalage 50 ms par élément (8 au plus),

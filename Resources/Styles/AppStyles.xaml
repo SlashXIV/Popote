@@ -63,8 +63,10 @@
         <Setter Property="BackgroundColor" Value="Transparent" />
     </Style>
 
+    <!-- Android écrit le libellé en blanc (non réglable) : le rouge foncé dans les deux thèmes
+         garde ≈ 6:1, le rouge clair du thème sombre tombait à ≈ 2,2:1. -->
     <Style TargetType="SwipeItem">
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource DangerLight}, Dark={StaticResource DangerDark}}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource DangerLight}" />
     </Style>
 
     <!-- Bouton : par défaut, l'action principale (safran). Variantes nommées ci-dessous. -->

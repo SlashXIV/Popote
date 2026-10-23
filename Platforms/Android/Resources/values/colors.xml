@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Couleurs du thème Android natif (dialogues, sélecteurs, fond avant la première page).
-     Mêmes valeurs que Resources/Styles/AppColors.xaml (thème clair) ; values-night/ pour le sombre. -->
+<!-- Couleurs du thème Android natif (fenêtres, listes déroulantes, fond avant la première page).
+     Mêmes valeurs que Resources/Styles/AppColors.xaml (thème clair) ; values-night/ pour le sombre.
+     Vérifié par Popote.Tests/ThemeContrastTests (aucune divergence avec les jetons). -->
 <resources>
     <color name="colorPrimary">#FBF3E6</color>
     <color name="colorPrimaryDark">#FBF3E6</color>
     <color name="colorAccent">#7A2F6B</color>
+    <color name="popote_surface">#FFF9F0</color>
+    <color name="popote_ink">#2A1F2A</color>
+    <color name="popote_mute">#66575F</color>
+    <color name="popote_accent">#7A2F6B</color>
+    <!-- Texte des listes des fenêtres natives : Material l'affiche à 60 % de l'encre (≈ 4,3:1,
+         sous le seuil de 4,5:1) ; ici, l'encre pleine. -->
+    <color name="material_on_surface_emphasis_medium">@color/popote_ink</color>
 </resources>

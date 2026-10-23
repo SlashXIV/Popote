@@ -4,4 +4,11 @@
     <color name="colorPrimary">#1C1620</color>
     <color name="colorPrimaryDark">#1C1620</color>
     <color name="colorAccent">#E3A6D3</color>
+    <color name="popote_surface">#261E2A</color>
+    <color name="popote_ink">#F4ECEF</color>
+    <color name="popote_mute">#BCAAB7</color>
+    <color name="popote_accent">#E3A6D3</color>
+    <!-- Texte des listes des fenêtres natives : Material l'affiche à 60 % de l'encre (≈ 4,3:1,
+         sous le seuil de 4,5:1) ; ici, l'encre pleine. -->
+    <color name="material_on_surface_emphasis_medium">@color/popote_ink</color>
 </resources>

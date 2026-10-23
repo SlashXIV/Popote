@@ -105,6 +105,28 @@ public class ThemeContrastTests
         return (Math.Max(l1, l2) + 0.05) / (Math.Min(l1, l2) + 0.05);
     }
 
+    // Fenêtres natives Android (styles.xml) : leurs couleurs recopient les jetons, sans divergence.
+    [Theory]
+    [InlineData("values", "Light")]
+    [InlineData("values-night", "Dark")]
+    public void Couleurs_Android_identiques_aux_jetons(string folder, string theme)
+    {
+        var android = XDocument.Load(RepoFiles.PathOf("Platforms", "Android", "Resources", folder, "colors.xml"))
+            .Descendants("color").ToDictionary(e => (string)e.Attribute("name")!, e => e.Value.Trim());
+        foreach (var (name, role) in new[] { ("popote_surface", "Surface"), ("popote_ink", "Ink"), ("popote_mute", "Mute"),
+                                             ("popote_accent", "Accent"), ("colorAccent", "Accent"), ("colorPrimary", "Background") })
+            Assert.True(string.Equals(android[name], C(role, theme), StringComparison.OrdinalIgnoreCase),
+                $"{folder}/{name} = {android[name]}, attendu {role}{theme} = {C(role, theme)}");
+    }
+
+    // Balayage « Supprimer » : Android écrit le libellé en blanc, quel que soit le thème.
+    [Fact]
+    public void Libelle_blanc_du_balayage_lisible_sur_le_rouge()
+    {
+        var ratio = Contrast("#FFFFFF", C("Danger", "Light"));
+        Assert.True(ratio >= 4.5, $"blanc sur DangerLight = {ratio:F2}:1");
+    }
+
     // --- Daltonisme simulé (Machado, Oliveira & Fernandes 2009, sévérité 1) ---
     private static readonly double[,] Protan = { { 0.152286, 1.052583, -0.204868 }, { 0.114503, 0.786281, 0.099216 }, { -0.003882, -0.048116, 1.051998 } };
     private static readonly double[,] Deutan = { { 0.367322, 0.860646, -0.227968 }, { 0.280085, 0.672501, 0.047413 }, { -0.011820, 0.042940, 0.968881 } };

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fenêtres natives (DisplayAlertAsync, DisplayActionSheetAsync, listes des Picker) : MAUI les
+     style par MauiAlertDialogTheme. Ce style du même nom l'emporte sur celui de la bibliothèque :
+     fond Surface arrondi, encre, accent et polices de l'app, en clair comme en sombre (values-night). -->
+<resources>
+    <style name="MauiAlertDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="android:windowBackground">@drawable/popote_dialog</item>
+        <item name="colorBackgroundFloating">@color/popote_surface</item>
+        <item name="colorSurface">@color/popote_surface</item>
+        <item name="colorOnSurface">@color/popote_ink</item>
+        <item name="colorPrimary">@color/popote_accent</item>
+        <item name="colorAccent">@color/popote_accent</item>
+        <item name="colorControlActivated">@color/popote_accent</item>
+        <item name="android:textColorPrimary">@color/popote_ink</item>
+        <!-- Le titre de la fenêtre lit textColorSecondary : encre pleine, comme les titres de l'app. -->
+        <item name="android:textColorSecondary">@color/popote_ink</item>
+        <item name="android:textColorAlertDialogListItem">@color/popote_ink</item>
+        <item name="android:fontFamily">@font/inter_regular</item>
+        <item name="fontFamily">@font/inter_regular</item>
+        <item name="android:windowTitleStyle">@style/PopoteDialogTitle</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/PopoteDialogTitleView</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/PopoteDialogBodyView</item>
+        <item name="shapeAppearanceMediumComponent">@style/PopoteDialogShape</item>
+        <item name="shapeAppearanceLargeComponent">@style/PopoteDialogShape</item>
+        <item name="android:textAppearanceMedium">@style/PopoteDialogBody</item>
+        <item name="textAppearanceSubtitle1">@style/PopoteDialogBody</item>
+        <item name="textAppearanceBody1">@style/PopoteDialogBody</item>
+        <item name="textAppearanceListItem">@style/PopoteDialogBody</item>
+        <item name="textAppearanceListItemSmall">@style/PopoteDialogBody</item>
+        <item name="android:textAppearanceListItem">@style/PopoteDialogBody</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PopoteDialogButton</item>
+        <item name="buttonBarNegativeButtonStyle">@style/PopoteDialogButton</item>
+        <item name="buttonBarNeutralButtonStyle">@style/PopoteDialogButton</item>
+    </style>
+
+    <style name="PopoteDialogTitle" parent="RtlOverlay.DialogWindowTitle.AppCompat">
+        <item name="android:textAppearance">@style/PopoteDialogTitleText</item>
+        <item name="android:textColor">@color/popote_ink</item>
+    </style>
+
+    <style name="PopoteDialogTitleText" parent="TextAppearance.AppCompat.Title">
+        <item name="android:fontFamily">@font/bricolage_bold</item>
+        <item name="fontFamily">@font/bricolage_bold</item>
+        <item name="android:textColor">@color/popote_ink</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="PopoteDialogBody" parent="TextAppearance.AppCompat.Subhead">
+        <item name="android:fontFamily">@font/inter_regular</item>
+        <item name="fontFamily">@font/inter_regular</item>
+        <item name="android:textColor">@color/popote_ink</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- Les mises en page Material de la fenêtre lisent leurs dimensions dans ces styles :
+         ils doivent hériter des styles Material (layout_width / layout_height). -->
+    <style name="PopoteDialogTitleView" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textAppearance">@style/PopoteDialogTitleText</item>
+        <item name="android:fontFamily">@font/bricolage_bold</item>
+        <item name="fontFamily">@font/bricolage_bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/popote_ink</item>
+    </style>
+
+    <style name="PopoteDialogBodyView" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
+        <item name="android:textAppearance">@style/PopoteDialogBody</item>
+        <item name="android:textColor">@color/popote_ink</item>
+    </style>
+
+    <style name="PopoteDialogShape" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <style name="PopoteDialogButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:fontFamily">@font/bricolage_bold</item>
+        <item name="fontFamily">@font/bricolage_bold</item>
+        <item name="android:textColor">@color/popote_accent</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+</resources>

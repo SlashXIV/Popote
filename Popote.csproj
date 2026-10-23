@@ -53,6 +53,9 @@
 
 		<!-- Polices -->
 		<MauiFont Include="Resources\Fonts\*" />
+		<!-- Mêmes polices pour les fenêtres natives Android (styles.xml), sans copie de fichier. -->
+		<AndroidResource Include="Resources\Fonts\Inter-Regular.ttf" LogicalName="font\inter_regular.ttf" Condition="$(TargetFramework.Contains('-android'))" />
+		<AndroidResource Include="Resources\Fonts\BricolageGrotesque-Bold.ttf" LogicalName="font\bricolage_bold.ttf" Condition="$(TargetFramework.Contains('-android'))" />
 
 		<!-- Textes de l'interface (français, langue de référence) : classe AppResources générée
 		     par MSBuild à la compilation, utilisée en XAML via x:Static et en C#. -->
