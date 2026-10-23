@@ -16,6 +16,11 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 - Éléments de ces listes à 60 % de l'encre (≈ 4,3:1) : encre pleine.
 - Balayage « Supprimer » illisible en thème sombre (blanc sur rouge clair, ≈ 2,2:1) : rouge foncé.
 
+### Changed
+- Plus de permission Internet ni d'état du réseau : l'app n'en a jamais eu besoin (restes du modèle MAUI).
+- README refait (vitrine : icône, 4 captures, fonctionnalités, installation, vie privée) ; les
+  instructions de compilation passent dans `docs/compiler.md`. Licence AGPL-3.0.
+
 ## [1.4.0] — 2026-10-23 — Import par IA
 
 ### Added

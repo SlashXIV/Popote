@@ -6,9 +6,14 @@ Une feature = un fichier. Pour toute nouvelle feature, créer `docs/<nom>.md`
 ## Design
 - [design-system.md](design-system.md) — Système « Mise en place » : métaphore du bol, couleurs testées, typo, jetons, contrôles maison, mouvement, accessibilité. **À suivre pour toute UI.**
 - [redesign-foundations.md](redesign-foundations.md) — Refonte, jalon Fondations (1.2.0).
+- [redesign-moments.md](redesign-moments.md) — Refonte, jalon Moments (1.3.0) et mesures.
 - `licences/` — licences OFL des polices embarquées.
 
+## Développement
+- [compiler.md](compiler.md) — Prérequis, compiler, tester, **APK signé** (procédure de livraison), arborescence.
+
 ## Features documentées
+- [ai-import.md](ai-import.md) — Import par IA : consignes, collage dans le formulaire, format texte (1.4.0).
 - [project-setup.md](project-setup.md) — Coquille MAUI compilable (csproj, App, Platforms, Resources).
 - [data-migrations.md](data-migrations.md) — Couche données `Popote.Data` & migrations EF Core.
 - [tests.md](tests.md) — Tests unitaires (xUnit).

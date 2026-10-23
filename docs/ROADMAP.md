@@ -33,6 +33,7 @@
 - [x] Tri de la liste des recettes (Favoris / Récent / Titre / Temps). _[DATA]_
 - [x] **Refonte « Mise en place » — Fondations (1.2.0)** : métaphore du bol, base safran/aubergine, thème sombre, Réglages, typo, jetons, contrôles maison, textes externalisés, logo. _[DESIGN + DEV]_ — voir `docs/redesign-foundations.md` et `docs/design-system.md`.
 - [x] **Refonte — Moments (1.3.0)** : 7 moments (article coché, recette enregistrée, étape suivante, minuteur fini, passage au poste, mise en place, transitions de page), mesurés sur téléphone sans régression. _[DESIGN + DEV]_ — voir `docs/redesign-moments.md`.
+- [x] **Vitrine (1.4.1)** : README sur le modèle de dromos (icône, 4 captures WebP du jeu de démo, fonctionnalités, installer, vie privée, compiler, crédits), licence AGPL-3.0, permission Internet retirée. _[DESIGN]_ — voir `README.md`, `docs/compiler.md`.
 - [x] **Fenêtres natives habillées (1.4.1)** : alertes, feuille d'actions et listes aux couleurs, coins et polices de l'app, clair et sombre ; balayage « Supprimer » lisible. _[DESIGN]_ — voir `docs/design-system.md`.
 - [x] **Import par IA (1.4.0)** : consignes copiées pour une IA, réponse collée dans le formulaire (aperçu + points à vérifier), partage au même format, analyseur tolérant testé. _[DATA + DEV]_ — voir `docs/ai-import.md`.
 
@@ -72,19 +73,12 @@
   désinstalle et vide la base).
 
 **Prochaines étapes**
-1. **Vitrine** : refaire le README (jalon ci-dessous), captures sur l'émulateur avec le jeu de démo.
+- La roadmap est terminée (Vitrine faite en 1.4.1). Suite : piocher dans « Plus tard / idées »,
+  en refaisant les captures du README (`design/screenshots/`, jeu de démo, thème clair, barres
+  système retirées) si l'interface change.
 
 ## En cours
-- [ ] **Vitrine — refaire le README** _[DESIGN]_ — **en dernier**, quand le reste de la roadmap est
-  fini (les captures doivent montrer l'app finale). Même format que les autres apps de l'auteur,
-  modèle propre : [dromos](https://github.com/SlashXIV/dromos) (voir aussi
-  [kalos-app](https://github.com/SlashXIV/kalos-app), dont seul l'en-tête suit le format) :
-  - en-tête centré : icône 112 px (`design/icon/popote-icon.svg`), titre `<h1>`, accroche en gras
-    + une ligne de traits (« 100 % hors ligne · sans compte ni cloud · … ») ;
-  - 4 captures WebP côte à côte (`width="200"`, `alt` descriptif en français) dans
-    `design/screenshots/` : liste, détail, mode cuisson, courses — jeu de démo, barres système retirées ;
-  - `---`, un paragraphe d'intro, puis Fonctionnalités (groupées), Installer (APK de la dernière
-    Release, mise à jour par-dessus sans perte), Vie privée, Compiler, Crédits (polices OFL), Licence.
+- Rien : voir « Plus tard / idées ».
 
 ### Refonte — preuves
 | Jalon | Version | Preuve |
