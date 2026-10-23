@@ -194,8 +194,9 @@ public class RecipeService
         if (cache.TryGetValue(name, out var tag))
             return tag;
 
-        var lower = name.ToLower();
-        var existing = await db.Tags.FirstOrDefaultAsync(t => t.Name.ToLower() == lower);
+        // Comparaison en mémoire : lower() de SQLite ignore les lettres non ASCII (« Été » ≠ « été »).
+        var existing = (await db.Tags.ToListAsync())
+            .FirstOrDefault(t => string.Equals(t.Name, name, StringComparison.OrdinalIgnoreCase));
         tag = existing ?? new Tag { Name = name };
         cache[name] = tag;
         return tag;
@@ -211,8 +212,10 @@ public class RecipeService
         var canonical = Capitalize(name);
         if (!cache.TryGetValue(canonical, out var ingredient))
         {
-            var lower = canonical.ToLower();
-            var existing = await db.Ingredients.FirstOrDefaultAsync(i => i.Name.ToLower() == lower);
+            // Comparaison en mémoire : lower() de SQLite ignore les lettres non ASCII ; « Œufs »
+            // n'était pas retrouvé et sa recréation violait l'index unique (enregistrement impossible).
+            var existing = (await db.Ingredients.ToListAsync())
+                .FirstOrDefault(i => string.Equals(i.Name, canonical, StringComparison.OrdinalIgnoreCase));
             ingredient = existing ?? new Ingredient { Name = canonical };
             cache[canonical] = ingredient;
         }

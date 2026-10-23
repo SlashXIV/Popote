@@ -40,6 +40,9 @@ versionnage [SemVer](https://semver.org/lang/fr/).
   suivie deux fois par EF Core). Présent depuis l'ajout des tags.
 - Rouvrir l'app après l'avoir quittée par « retour » la faisait planter (fenêtre MAUI recréée
   dans le même processus) : « retour » sur une page racine la met désormais en arrière-plan.
+- Enregistrer une recette dont un ingrédient commence par une lettre accentuée ou « Œ »
+  (« Œufs », « Échalote ») plantait, et ce type de tag (« Été ») était dupliqué : la recherche
+  insensible à la casse passait par `lower()` de SQLite, limité à l'ASCII.
 
 ### Removed
 - Restes du modèle MAUI (OpenSans, `dotnet_bot.png`, `Colors.xaml`, `Styles.xaml`),
