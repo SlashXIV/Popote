@@ -70,7 +70,8 @@
    *En attente du téléphone* (vérification du démarrage) ; le reste peut avancer sans lui.
 2. **Refonte — Moments (1.3.0)**, voir le jalon ci-dessous — sur l'émulateur, mesures au retour du téléphone.
    Les 7 moments sont faits (branche `refonte/moments`) ; reste : mesures téléphone, puis fusion et 1.3.0.
-3. **Import par IA (1.4.0)**, voir le jalon ci-dessous.
+3. **Import par IA (1.4.0)** : fait (branche `feature/import-ia`, au-dessus de `refonte/moments`),
+   voir `docs/ai-import.md`. Se livre après la 1.3.0.
 4. **Vitrine** (en tout dernier, roadmap finie) : refaire le README, voir le jalon ci-dessous.
 
 ## En cours
@@ -94,7 +95,7 @@
     fondus de 150 ms ; « Supprimer les animations » = état final direct ; aucune gêne à la saisie ;
     rien ne bouge pendant la lecture d'une étape ; mesures téléphone avant / après (même build,
     Ambiance Expressive puis Sobre) sans régression de la liste ni du carrousel ; doc `docs/redesign-moments.md`.
-- [ ] **Import par IA (1.4.0)** _[DATA + DEV]_ — préparer, dans l'app, un **copier-coller du format
+- [x] **Import par IA (1.4.0)** _[DATA + DEV]_ — fait, dans le formulaire (voir `docs/ai-import.md`). Spécification d'origine : préparer, dans l'app, un **copier-coller du format
   attendu** pour qu'une IA externe (ChatGPT, Claude…) crée ou remodèle une recette à importer.
   - Bouton « Copier les consignes pour une IA » (Réglages ou écran d'import) : met dans le
     presse-papiers les consignes + le gabarit + les **listes autorisées** (unités de
