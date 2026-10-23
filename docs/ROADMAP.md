@@ -134,6 +134,7 @@
 ### Refonte — preuves
 | Jalon | Version | Preuve |
 |---|---|---|
+| Moments | 1.3.0 | téléphone (Release, avant / après, Expressive et Sobre) : démarrage ≈ 1,76 s inchangé, liste p90 7–8 ms, carrousel p90 5 ms ; minuteur 0,95 → 1,03–1,13 s CPU/min ; émulateur : vidéo 20 i/s, animations coupées |
 | Fondations | 1.2.0 | 50 tests verts (dont contrastes/daltonisme des 2 thèmes, aucun texte en dur) ; build sans avertissement nouveau ; émulateur : 8 pages en clair et en sombre, police 200 %, densité 600, arbre TalkBack ; téléphone (Release) : démarrage 1,76 s, liste p90 7 ms, carrousel p90 5 ms |
 
 ### Journal des décisions (refonte)

@@ -1,6 +1,6 @@
-# Refonte « Mise en place » — Moments (1.2.0)
+# Refonte « Mise en place » — Moments (1.3.0)
 
-> Statut : moments faits, mesures téléphone à faire — 23/10/2026 (branche `refonte/moments`)
+> Statut : moments faits, mesurés sur téléphone — 23/10/2026 (branche `refonte/moments`)
 
 ## Objectif
 Donner vie aux instants clés de la cuisine (planche, section 07) sans gêner la saisie ni la
@@ -66,8 +66,21 @@ Niveaux : Full = mouvement complet ; Reduced (Sobre) = fondu ou remplissage lin�
 Aucun.
 
 ## Reste à faire / limites connues
-- Coût CPU du minuteur (1,09 s/min mesuré en 1.1.0) : à mesurer et réduire au retour du téléphone.
+- Coût CPU du minuteur : 0,95 → 1,03–1,13 s par minute de décompte (≈ 2 % d'un cœur), non réduit.
+  Piste : le libellé du décompte relance la mise en page de la carte à chaque seconde.
 - La carte du minuteur change de hauteur à la fin (champ ↔ décompte) : petit saut, existant.
-- Mesures téléphone avant / après (Expressive puis Sobre) : à faire au retour du téléphone.
+- ~~Mesures téléphone avant / après~~ (faites, voir ci-dessous) (Expressive puis Sobre) : à faire au retour du téléphone.
 - Enregistrer depuis la coche de l'en-tête : la pastille du bas peut être hors écran ; la
   vibration et la pause restent.
+
+## Mesures (téléphone Xiaomi 2506BPN68G, Release, jeu de démo de 30 recettes)
+Copie `onl.nci.popote.perf`, même jeu de données ; avant = `main` (1.2.0), après = `refonte/moments`.
+
+| Mesure | Avant, Expressive | Avant, Sobre | Après, Expressive | Après, Sobre |
+|---|---|---|---|---|
+| Démarrage (8 lancements) | 1,74–1,89 s | 1,75–1,80 s | 1,75–1,79 s | 1,77–1,94 s |
+| Liste, p90 / p99 | 7 / 10–12 ms | 7–8 / 10–11 ms | 7–8 / 10–12 ms | 7–8 / 12 ms |
+| Carrousel, p90 / p99 | 5 / 6 ms | 5 / 6 ms | 5 / 6–7 ms | 5 / 6 ms |
+| Minuteur, CPU par minute | 0,96 s | 0,94 s | 1,03 s | 1,13 s |
+
+Aucune régression de la liste ni du carrousel ; démarrage inchangé.
