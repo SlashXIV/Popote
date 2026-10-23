@@ -28,7 +28,8 @@ un bol par ingrédient, émaillé de la couleur de son rayon. Tes données ne qu
 - Portions ajustables (×½, ×1, ×2, ×3 ou au choix) : toutes les quantités suivent.
 - **Import par IA** : copie les consignes, colle-les dans ChatGPT, Claude ou une autre IA avec ta
   recette (texte, photo, lien), puis colle sa réponse : le formulaire se remplit, avec les points à
-  vérifier. « Partager » écrit le même format, réimportable tel quel.
+  vérifier. « Partager » écrit le même format, réimportable tel quel. Tout un carnet de notes peut
+  aussi être importé d'un coup (Réglages → Importer plusieurs recettes).
 
 **En cuisine**
 - Mode cuisson : une étape par écran, lisible de loin, écran maintenu allumé.
@@ -44,7 +45,7 @@ un bol par ingrédient, émaillé de la couleur de son rayon. Tes données ne qu
 - Thème clair ou sombre (ou celui du système), Ambiance *Expressive* ou *Sobre*.
 - Lisible avec TalkBack et en très grande police ; couleurs de rayon distinctes pour les daltoniens.
 - Respect du réglage Android « Supprimer les animations » ; vibrations désactivables.
-- Sauvegarde et restauration de toutes tes recettes dans un fichier.
+- Sauvegarde et restauration de toutes tes recettes, photos comprises, dans un fichier.
 
 ## Installer
 

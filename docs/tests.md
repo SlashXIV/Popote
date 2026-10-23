@@ -12,6 +12,11 @@ apprendre les tests en .NET.
 - `ShoppingListBuilder.Aggregate` : regroupement/somme des ingrédients (même
   unité sommée, unités différentes séparées, rayon absent → « Divers », tri).
 - `StepParser` : découpage des étapes.
+- `RecipeTextFormat` (1.4.0) : format texte de l'import par IA ; `ParseMany` (1.5) : plusieurs
+  recettes à la suite, numéros de ligne dans le texte entier.
+- `BackupArchive` (1.5) : sauvegarde `.zip` aller-retour (base + photos, chemins réécrits), ancien
+  `.db3` accepté, fichiers invalides refusés sans toucher la base, `Undo`, entrées d'archive hors
+  photos ignorées — sur de vraies bases SQLite dans un dossier temporaire.
 - **Interface (depuis la 1.2.0)** :
   - `ThemeContrastTests` : relit `AppColors.xaml` ; contrastes WCAG (texte 7:1, accents 4,5:1,
     graphiques 3:1) dans les deux thèmes, émaux de rayon distincts en protan / deutan
@@ -37,5 +42,6 @@ dotnet test Popote.Tests/Popote.Tests.csproj
 ```
 
 ## Reste à faire / limites connues
-- Pas encore de tests sur les requêtes EF (possible via SQLite en mémoire).
+- Pas encore de tests sur les requêtes EF (possible via SQLite en mémoire) ; `BackupArchive` passe
+  par `Microsoft.Data.Sqlite` directement.
 - Pas de tests d'UI / ViewModels.

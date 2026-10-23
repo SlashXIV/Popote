@@ -6,6 +6,33 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 
 ## [Unreleased]
 
+## [1.5.0] — 2026-10-23 — Sauvegarde complète, import multiple
+
+### Added
+- **Importer plusieurs recettes** (Réglages) : coller la réponse d'une IA (ou un texte au format
+  de Popote) qui contient plusieurs recettes → liste des recettes reconnues avec leurs points à
+  vérifier, cases à cocher, enregistrement de la sélection. Un titre déjà présent est signalé et
+  décoché, jamais écrasé.
+- **Sauvegarde complète** : « Sauvegarder » produit une archive `.zip` avec la base **et les
+  photos** des recettes ; à la restauration, les photos reviennent et leurs chemins sont
+  réécrits pour l'appareil. Les anciennes sauvegardes `.db3` restent acceptées.
+
+### Changed
+- La liste des recettes affiche une **miniature** de chaque photo (360 px, créée à l'ajout de la
+  photo, et au démarrage pour les photos existantes) au lieu de l'original, jusqu'à 4000 × 3000
+  (téléphone : défilement p90 12 → 10 ms).
+- Minuteur du mode cuisson moins gourmand : le décompte ne relance plus la mise en page de
+  l'écran à chaque seconde (téléphone : 0,98 → 0,58 s de CPU par minute).
+
+### Fixed
+- « Restaurer » écrasait la base sans vérifier le fichier : un fichier qui n'est pas une
+  sauvegarde Popote est désormais refusé sans rien toucher, et la base d'avant est remise en
+  place si la restauration échoue.
+
+### Security
+- EF Core 10.0.9 → 10.0.13 : SQLitePCLRaw passe en 2.1.13, qui corrige la faille
+  GHSA-2m69-gcr7-jv3q (alerte NU1903).
+
 ## [1.4.1] — 2026-10-23 — Fenêtres habillées
 
 ### Fixed
