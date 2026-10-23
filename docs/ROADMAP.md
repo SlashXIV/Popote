@@ -32,100 +32,49 @@
 - [x] Partage d'une recette en texte (feuille de partage système). _[DEV]_
 - [x] Tri de la liste des recettes (Favoris / Récent / Titre / Temps). _[DATA]_
 - [x] **Refonte « Mise en place » — Fondations (1.2.0)** : métaphore du bol, base safran/aubergine, thème sombre, Réglages, typo, jetons, contrôles maison, textes externalisés, logo. _[DESIGN + DEV]_ — voir `docs/redesign-foundations.md` et `docs/design-system.md`.
+- [x] **Refonte — Moments (1.3.0)** : 7 moments (article coché, recette enregistrée, étape suivante, minuteur fini, passage au poste, mise en place, transitions de page), mesurés sur téléphone sans régression. _[DESIGN + DEV]_ — voir `docs/redesign-moments.md`.
+- [x] **Import par IA (1.4.0)** : consignes copiées pour une IA, réponse collée dans le formulaire (aperçu + points à vérifier), partage au même format, analyseur tolérant testé. _[DATA + DEV]_ — voir `docs/ai-import.md`.
 
 ## Reprise (prochaine session)
-> À lire en premier dans une conversation neuve. État au 22/10/2026.
+> À lire en premier dans une conversation neuve. État au 23/10/2026.
 
 **Où on en est**
-- État au 23/10/2026, rien de poussé ni tagué. Trois branches empilées, historique linéaire :
-  - **`main`** = Fondations 1.2.0 + 3 correctifs trouvés sur émulateur (réenregistrer une recette à
-    tags, réouverture après « retour », ingrédients/tags accentués) → c'est la **1.2.0 à livrer** ;
-  - **`refonte/moments`** = `main` + les 7 Moments (1.3.0) ;
-  - **`feature/import-ia`** = `refonte/moments` + l'import par IA (1.4.0). `Popote.csproj` est déjà en **1.2.0 (code 2)** ; la Release 1.2.0 n'est pas publiée.
-- Lire d'abord `docs/design-system.md` (le système codé) et `docs/redesign-foundations.md`
-  (choix, mesures, limites). Planche validée : https://claude.ai/code/artifact/f73a7898-93b7-4c17-bea9-41e47c58afe5
-- Rien n'a changé dans `Popote.Data` ni dans le schéma (aucune migration).
+- `main` = **1.4.0** (code 4), historique linéaire. Tags `v1.2.0` (poussé, Release publiée),
+  `v1.3.0` et `v1.4.0` (locaux tant que l'auteur n'a pas validé leur publication).
+- Le téléphone de l'auteur a la **1.4.0 signée** (nouvelle clé) et ses données restaurées.
+- Reste de la roadmap : la **Vitrine** (README), puis les idées « Plus tard ».
+- Lire d'abord `docs/design-system.md`, `docs/redesign-foundations.md`, `docs/redesign-moments.md`,
+  `docs/ai-import.md`. Planche validée : https://claude.ai/code/artifact/f73a7898-93b7-4c17-bea9-41e47c58afe5
+
+**Livrer une version (procédure qui marche)**
+1. `ApplicationDisplayVersion` / `ApplicationVersion` (+1) dans `Popote.csproj`, section datée du CHANGELOG.
+2. **Dossier propre** (`bin`/`obj` supprimés) : un build incrémental mêlé à un build Debug a produit
+   un APK qui plantait au démarrage (`UnsatisfiedLinkError` sur `MauiApplication.n_onCreate`).
+3. `dotnet publish -c Release -f net10.0-android -p:AndroidPackageFormat=apk -p:AndroidSigningKeyStore=<chemin>\popote.keystore
+   -p:AndroidSigningKeyPass=file:<fichier> -p:AndroidSigningStorePass=file:<fichier>` — le fichier contient
+   le mot de passe **sur deux lignes** (apksigner lit une ligne par mot de passe). Clé et mot de passe :
+   Bitwarden de l'auteur ; copie locale hors dépôt dans `%USERPROFILE%\popote-sauvegardes\`.
+4. `apksigner verify --print-certs` (empreinte SHA-256 du certificat `0a4b62ae…1d11`), installation
+   `adb install -r` sur le téléphone (accepter l'invite du Xiaomi), démarrage vérifié, puis tag, push et
+   Release (`Popote.apk`, accord de l'auteur).
 
 **Environnement (poste de l'auteur)**
 - `global.json` **local, hors dépôt** (`.git/info/exclude`) : épingle le SDK **10.0.303** — la charge
   MAUI n'existe que pour la bande 10.0.300 (un SDK 10.0.402 est aussi installé, sans MAUI).
-  `dotnet workload update` lancé le 22/10 (runtime Mono et compilateur AOT en 10.0.11).
 - **Release sans AOT** (`RunAOTCompilation=false`) : l'AOT exige le trimming, exclu pour EF Core ;
-  AOT sans trimming = plantage au démarrage (assertion Mono `class-init.c:2474`), y compris pour le
-  code d'avant la refonte. Ne pas réactiver l'AOT sans trimming testé avec EF Core.
-- Outils de vérification **locaux** dans `.claude/outils/` (voir `LISEZMOI.md`) : pilotage d'appareil
-  et captures (`ui.py`, `tour.sh`, `sheet.py`), mesures (`bench.sh`), jeu de démo (`seed/`,
-  `mkphotos.py`), calculs de palette, ajout de chaînes au resx (`str.py`), source de la planche.
-- Appareils : **émulateur** `emulator-5554` pour captures, TalkBack (`uiautomator dump --compressed`),
-  police 200 %, densité ; **téléphone** (Xiaomi 2506BPN68G, Android 17) pour **toutes les mesures** :
-  l'émulateur varie trop. Le Xiaomi demande d'accepter chaque installation USB à l'écran.
-  Une copie de mesure `onl.nci.popote.perf` (jeu de démo) est installée à côté de l'app réelle ;
-  l'app réelle est encore la 1.0 Debug, ses données sont sauvegardées hors dépôt.
-- **Depuis le 22/10/2026 : téléphone débranché.** On code et on vérifie sur l'émulateur ; tout ce qui
-  exige le téléphone (mesures de performance, démarrage de l'APK Release signé) est **mis de côté**
-  et noté « à mesurer au retour du téléphone » dans le jalon concerné, jamais extrapolé de l'émulateur.
+  AOT sans trimming = plantage au démarrage (assertion Mono `class-init.c:2474`).
+- Outils **locaux** dans `.claude/outils/` (voir `LISEZMOI.md`) : `ui.py`, `rec.sh` (vidéo découpée à
+  20 i/s), `bench.sh`, jeu de démo (`seed/`, `mkphotos.py`, `push-demo.sh`), `str.py` (resx).
+- Appareils : **émulateur** `emulator-5554` pour coder et capturer ; **téléphone** (Xiaomi 2506BPN68G,
+  Android 17) pour les mesures et la vérification des Release. Mesures : copie `onl.nci.popote.perf`
+  (Debug pour pousser les données, puis Release par `adb install -r`, **jamais** par `-t:Install`, qui
+  désinstalle et vide la base).
 
-**Prochaines étapes, dans l'ordre**
-1. **Livrer 1.2.0** : ~~fusionner dans `main`~~ (fait), tag `v1.2.0`,
-   APK signé (`dotnet publish -c Release … -p:AndroidSigningKeyPass=… -p:AndroidSigningStorePass=…`,
-   mots de passe par l'auteur), vérifier qu'il **démarre sur le téléphone**, Release GitHub. Installer
-   par-dessus la 1.0 réelle : même clé ? sinon sauvegarde / restauration des données d'abord.
-   *En attente du téléphone* (vérification du démarrage) ; le reste peut avancer sans lui.
-   Tag `v1.2.0` sur la tête de `main` (correctifs compris), pas sur l'ancien commit de fusion.
-2. **Refonte — Moments (1.3.0)** : mesures téléphone (`bench.sh`, Expressive puis Sobre, et CPU du
-   minuteur) puis fusion de `refonte/moments` dans `main`, tag, Release.
-   Les 7 moments sont faits (branche `refonte/moments`) ; reste : mesures téléphone, puis fusion et 1.3.0.
-3. **Import par IA (1.4.0)** : fait (branche `feature/import-ia`, au-dessus de `refonte/moments`),
-   voir `docs/ai-import.md`. Se livre après la 1.3.0.
-4. **Vitrine** (en tout dernier, roadmap finie) : refaire le README, voir le jalon ci-dessous.
+**Prochaines étapes**
+1. Publier `v1.3.0` et `v1.4.0` (accord de l'auteur) : push `main` + tags, deux Releases avec l'APK.
+2. **Vitrine** : refaire le README (jalon ci-dessous), captures sur l'émulateur avec le jeu de démo.
 
 ## En cours
-- [ ] **Refonte — Moments (1.3.0)** _[DESIGN + DEV]_ — planche, section 07. Briques déjà prêtes :
-  `Motion/MotionTokens` (durées, courbes, `Level`), `Motion/Entrances` (`RiseInAsync`,
-  `PressAsync`, `PressScaleBehavior`), `Controls/Bowl.FillProgress` (le bol se
-  remplit), `Motion/Haptics` (`Tick`, `Confirm`).
-  1. ~~*La mise en place*~~ (fait) : photo 1,04 → 1 en fondu, bols d'ingrédients en cascade
-     (50 ms, 8 au plus) ; titre qui monte d'un bloc (lettre à lettre écarté, voir la doc).
-  2. ~~*Passage au poste*~~ (fait) : ouverture en fondu (transition de page), bols de progression
-     en cascade, haptique `Confirm`.
-  3. ~~*Étape suivante*~~ (fait) : bol de l'étape faite qui se remplit ; numéro qui roule écarté
-     (il est dans la page du carrousel, qui glisse déjà).
-  4. ~~*Minuteur fini*~~ (fait) : bol-minuteur qui « déborde » 3 fois puis s'arrête, `Confirm` ; une seule
-     annonce TalkBack. **Reste** : coût du minuteur (1,09 s CPU/min), à mesurer au retour du téléphone.
-  5. ~~*Article coché*~~ (fait) : le bol se remplit (courbe Release), `Tick` ; libellé barré d'un coup.
-  6. ~~*Recette enregistrée*~~ (fait) : le bouton se change en coche (0,4 s), `Confirm`, puis retour.
-  7. ~~*Transitions de page*~~ (fait) : entrée maison fondu + montée sous contrôle du niveau de mouvement
-     (`Shell.PresentationMode=NotAnimated` sur les routes poussées) ; aucun flash vu sur l'émulateur.
-  - Critères : tout est interruptible et déclenché par un événement (jamais de boucle) ; Sobre =
-    fondus de 150 ms ; « Supprimer les animations » = état final direct ; aucune gêne à la saisie ;
-    rien ne bouge pendant la lecture d'une étape ; mesures téléphone avant / après (même build,
-    Ambiance Expressive puis Sobre) sans régression de la liste ni du carrousel ; doc `docs/redesign-moments.md`.
-- [x] **Import par IA (1.4.0)** _[DATA + DEV]_ — fait, dans le formulaire (voir `docs/ai-import.md`). Spécification d'origine : préparer, dans l'app, un **copier-coller du format
-  attendu** pour qu'une IA externe (ChatGPT, Claude…) crée ou remodèle une recette à importer.
-  - Bouton « Copier les consignes pour une IA » (Réglages ou écran d'import) : met dans le
-    presse-papiers les consignes + le gabarit + les **listes autorisées** (unités de
-    `IngredientLineViewModel.UnitOptions`, rayons de `AisleOptions`, tags existants).
-  - L'utilisateur colle ces consignes dans l'IA avec sa recette (texte, photo, lien), récupère le bloc,
-    puis « Importer une recette » : coller → **aperçu** (mise en place, étapes) → corriger → Enregistrer.
-  - Format proposé (lisible, tolérant, sans JSON à échapper) :
-    ```
-    # Crêpes de la Chandeleur
-    Portions : 4
-    Préparation : 10 min
-    Cuisson : 20 min
-    Tags : Dessert, Rapide
-    ## Ingrédients
-    - 250 g | Farine | Épicerie
-    - 4 pièce | Œufs | Crèmerie
-    ## Étapes
-    1. Verser la farine dans un saladier…
-    ## Notes
-    Moins de sucre la prochaine fois.
-    ```
-  - Analyseur **pur** dans `Popote.Data` (ex. `RecipeTextParser`), testé (champs manquants,
-    unités synonymes « gr » → « g », rayon inconnu → « Divers » avec avertissement, quantités
-    « 1,5 » / « ½ »), réutilisant `SaveRecipeAsync` (pas de migration). Même format en sortie pour
-    « Partager » : aller-retour garanti. Remplace l'idée « Import d'une recette (URL ou texte collé) ».
 - [ ] **Vitrine — refaire le README** _[DESIGN]_ — **en dernier**, quand le reste de la roadmap est
   fini (les captures doivent montrer l'app finale). Même format que les autres apps de l'auteur,
   modèle propre : [dromos](https://github.com/SlashXIV/dromos) (voir aussi
@@ -158,6 +107,8 @@
 
 ## Plus tard / idées
 - [ ] Import de mes notes existantes (après l'import par IA, qui couvre le texte collé).
+- [ ] Réduire le coût CPU du minuteur (≈ 1,1 s par minute de décompte) : le libellé relance la
+  mise en page de la carte à chaque seconde.
 - [ ] Miniatures des photos à l'import si la liste réelle grossit (PSS ≈ 346 Mo avec des photos 4000 × 3000).
 - [ ] Habiller les dialogues natifs restants (alertes, sélecteur, feuille d'actions de la Semaine).
 - [ ] Corriger l'alerte NU1903 (`SQLitePCLRaw` transitif) quand une version corrigée sera tirable par EF Core.
