@@ -1,4 +1,4 @@
-# Import par IA (1.3.0)
+# Import par IA (1.4.0)
 
 > Statut : fait, vérifié sur émulateur — 23/10/2026 (branche `feature/import-ia`)
 
