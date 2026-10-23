@@ -6,6 +6,18 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 
 ## [Unreleased]
 
+## [1.4.0] — 2026-10-23 — Import par IA
+
+### Added
+- **Import par IA** : dans le formulaire, « Copier les consignes » (format, unités, rayons et
+  tags autorisés ; la recette en cours pour la remodeler) puis « Coller la réponse » remplit le
+  formulaire, avec les points à vérifier. Analyse tolérante (synonymes, fractions, réponse
+  bavarde d'une IA).
+
+### Changed
+- « Partager » écrit le format texte de Popote (réimportable tel quel) ; la signature
+  « partagé depuis Popote » est retirée, elle aurait fini dans les notes au réimport.
+
 ## [1.3.0] — 2026-10-23 — Refonte « Mise en place » : moments
 
 ### Added
@@ -19,14 +31,6 @@ versionnage [SemVer](https://semver.org/lang/fr/).
   cascade, une seule fois), *passage au poste* (bols de progression en cascade, vibration) et
   **transitions de page** maison (fondu + montée) à la place du glissement natif ; retour
   arrière instantané.
-- **Import par IA** : dans le formulaire, « Copier les consignes » (format, unités, rayons et
-  tags autorisés ; la recette en cours pour la remodeler) puis « Coller la réponse » remplit le
-  formulaire, avec les points à vérifier. Analyse tolérante (synonymes, fractions, réponse
-  bavarde d'une IA).
-
-### Changed
-- « Partager » écrit le format texte de Popote (réimportable tel quel) ; la signature
-  « partagé depuis Popote » est retirée, elle aurait fini dans les notes au réimport.
 
 ### Performance
 - Mesuré sur téléphone (Release) : démarrage, liste et carrousel inchangés ; le minuteur coûte
