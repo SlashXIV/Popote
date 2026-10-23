@@ -226,9 +226,7 @@ public partial class RecipeEditViewModel : ObservableObject
     private async Task CopyAiInstructionsAsync()
     {
         await _catalogsReady;
-        var tags = Tags.Count > 0 ? string.Join(", ", Tags.Select(t => t.Name)) : AppResources.Import_NoTags;
-        var text = string.Format(AppResources.Import_Instructions,
-            string.Join(", ", RecipeVocabulary.Units), string.Join(", ", RecipeVocabulary.Aisles), tags);
+        var text = AiInstructions(Tags.Select(t => t.Name).ToList());
         // Recette déjà commencée : l'IA la remodèle au lieu d'en créer une.
         text += "\n" + (string.IsNullOrWhiteSpace(Title)
             ? AppResources.Import_AskNew
@@ -299,7 +297,12 @@ public partial class RecipeEditViewModel : ObservableObject
             .ToList(),
         StepParser.Parse(Instructions), string.IsNullOrWhiteSpace(Notes) ? null : Notes.Trim());
 
-    private static string Describe(ImportWarning w) => string.Format(w.Kind switch
+    // Consignes pour l'IA (format, unités, rayons, tags existants) ; partagées avec l'import multiple.
+    internal static string AiInstructions(IReadOnlyList<string> tags) => string.Format(AppResources.Import_Instructions,
+        string.Join(", ", RecipeVocabulary.Units), string.Join(", ", RecipeVocabulary.Aisles),
+        tags.Count > 0 ? string.Join(", ", tags) : AppResources.Import_NoTags);
+
+    internal static string Describe(ImportWarning w) => string.Format(w.Kind switch
     {
         ImportWarningKind.MissingTitle => AppResources.Import_Warn_MissingTitle,
         ImportWarningKind.MissingServings => AppResources.Import_Warn_MissingServings,

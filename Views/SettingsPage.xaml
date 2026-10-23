@@ -47,6 +47,11 @@
                             SemanticProperties.Hint="{x:Static res:AppResources.Settings_BackupHelp}" />
                     <Label Text="{x:Static res:AppResources.Settings_BackupHelp}" Style="{StaticResource Caption}"
                            AutomationProperties.IsInAccessibleTree="False" />
+                    <Button Text="{x:Static res:AppResources.Settings_ImportMany}" Style="{StaticResource QuietButton}"
+                            Command="{Binding GoToImportManyCommand}"
+                            SemanticProperties.Hint="{x:Static res:AppResources.Settings_ImportManyHelp}" />
+                    <Label Text="{x:Static res:AppResources.Settings_ImportManyHelp}" Style="{StaticResource Caption}"
+                           AutomationProperties.IsInAccessibleTree="False" />
                     <Button Text="{x:Static res:AppResources.Settings_Restore}" Style="{StaticResource QuietButton}"
                             Command="{Binding RestoreCommand}"
                             SemanticProperties.Hint="{x:Static res:AppResources.Settings_RestoreHelp}" />

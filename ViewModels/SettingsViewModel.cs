@@ -42,7 +42,10 @@ public partial class SettingsViewModel : ObservableObject
     partial void OnAmbianceIndexChanged(int value) => _settings.Sober = value == 1;
     partial void OnHapticsEnabledChanged(bool value) => _settings.HapticsEnabled = value;
 
-    // Exporte la base (.db3) et la partage (Drive, Fichiers, mail…).
+    [RelayCommand]
+    private Task GoToImportManyAsync() => Shell.Current.GoToAsync("ImportManyPage");
+
+    // Exporte la base et les photos dans une archive .zip, puis la partage (Drive, Fichiers, mail…).
     [RelayCommand]
     private async Task BackupAsync()
     {

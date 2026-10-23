@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Popote.ViewModels"
+             xmlns:controls="clr-namespace:Popote.Controls"
+             xmlns:res="clr-namespace:Popote.Resources.Strings"
+             x:Class="Popote.Views.ImportManyPage"
+             Shell.PresentationMode="NotAnimated"
+             x:DataType="vm:ImportManyViewModel"
+             Title="{x:Static res:AppResources.ImportMany_Title}">
+
+    <Grid RowDefinitions="Auto,*">
+        <controls:PageHeader Title="{x:Static res:AppResources.ImportMany_Title}" ShowBack="True" />
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="{StaticResource PagePadding}" Spacing="{StaticResource Space16}">
+
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="{StaticResource Space8}">
+                        <Label Text="{x:Static res:AppResources.ImportMany_Step1}" Style="{StaticResource Caption}" />
+                        <Button Text="{x:Static res:AppResources.Import_Copy}" Style="{StaticResource CompactButton}"
+                                HorizontalOptions="Start" Command="{Binding CopyInstructionsCommand}" />
+                        <Label Text="{x:Static res:AppResources.ImportMany_Step2}" Style="{StaticResource Caption}" />
+                        <Button Text="{x:Static res:AppResources.Import_Paste}" Style="{StaticResource CompactButton}"
+                                HorizontalOptions="Start" Command="{Binding PasteCommand}" />
+                        <Label Text="{Binding Report}" Style="{StaticResource Body}"
+                               IsVisible="{Binding Report, Converter={StaticResource HasText}}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Recettes reconnues : cochées sauf doublons et recettes sans titre -->
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Candidates}" Spacing="{StaticResource Space12}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="vm:ImportCandidateViewModel">
+                            <Border Style="{StaticResource Card}">
+                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="{StaticResource Space8}">
+                                    <controls:BowlCheck IsChecked="{Binding IsSelected}" UseAccent="True"
+                                                        IsVisible="{Binding CanSave}" VerticalOptions="Start"
+                                                        Description="{Binding Title}" />
+                                    <VerticalStackLayout Grid.Column="1" Spacing="{StaticResource Space4}">
+                                        <Label Text="{Binding Title}" Style="{StaticResource BodyStrong}" />
+                                        <Label Text="{Binding Summary}" Style="{StaticResource Caption}" />
+                                        <Label Text="{Binding Warnings}" Style="{StaticResource Body}"
+                                               IsVisible="{Binding Warnings, Converter={StaticResource HasText}}" />
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+
+                <Button Text="{x:Static res:AppResources.ImportMany_Save}" Command="{Binding SaveCommand}" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

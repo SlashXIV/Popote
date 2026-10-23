@@ -92,6 +92,25 @@ public static class RecipeTextFormat
         return new TextImport(recipe, warnings);
     }
 
+    // Plusieurs recettes à la suite (carnet de notes) : chacune commence à une ligne « # Titre ».
+    // Le texte avant le premier titre (introduction d'une IA) est ignoré. Les numéros de ligne
+    // des avertissements sont ceux du texte entier.
+    public static List<TextImport> ParseMany(string? text)
+    {
+        var lines = (text ?? string.Empty).Replace("\r", string.Empty).Split('\n');
+        var starts = Enumerable.Range(0, lines.Length).Where(i => IsTitle(lines[i].Trim())).ToList();
+        var imports = new List<TextImport>();
+        for (var k = 0; k < starts.Count; k++)
+        {
+            var end = k + 1 < starts.Count ? starts[k + 1] : lines.Length;
+            var (recipe, warnings) = Parse(string.Join("\n", lines[starts[k]..end]));
+            imports.Add(new(recipe, warnings.Select(w => w.Line == 0 ? w : w with { Line = w.Line + starts[k] }).ToList()));
+        }
+        return imports;
+    }
+
+    private static bool IsTitle(string line) => line.StartsWith('#') && !line.StartsWith("##");
+
     public static string Write(TextRecipe recipe)
     {
         var sb = new StringBuilder();

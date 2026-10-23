@@ -92,6 +92,9 @@ public static class MauiProgram
         builder.Services.AddTransient<SettingsViewModel>();
         builder.Services.AddTransient<SettingsPage>();
 
+        builder.Services.AddTransient<ImportManyViewModel>();
+        builder.Services.AddTransient<ImportManyPage>();
+
 #if DEBUG
         builder.Logging.AddDebug();
 #endif

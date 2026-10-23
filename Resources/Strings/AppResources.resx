@@ -232,6 +232,39 @@
   <data name="Edit_Unit" xml:space="preserve">
     <value>Unité</value>
   </data>
+  <data name="ImportMany_Counts" xml:space="preserve">
+    <value>ingrédients : {0} · étapes : {1}</value>
+  </data>
+  <data name="ImportMany_Duplicate" xml:space="preserve">
+    <value>Une recette porte déjà ce titre : non cochée, rien ne sera écrasé.</value>
+  </data>
+  <data name="ImportMany_Found" xml:space="preserve">
+    <value>Recettes reconnues : {0}. Vérifie-les, puis enregistre celles qui sont cochées.</value>
+  </data>
+  <data name="ImportMany_NoneSelected" xml:space="preserve">
+    <value>Coche au moins une recette à enregistrer.</value>
+  </data>
+  <data name="ImportMany_Save" xml:space="preserve">
+    <value>Enregistrer la sélection</value>
+  </data>
+  <data name="ImportMany_Saved" xml:space="preserve">
+    <value>Recettes enregistrées : {0}.</value>
+  </data>
+  <data name="ImportMany_Step1" xml:space="preserve">
+    <value>Copie les consignes et colle-les dans ton IA avec tes notes de recettes, toutes à la suite.</value>
+  </data>
+  <data name="ImportMany_Step2" xml:space="preserve">
+    <value>Copie sa réponse, puis colle-la ici : coche les recettes à garder.</value>
+  </data>
+  <data name="ImportMany_Title" xml:space="preserve">
+    <value>Importer des recettes</value>
+  </data>
+  <data name="ImportMany_Untitled" xml:space="preserve">
+    <value>Recette sans titre (ignorée)</value>
+  </data>
+  <data name="Import_AskMany" xml:space="preserve">
+    <value>Mes recettes, à rendre à la suite (un bloc par recette, chacun commençant par « # Titre ») :</value>
+  </data>
   <data name="Import_AskNew" xml:space="preserve">
     <value>Ma recette (texte, photo ou lien) :</value>
   </data>
@@ -458,6 +491,12 @@ Facultatif.
   </data>
   <data name="Settings_HapticsHelp" xml:space="preserve">
     <value>Coche, enregistrement, fin du minuteur</value>
+  </data>
+  <data name="Settings_ImportMany" xml:space="preserve">
+    <value>Importer plusieurs recettes</value>
+  </data>
+  <data name="Settings_ImportManyHelp" xml:space="preserve">
+    <value>Depuis tes notes, avec une IA</value>
   </data>
   <data name="Settings_Restore" xml:space="preserve">
     <value>Restaurer une sauvegarde</value>

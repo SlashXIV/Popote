@@ -173,6 +173,64 @@ public class RecipeTextFormatTests
         Assert.Equal(recipe.Steps, back.Steps);
         Assert.Equal(recipe.Notes, back.Notes);
     }
+    [Theory]
+    [InlineData("")]
+    [InlineData("Voici tes recettes, bonne lecture !")]
+    public void ParseMany_SansTitre_AucuneRecette(string text)
+    {
+        Assert.Empty(RecipeTextFormat.ParseMany(text));
+    }
+
+    [Fact]
+    public void ParseMany_UneRecette_CommeParse()
+    {
+        var one = Assert.Single(RecipeTextFormat.ParseMany(Crepes));
+        Assert.Equal(RecipeTextFormat.Write(RecipeTextFormat.Parse(Crepes).Recipe), RecipeTextFormat.Write(one.Recipe));
+        Assert.Empty(one.Warnings);
+    }
+
+    [Fact]
+    public void ParseMany_PlusieursRecettes_TexteAvantIgnore_AvertissementsALaBonneRecette()
+    {
+        var text = "Voici tes 3 recettes :\n```\n" + Crepes + "\n\n" + """
+            # Soupe
+            Portions : 2
+            ## Ingrédients
+            - 1 poignée | Poireaux | Fruits & légumes
+            ## Étapes
+            1. Cuire.
+
+            # Pain perdu
+            ## Ingrédients
+            - 2 | Œufs | Crèmerie
+            ## Étapes
+            Tremper, dorer.
+            """ + "\n```";
+
+        var all = RecipeTextFormat.ParseMany(text);
+
+        Assert.Equal(new[] { "Crêpes de la Chandeleur", "Soupe", "Pain perdu" }, all.Select(i => i.Recipe.Title));
+        Assert.Empty(all[0].Warnings);
+        var unit = Assert.Single(all[1].Warnings);
+        Assert.Equal(ImportWarningKind.UnknownUnit, unit.Kind);
+        Assert.Equal(20, unit.Line); // ligne dans le texte entier, pas dans le bloc de la soupe
+        Assert.Equal(ImportWarningKind.MissingServings, Assert.Single(all[2].Warnings).Kind);
+        Assert.Equal(new[] { "Tremper, dorer." }, all[2].Recipe.Steps);
+    }
+
+    [Fact]
+    public void ParseMany_AllerRetourAvecWrite()
+    {
+        var a = RecipeTextFormat.Parse(Crepes).Recipe;
+        var b = a with { Title = "Crêpes salées", Tags = new[] { "Plat" } };
+
+        var all = RecipeTextFormat.ParseMany(RecipeTextFormat.Write(a) + "\n" + RecipeTextFormat.Write(b));
+
+        Assert.Equal(2, all.Count);
+        Assert.All(all, i => Assert.Empty(i.Warnings));
+        Assert.Equal(new[] { "Plat" }, all[1].Recipe.Tags);
+        Assert.Equal(a.Ingredients, all[1].Recipe.Ingredients);
+    }
 }
 
 // Le gabarit donné à l'IA (resx) doit se relire sans avertissement : une IA qui l'imite à la

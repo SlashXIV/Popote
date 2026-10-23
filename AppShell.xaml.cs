@@ -16,6 +16,7 @@ public partial class AppShell : Shell
         Routing.RegisterRoute("CookWithPage", typeof(CookWithPage));
         Routing.RegisterRoute("CookingModePage", typeof(CookingModePage));
         Routing.RegisterRoute("SettingsPage", typeof(SettingsPage));
+        Routing.RegisterRoute("ImportManyPage", typeof(ImportManyPage));
 
         // Transitions de page : une route poussée apparaît sans animation native
         // (Shell.PresentationMode="NotAnimated" sur chaque page poussée ; un style implicite arrive
