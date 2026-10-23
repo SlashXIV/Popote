@@ -74,9 +74,9 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.9" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.13" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.9" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.13" />
 	</ItemGroup>
 
 	<!-- Couche données (entités + EF Core + migrations) dans une bibliothèque à part. -->
