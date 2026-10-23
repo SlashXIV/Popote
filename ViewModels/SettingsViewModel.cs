@@ -46,17 +46,24 @@ public partial class SettingsViewModel : ObservableObject
     [RelayCommand]
     private async Task BackupAsync()
     {
-        await _service.CheckpointAsync(); // WAL -> .db3 (sauvegarde en un seul fichier)
+        await _service.CheckpointAsync(); // WAL -> .db3 (la base tient en un seul fichier)
 
-        var dbPath = Path.Combine(FileSystem.AppDataDirectory, "recettes.db3");
+        var dbPath = Path.Combine(FileSystem.AppDataDirectory, BackupArchive.DbName);
         if (!File.Exists(dbPath))
         {
             await Shell.Current.DisplayAlertAsync(AppResources.Backup_Title, AppResources.Backup_Empty, AppResources.Action_Ok);
             return;
         }
 
-        var backup = Path.Combine(FileSystem.CacheDirectory, $"popote-sauvegarde-{DateTime.Now:yyyyMMdd-HHmm}.db3");
-        File.Copy(dbPath, backup, overwrite: true);
+        var photos = await _service.GetPhotoPathsAsync();
+        foreach (var old in Directory.GetFiles(FileSystem.CacheDirectory, "popote-sauvegarde-*"))
+            File.Delete(old); // une archive pèse les photos : on ne garde que la dernière
+        var backup = Path.Combine(FileSystem.CacheDirectory, $"popote-sauvegarde-{DateTime.Now:yyyyMMdd-HHmm}.zip");
+        await Task.Run(() =>
+        {
+            using var output = File.Create(backup);
+            BackupArchive.Write(output, dbPath, photos);
+        });
 
         await Share.Default.RequestAsync(new ShareFileRequest
         {
@@ -65,7 +72,8 @@ public partial class SettingsViewModel : ObservableObject
         });
     }
 
-    // Restaure la base depuis un fichier de sauvegarde choisi.
+    // Restaure une sauvegarde (.zip, ou ancien .db3) : fichier vérifié avant d'écraser,
+    // base actuelle remise en place si quoi que ce soit échoue.
     [RelayCommand]
     private async Task RestoreAsync()
     {
@@ -77,19 +85,42 @@ public partial class SettingsViewModel : ObservableObject
         var file = await FilePicker.Default.PickAsync(new PickOptions { PickerTitle = AppResources.Restore_PickerTitle });
         if (file is null) return;
 
-        var dbPath = Path.Combine(FileSystem.AppDataDirectory, "recettes.db3");
-        using (var src = await file.OpenReadAsync())
-        using (var dst = File.Create(dbPath))
-            await src.CopyToAsync(dst);
-
-        // Supprime les journaux WAL périmés de l'ancienne base.
-        foreach (var ext in new[] { "-wal", "-shm" })
+        var appDir = FileSystem.AppDataDirectory;
+        var picked = Path.Combine(FileSystem.CacheDirectory, "sauvegarde-choisie");
+        try
         {
-            var p = dbPath + ext;
-            if (File.Exists(p)) File.Delete(p);
+            using (var src = await file.OpenReadAsync())
+            using (var dst = File.Create(picked))
+                await src.CopyToAsync(dst);
+
+            await _service.CheckpointAsync(); // la copie de secours doit contenir tout le journal
+            await Task.Run(() => BackupArchive.Restore(picked, appDir));
+        }
+        catch (InvalidDataException)
+        {
+            await Shell.Current.DisplayAlertAsync(AppResources.Restore_FailedTitle, AppResources.Restore_Invalid, AppResources.Action_Ok);
+            return;
+        }
+        catch (Exception) // lecture ou écriture impossible : la base d'avant est déjà remise
+        {
+            await Shell.Current.DisplayAlertAsync(AppResources.Restore_FailedTitle, AppResources.Restore_Failed, AppResources.Action_Ok);
+            return;
+        }
+        finally
+        {
+            File.Delete(picked);
         }
 
-        await _service.MigrateAsync(); // aligne le schéma si la sauvegarde est plus ancienne
+        try
+        {
+            await _service.MigrateAsync(); // aligne le schéma si la sauvegarde est plus ancienne
+        }
+        catch (Exception)
+        {
+            BackupArchive.Undo(appDir);
+            await Shell.Current.DisplayAlertAsync(AppResources.Restore_FailedTitle, AppResources.Restore_Failed, AppResources.Action_Ok);
+            return;
+        }
         await Shell.Current.DisplayAlertAsync(AppResources.Restore_DoneTitle, AppResources.Restore_DoneMessage, AppResources.Action_Ok);
     }
 }

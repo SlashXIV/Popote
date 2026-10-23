@@ -417,8 +417,17 @@ Facultatif.
   <data name="Restore_DoneTitle" xml:space="preserve">
     <value>Restauration effectuée</value>
   </data>
+  <data name="Restore_Failed" xml:space="preserve">
+    <value>La restauration a échoué. Tes données d’avant ont été remises en place.</value>
+  </data>
+  <data name="Restore_FailedTitle" xml:space="preserve">
+    <value>Restauration impossible</value>
+  </data>
+  <data name="Restore_Invalid" xml:space="preserve">
+    <value>Ce fichier n’est pas une sauvegarde Popote. Tes données n’ont pas été modifiées.</value>
+  </data>
   <data name="Restore_PickerTitle" xml:space="preserve">
-    <value>Choisis une sauvegarde Popote (.db3)</value>
+    <value>Choisis une sauvegarde Popote (.zip ou .db3)</value>
   </data>
   <data name="Settings_Ambiance" xml:space="preserve">
     <value>Ambiance</value>
@@ -439,7 +448,7 @@ Facultatif.
     <value>Sauvegarder</value>
   </data>
   <data name="Settings_BackupHelp" xml:space="preserve">
-    <value>Exporter recettes, semaine et courses (.db3)</value>
+    <value>Exporter recettes, photos, semaine et courses (.zip)</value>
   </data>
   <data name="Settings_Data" xml:space="preserve">
     <value>Données</value>

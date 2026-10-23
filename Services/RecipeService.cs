@@ -303,6 +303,16 @@ public class RecipeService
         await db.Database.ExecuteSqlRawAsync("PRAGMA wal_checkpoint(TRUNCATE);");
     }
 
+    // Photos à inclure dans la sauvegarde (celles des recettes, pas les fichiers orphelins).
+    public async Task<List<string>> GetPhotoPathsAsync()
+    {
+        using var db = await _factory.CreateDbContextAsync();
+        return await db.Recipes
+            .Where(r => r.PhotoPath != null && r.PhotoPath != "")
+            .Select(r => r.PhotoPath!)
+            .ToListAsync();
+    }
+
     // Applique les migrations (utile après restauration d'une base plus ancienne).
     public async Task MigrateAsync()
     {

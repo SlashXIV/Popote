@@ -1,6 +1,6 @@
 # Sauvegarde & restauration
 
-> Statut : livré — 2026-07-04
+> Statut : livré — 2026-07-04 ; photos et restauration sûre — 2026-10-23
 
 ## Objectif
 Popote étant 100 % local, permettre d'**exporter** ses données et de les
@@ -8,24 +8,38 @@ Popote étant 100 % local, permettre d'**exporter** ses données et de les
 
 ## Comportement attendu
 - Page **Réglages** (icône engrenage de l'onglet Recettes), section *Données* — depuis la 1.2.0 ; avant, menu ⋮ :
-  - **Sauvegarder les données** → exporte la base (`.db3`) et ouvre le partage
-    (Google Drive, Fichiers, mail…). Fichier `popote-sauvegarde-AAAAMMJJ-HHmm.db3`.
-  - **Restaurer une sauvegarde** → choisir un fichier `.db3` ; remplace les données
-    actuelles (confirmation). Redémarrer l'app pour voir le résultat.
+  - **Sauvegarder** → archive `popote-sauvegarde-AAAAMMJJ-HHmm.zip` : la base `recettes.db3` et les
+    photos des recettes (`recipe_*.jpg|png`), puis feuille de partage (Drive, Fichiers, mail…).
+  - **Restaurer une sauvegarde** → choisir un `.zip` (ou un ancien `.db3`, toujours accepté) ;
+    remplace les données actuelles (confirmation). Redémarrer l'app pour voir le résultat.
+- Un fichier qui n'est pas une sauvegarde Popote est **refusé sans rien toucher** (« Ce fichier
+  n'est pas une sauvegarde Popote »). Si la restauration ou la migration échoue, la base d'avant
+  est remise en place.
 
 ## Fichiers concernés
-- `Services/RecipeService.cs` — `CheckpointAsync` (WAL → `.db3`), `MigrateAsync`.
-- `ViewModels/SettingsViewModel.cs` — `BackupCommand`, `RestoreCommand` (`Share`, `FilePicker`), logique inchangée depuis la 1.0.
-- `Views/SettingsPage.xaml` — boutons Sauvegarder / Restaurer.
+- `Popote.Data/Services/BackupArchive.cs` — écriture de l'archive, validation, restauration,
+  retour arrière (`Undo`), réécriture des chemins de photos. Logique pure, testée.
+- `Popote.Tests/BackupArchiveTests.cs` — aller-retour base + photos, ancien `.db3`, fichiers
+  invalides refusés, `Undo`, entrées d'archive hors photos ignorées.
+- `Services/RecipeService.cs` — `CheckpointAsync` (WAL → `.db3`), `GetPhotoPathsAsync`, `MigrateAsync`.
+- `ViewModels/SettingsViewModel.cs` — `BackupCommand`, `RestoreCommand` (`Share`, `FilePicker`, alertes).
 
 ## Choix techniques
-- **`PRAGMA wal_checkpoint(TRUNCATE)`** avant l'export : le journal WAL est rapatrié,
-  la sauvegarde tient en **un seul fichier**.
-- Restauration : on écrase `recettes.db3`, on **supprime les `-wal`/`-shm` périmés**,
-  puis on **migre** (au cas où la sauvegarde vient d'une version plus ancienne).
-- Partage via `Share` / sélection via `FilePicker` (pickers système, pas de permission spéciale).
+- **`PRAGMA wal_checkpoint(TRUNCATE)`** avant l'export : le journal WAL est rapatrié, la base
+  tient en un seul fichier.
+- **`System.IO.Compression`** (déjà dans .NET) : aucune dépendance. Photos stockées sans
+  compression (JPEG déjà compressé). Seules les photos **référencées** par une recette partent.
+- **Validation avant d'écraser** : l'en-tête (`PK\3\4` pour une archive, `SQLite format 3\0` pour
+  la base) puis la présence de la table `Recipes`, sur une copie de travail
+  (`recettes.restauration.db3`). La base actuelle est copiée en `recettes.avant-restauration.db3`.
+- **Chemins de photos** : `PhotoPath` est absolu et propre à l'appareil d'origine ; il est
+  réécrit vers le dossier de l'app (seul le nom de fichier compte), dans la copie de travail.
+- **Sécurité de l'archive** : seules les entrées `recipe_*.jpg|jpeg|png` sans dossier sont
+  extraites (pas de `../`).
+- `SqliteConnection.ClearAllPools()` avant le remplacement : une connexion en cache pointerait
+  encore sur l'ancien fichier. Connexions de vérification sans pool.
 
 ## Reste à faire / limites connues
-- Les **photos** (fichiers hors base) ne sont pas incluses dans la sauvegarde.
 - Après restauration, un **redémarrage** de l'app est nécessaire (les écrans en cache
   gardent les anciennes données jusqu'au relancement).
+- Les photos orphelines de l'appareil (ancienne base) ne sont pas supprimées à la restauration.
