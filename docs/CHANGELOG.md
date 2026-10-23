@@ -38,6 +38,8 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 - Les vibrations faisaient planter l'app (permission `VIBRATE` manquante).
 - Réenregistrer une recette **qui a des tags** faisait planter l'app (liaison recette-tag
   suivie deux fois par EF Core). Présent depuis l'ajout des tags.
+- Rouvrir l'app après l'avoir quittée par « retour » la faisait planter (fenêtre MAUI recréée
+  dans le même processus) : « retour » sur une page racine la met désormais en arrière-plan.
 
 ### Removed
 - Restes du modèle MAUI (OpenSans, `dotnet_bot.png`, `Colors.xaml`, `Styles.xaml`),

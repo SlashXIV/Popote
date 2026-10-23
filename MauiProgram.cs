@@ -1,6 +1,7 @@
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Maui.LifecycleEvents;
 using Popote.Data;
 using Popote.Services;
 using Popote.ViewModels;
@@ -33,6 +34,21 @@ public static class MauiProgram
             {
 #if ANDROID
                 handlers.AddHandler(typeof(Shell), typeof(PopoteShellRenderer));
+#endif
+            })
+            .ConfigureLifecycleEvents(events =>
+            {
+#if ANDROID
+                // Retour sur une page racine : l'app passe en arrière-plan au lieu de détruire
+                // l'activité. La recréer dans le même processus fait planter MAUI
+                // (ObjectDisposedException dans Shell à la réouverture, présent depuis la 1.0).
+                events.AddAndroid(android => android.OnBackPressed(activity =>
+                {
+                    var nav = Shell.Current?.Navigation;
+                    if (nav is null || nav.NavigationStack.Count > 1 || nav.ModalStack.Count > 0) return false;
+                    activity.MoveTaskToBack(true);
+                    return true;
+                }));
 #endif
             });
 
