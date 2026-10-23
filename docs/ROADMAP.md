@@ -33,13 +33,14 @@
 - [x] Tri de la liste des recettes (Favoris / Récent / Titre / Temps). _[DATA]_
 - [x] **Refonte « Mise en place » — Fondations (1.2.0)** : métaphore du bol, base safran/aubergine, thème sombre, Réglages, typo, jetons, contrôles maison, textes externalisés, logo. _[DESIGN + DEV]_ — voir `docs/redesign-foundations.md` et `docs/design-system.md`.
 - [x] **Refonte — Moments (1.3.0)** : 7 moments (article coché, recette enregistrée, étape suivante, minuteur fini, passage au poste, mise en place, transitions de page), mesurés sur téléphone sans régression. _[DESIGN + DEV]_ — voir `docs/redesign-moments.md`.
+- [x] **Fenêtres natives habillées (1.4.1)** : alertes, feuille d'actions et listes aux couleurs, coins et polices de l'app, clair et sombre ; balayage « Supprimer » lisible. _[DESIGN]_ — voir `docs/design-system.md`.
 - [x] **Import par IA (1.4.0)** : consignes copiées pour une IA, réponse collée dans le formulaire (aperçu + points à vérifier), partage au même format, analyseur tolérant testé. _[DATA + DEV]_ — voir `docs/ai-import.md`.
 
 ## Reprise (prochaine session)
 > À lire en premier dans une conversation neuve. État au 23/10/2026.
 
 **Où on en est**
-- `main` = **1.4.0** (code 4), historique linéaire, poussé. Releases GitHub v1.2.0, v1.3.0 et
+- `main` = **1.4.1** (code 5), historique linéaire, poussé. Releases GitHub v1.2.0, v1.3.0 et
   **v1.4.0** (dernière) publiées le 23/10/2026, toutes signées avec la nouvelle clé.
 - Le téléphone de l'auteur a la **1.4.0 signée** (nouvelle clé) et ses données restaurées.
 - Reste de la roadmap : la **Vitrine** (README), puis les idées « Plus tard ».
@@ -109,7 +110,6 @@
 - [ ] Réduire le coût CPU du minuteur (≈ 1,1 s par minute de décompte) : le libellé relance la
   mise en page de la carte à chaque seconde.
 - [ ] Miniatures des photos à l'import si la liste réelle grossit (PSS ≈ 346 Mo avec des photos 4000 × 3000).
-- [ ] Habiller les dialogues natifs restants (alertes, sélecteur, feuille d'actions de la Semaine).
 - [ ] Corriger l'alerte NU1903 (`SQLitePCLRaw` transitif) quand une version corrigée sera tirable par EF Core.
 
 ## Non-objectifs (pour ne pas se disperser)

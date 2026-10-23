@@ -6,6 +6,16 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 
 ## [Unreleased]
 
+## [1.4.1] — 2026-10-23 — Fenêtres habillées
+
+### Fixed
+- Les fenêtres natives (fin du minuteur, confirmations de suppression, de vidage et de
+  restauration, choix d'un repas de la Semaine, listes Unité / Rayon / Tri) s'affichaient en gris
+  Android, angles droits et police système : elles prennent désormais le fond, l'encre, l'accent,
+  les coins et les polices de l'app, en clair comme en sombre (selon le réglage de l'app).
+- Éléments de ces listes à 60 % de l'encre (≈ 4,3:1) : encre pleine.
+- Balayage « Supprimer » illisible en thème sombre (blanc sur rouge clair, ≈ 2,2:1) : rouge foncé.
+
 ## [1.4.0] — 2026-10-23 — Import par IA
 
 ### Added
