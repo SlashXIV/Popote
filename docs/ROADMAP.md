@@ -73,12 +73,12 @@
   désinstalle et vide la base).
 
 **Prochaines étapes**
-- La roadmap est terminée (Vitrine faite en 1.4.1). Suite : piocher dans « Plus tard / idées »,
+- La roadmap est terminée (Vitrine faite en 1.4.1). Suite : « Prochain lot » ci-dessous,
   en refaisant les captures du README (`design/screenshots/`, jeu de démo, thème clair, barres
   système retirées) si l'interface change.
 
 ## En cours
-- Rien : voir « Plus tard / idées ».
+- Rien : voir « Prochain lot ».
 
 ### Refonte — preuves
 | Jalon | Version | Preuve |
@@ -99,12 +99,80 @@
 | Release sans AOT | AOT sans trimming = plantage au démarrage ; trimming exclu pour EF Core |
 | Mesures sur téléphone uniquement | l'émulateur varie trop d'un passage à l'autre pour comparer |
 
+## Prochain lot (journée du 23/10/2026)
+> Ordre conseillé : du plus sûr au plus long. Chaque sujet suit le workflow du projet (plan court,
+> doc, CHANGELOG, build + tests réellement lancés, émulateur), puis une version de correctif 1.4.x
+> ou 1.5.0 publiée sur accord. 📱 = le téléphone est nécessaire pour la mesure finale (débranché
+> aujourd'hui : coder et vérifier sur l'émulateur, mesurer au retour du téléphone).
+
+### 1. Corriger l'alerte NU1903 _[DATA]_ — environ 15 min
+- **Constat** : `SQLitePCLRaw.lib.e_sqlite3` 2.1.11, tiré par EF Core 10.0.9, porte une faille connue
+  (GHSA-2m69-gcr7-jv3q, versions ≤ 2.1.11). **EF Core 10.0.13 tire SQLitePCLRaw 2.1.13** (corrigé).
+- **Approche** : passer `Microsoft.EntityFrameworkCore.Sqlite` / `.Design` de 10.0.9 à **10.0.13** dans
+  `Popote.csproj` et `Popote.Data/Popote.Data.csproj` (et `Microsoft.Extensions.Logging.Debug`, même
+  train de versions). Pas de nouvelle dépendance ; aucune migration attendue.
+- **Vérifier** : `dotnet list package --vulnerable --include-transitive` vide, build sans NU1903,
+  tests verts, démarrage et enregistrement d'une recette sur émulateur (les migrations se rejouent).
+
+### 2. Sauvegarde complète, photos comprises, et restauration sûre _[DATA + DEV]_ — ½ journée
+- **Constat** (migration du téléphone, 23/10) : la sauvegarde ne contient que `recettes.db3` ; les
+  photos ont dû être rattachées à la main. Et « Restaurer » **écrase la base sans vérifier le fichier
+  ni garder de copie** : un mauvais fichier rendrait l'app inutilisable.
+- **Approche** :
+  - Sauvegarde = une archive `popote-sauvegarde-AAAAMMJJ-HHmm.zip` (`System.IO.Compression`, déjà dans
+    .NET) : `recettes.db3` (après `CheckpointAsync`) + les photos référencées (`recipe_*.jpg|png`).
+  - Restauration : accepter le `.zip` **et** l'ancien `.db3` (compatibilité). Avant d'écraser : vérifier
+    l'en-tête SQLite (`SQLite format 3\0`) et la présence de la table `Recipes`, copier la base actuelle
+    en `recettes.avant-restauration.db3`, puis extraire ; en cas d'échec, remettre la copie.
+  - Photos : chemins réécrits vers le dossier de l'app à la restauration (`PhotoPath` est un chemin
+    absolu ; le nom de fichier suffit à le reconstruire).
+  - Logique pure dans `Popote.Data` (ex. `BackupArchive` : liste des fichiers, validation de l'en-tête,
+    réécriture des chemins), testée ; l'UI reste dans `SettingsViewModel`.
+- **Tests** : archive aller-retour (base + photos), fichier non SQLite refusé, ancienne sauvegarde
+  `.db3` acceptée, chemins de photos réécrits.
+- **Vérifier** : émulateur, jeu de démo → sauvegarder, désinstaller, réinstaller, restaurer : recettes
+  **et photos** revenues. Doc `docs/backup-restore.md` (la limite « photos non incluses » disparaît).
+
+### 3. Importer plusieurs recettes d'un coup (mes notes existantes) _[DATA + DEV]_ — ½ journée
+- **Constat** : l'import par IA (1.4.0) traite une recette à la fois ; reprendre un carnet de notes
+  serait fastidieux.
+- **Question à trancher d'abord** : où sont les notes (Google Keep, Samsung Notes, fichiers texte,
+  captures…) et combien ? La réponse fixe la source (coller du texte suffit-il ?).
+- **Approche** (si texte collé) : `RecipeTextFormat.ParseMany` découpe sur les lignes `# Titre`
+  (même format, mêmes avertissements par recette) ; consignes IA « plusieurs recettes » (variante du
+  resx `Import_Instructions`) ; écran « Importer plusieurs recettes » (Réglages) : coller → liste des
+  recettes reconnues avec leurs avertissements, cases à cocher → enregistrer la sélection via
+  `SaveRecipeAsync`. Doublons de titre signalés, jamais écrasés.
+- **Tests** : découpage (0, 1, n recettes ; texte avant la première), avertissements rattachés à la
+  bonne recette, aller-retour avec `Write`.
+
+### 4. Miniatures des photos _[DEV]_ — ½ journée — 📱 mesure
+- **Constat** : la liste (`RecipeListPage.xaml`) et le détail affichent la photo d'origine (jusqu'à
+  4000 × 3000) ; avec le jeu de démo, la mémoire de la liste passe d'environ 295 Mo sans photos à
+  365–371 Mo avec (`bench.sh`, PSS).
+- **Approche** : à la copie de la photo (`RecipeEditViewModel.CopyToAppDataAsync`), écrire aussi une
+  miniature `<nom>.min.jpg` (≈ 360 px de large, JPEG 80) avec `Microsoft.Maui.Graphics`
+  (`PlatformImage.FromStream` + `Downsize`) ; la liste affiche la miniature si elle existe, sinon
+  l'original (convertisseur, aucun changement de schéma). Photos existantes : miniatures créées en
+  arrière-plan au démarrage si absentes. Le détail garde l'original (photo plein écran).
+- **Vérifier** : émulateur (rendu identique, pas de flou visible) ; 📱 `bench.sh` avant / après,
+  objectif PSS liste nettement sous 300 Mo, défilement p90 inchangé.
+
+### 5. Réduire le coût CPU du minuteur _[DEV]_ — 2 h — 📱 mesure
+- **Constat** : décompte = 0,95 s CPU par minute avant les Moments, 1,03–1,13 s après. Chaque
+  seconde, le texte du `NumberLabel` (style `Timer`, 48 pt) change dans une grille à colonnes `Auto`,
+  dans une carte, dans une page à lignes `Auto` : la mise en page remonte probablement jusqu'à la page
+  (carrousel compris).
+- **Approche** : mesurer d'abord (une minute de décompte, `bench.sh`), puis isoler la mise en page :
+  taille fixe pour le libellé (largeur de « 00:00 » en chiffres tabulaires, hauteur fixée), colonne
+  fixe dans la carte. Ne rien changer au `DispatcherTimer` (1 Hz suffit). Garder l'annonce TalkBack
+  unique de fin.
+- **Vérifier** : 📱 CPU par minute avant / après (objectif ≤ 0,6 s), aucun saut visuel du décompte.
+
 ## Plus tard / idées
-- [ ] Import de mes notes existantes (après l'import par IA, qui couvre le texte collé).
-- [ ] Réduire le coût CPU du minuteur (≈ 1,1 s par minute de décompte) : le libellé relance la
-  mise en page de la carte à chaque seconde.
-- [ ] Miniatures des photos à l'import si la liste réelle grossit (PSS ≈ 346 Mo avec des photos 4000 × 3000).
-- [ ] Corriger l'alerte NU1903 (`SQLitePCLRaw` transitif) quand une version corrigée sera tirable par EF Core.
+- [ ] Bouton « Supprimer » en rouge dans les confirmations : impossible avec les fenêtres natives
+  habillées ; seulement si un dialogue maison devient utile ailleurs.
+- [ ] Jeu de démo plus varié (supprimer les doublons « … de mamie ») avant de refaire les captures du README.
 
 ## Non-objectifs (pour ne pas se disperser)
 - Pas de backend / cloud / compte utilisateur pour l'instant : 100 % local.
