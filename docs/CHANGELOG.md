@@ -46,6 +46,8 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 - Enregistrer une recette dont un ingrédient commence par une lettre accentuée ou « Œ »
   (« Œufs », « Échalote ») plantait, et ce type de tag (« Été ») était dupliqué : la recherche
   insensible à la casse passait par `lower()` de SQLite, limité à l'ASCII.
+- Après « Modifier », la page de la recette montrait encore l'ancienne version (titre, photo…)
+  jusqu'à la rouvrir : elle se relit désormais au retour, en gardant les portions choisies.
 
 ### Removed
 - Restes du modèle MAUI (OpenSans, `dotnet_bot.png`, `Colors.xaml`, `Styles.xaml`),

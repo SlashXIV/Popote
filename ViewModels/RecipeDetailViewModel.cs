@@ -77,6 +77,16 @@ public partial class RecipeDetailViewModel : ObservableObject
             _ = LoadAsync(value);
     }
 
+    // Retour sur la page (après « Modifier », par exemple) : relit la recette en gardant
+    // les portions choisies, sauf si la base a changé.
+    public async Task RefreshAsync()
+    {
+        if (RecipeId <= 0) return;
+        var (target, previousBase) = (TargetServings, _baseServings);
+        await LoadAsync(RecipeId);
+        if (_baseServings == previousBase) TargetServings = target;
+    }
+
     private async Task LoadAsync(int id)
     {
         var r = await _service.GetRecipeAsync(id);
