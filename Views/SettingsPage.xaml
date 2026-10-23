@@ -5,6 +5,7 @@
              xmlns:controls="clr-namespace:Popote.Controls"
              xmlns:res="clr-namespace:Popote.Resources.Strings"
              x:Class="Popote.Views.SettingsPage"
+             Shell.PresentationMode="NotAnimated"
              x:DataType="vm:SettingsViewModel"
              Title="{x:Static res:AppResources.Settings_Title}">
 

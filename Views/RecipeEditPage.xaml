@@ -6,6 +6,7 @@
              xmlns:controls="clr-namespace:Popote.Controls"
              xmlns:res="clr-namespace:Popote.Resources.Strings"
              x:Class="Popote.Views.RecipeEditPage"
+             Shell.PresentationMode="NotAnimated"
              x:DataType="vm:RecipeEditViewModel"
              x:Name="EditPage"
              Title="{Binding PageTitle}">

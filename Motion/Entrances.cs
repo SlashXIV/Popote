@@ -15,13 +15,33 @@ public static class Entrances
                 return Task.CompletedTask;
             case MotionLevel.Reduced:
                 view.TranslationY = 0; view.Opacity = 0;
-                return view.FadeToAsync(1, MotionTokens.ReducedMs, Easing.Linear);
+                return RunAfterAsync(view, 0, () => view.FadeToAsync(1, MotionTokens.ReducedMs, Easing.Linear));
             default:
                 view.Opacity = 0; view.TranslationY = MotionTokens.RiseDistance;
                 var delay = baseDelayMs + (uint)Math.Min(index, MotionTokens.MaxStaggered) * MotionTokens.ItemStaggerMs;
-                return RunAfterAsync(delay, () => Task.WhenAll(
+                return RunAfterAsync(view, delay, () => Task.WhenAll(
                     view.FadeToAsync(1, MotionTokens.EnterMs, MotionTokens.Enter),
                     view.TranslateToAsync(0, 0, MotionTokens.EnterMs, MotionTokens.Enter)));
+        }
+    }
+
+    // Une photo se pose : 1,04 → 1 en fondu (Full), fondu court (Reduced), rien (None).
+    public static Task SettleInAsync(this VisualElement view)
+    {
+        view.CancelAnimations();
+        switch (MotionTokens.Level)
+        {
+            case MotionLevel.None:
+                view.Opacity = 1; view.Scale = 1;
+                return Task.CompletedTask;
+            case MotionLevel.Reduced:
+                view.Scale = 1; view.Opacity = 0;
+                return RunAfterAsync(view, 0, () => view.FadeToAsync(1, MotionTokens.ReducedMs, Easing.Linear));
+            default:
+                view.Opacity = 0; view.Scale = MotionTokens.SettleScale;
+                return RunAfterAsync(view, 0, () => Task.WhenAll(
+                    view.FadeToAsync(1, MotionTokens.EnterMs, MotionTokens.Enter),
+                    view.ScaleToAsync(1, MotionTokens.TransitionMs, MotionTokens.Enter)));
         }
     }
 
@@ -59,8 +79,17 @@ public static class Entrances
         }
     }
 
-    private static async Task RunAfterAsync(uint delayMs, Func<Task> action)
+    // Une vue pas encore attachée (page poussée, au moment de OnAppearing) finirait ses
+    // animations aussitôt : on attend qu'elle soit chargée avant d'animer.
+    private static async Task RunAfterAsync(VisualElement view, uint delayMs, Func<Task> action)
     {
+        if (!view.IsLoaded)
+        {
+            var loaded = new TaskCompletionSource();
+            void OnLoaded(object? sender, EventArgs e) { view.Loaded -= OnLoaded; loaded.TrySetResult(); }
+            view.Loaded += OnLoaded;
+            await loaded.Task;
+        }
         if (delayMs > 0) await Task.Delay((int)delayMs);
         await action();
     }

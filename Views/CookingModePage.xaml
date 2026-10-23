@@ -5,6 +5,7 @@
              xmlns:controls="clr-namespace:Popote.Controls"
              xmlns:res="clr-namespace:Popote.Resources.Strings"
              x:Class="Popote.Views.CookingModePage"
+             Shell.PresentationMode="NotAnimated"
              x:DataType="vm:CookingModeViewModel"
              x:Name="Page"
              Title="{x:Static res:AppResources.Cook_Title}">
@@ -20,7 +21,7 @@
         </Grid>
 
         <!-- Progression : un bol par étape -->
-        <HorizontalStackLayout Grid.Row="1" Spacing="{StaticResource TightSpacing}" Padding="{StaticResource Gutter}"
+        <HorizontalStackLayout x:Name="ProgressRow" Grid.Row="1" Spacing="{StaticResource TightSpacing}" Padding="{StaticResource Gutter}"
                                BindableLayout.ItemsSource="{Binding Progress}"
                                SemanticProperties.Description="{Binding ProgressSpoken}">
             <BindableLayout.ItemTemplate>

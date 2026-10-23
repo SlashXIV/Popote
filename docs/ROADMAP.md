@@ -69,27 +69,27 @@
    par-dessus la 1.0 réelle : même clé ? sinon sauvegarde / restauration des données d'abord.
    *En attente du téléphone* (vérification du démarrage) ; le reste peut avancer sans lui.
 2. **Refonte — Moments (1.3.0)**, voir le jalon ci-dessous — sur l'émulateur, mesures au retour du téléphone.
-   Faits : 3, 4, 5, 6 (branche `refonte/moments`). Suite : 2, 1, 7 — voir `docs/redesign-moments.md`.
+   Les 7 moments sont faits (branche `refonte/moments`) ; reste : mesures téléphone, puis fusion et 1.3.0.
 3. **Import par IA (1.4.0)**, voir le jalon ci-dessous.
 4. **Vitrine** (en tout dernier, roadmap finie) : refaire le README, voir le jalon ci-dessous.
 
 ## En cours
 - [ ] **Refonte — Moments (1.3.0)** _[DESIGN + DEV]_ — planche, section 07. Briques déjà prêtes :
   `Motion/MotionTokens` (durées, courbes, `Level`), `Motion/Entrances` (`RiseInAsync`,
-  `PressAsync`, `PressScaleBehavior`, encore inutilisés), `Controls/Bowl.FillProgress` (le bol se
+  `PressAsync`, `PressScaleBehavior`), `Controls/Bowl.FillProgress` (le bol se
   remplit), `Motion/Haptics` (`Tick`, `Confirm`).
-  1. *La mise en place* (ouverture d'une recette) : photo 1,04 → 1 en fondu, titre posé lettre à
-     lettre (un seul nœud TalkBack), bols d'ingrédients en cascade (50 ms, 8 au plus).
-  2. *Passage au poste* (« Cuisiner ») : ouverture du poste en fondu, bols de progression qui
-     apparaissent, haptique `Confirm`.
+  1. ~~*La mise en place*~~ (fait) : photo 1,04 → 1 en fondu, bols d'ingrédients en cascade
+     (50 ms, 8 au plus) ; titre qui monte d'un bloc (lettre à lettre écarté, voir la doc).
+  2. ~~*Passage au poste*~~ (fait) : ouverture en fondu (transition de page), bols de progression
+     en cascade, haptique `Confirm`.
   3. ~~*Étape suivante*~~ (fait) : bol de l'étape faite qui se remplit ; numéro qui roule écarté
      (il est dans la page du carrousel, qui glisse déjà).
   4. ~~*Minuteur fini*~~ (fait) : bol-minuteur qui « déborde » 3 fois puis s'arrête, `Confirm` ; une seule
      annonce TalkBack. **Reste** : coût du minuteur (1,09 s CPU/min), à mesurer au retour du téléphone.
   5. ~~*Article coché*~~ (fait) : le bol se remplit (courbe Release), `Tick` ; libellé barré d'un coup.
   6. ~~*Recette enregistrée*~~ (fait) : le bouton se change en coche (0,4 s), `Confirm`, puis retour.
-  7. *Transitions de page* : entrée maison fondu + montée sous contrôle du niveau de mouvement
-     (`Shell.PresentationMode=NotAnimated` sur les routes poussées) ; revenir au push natif si flash.
+  7. ~~*Transitions de page*~~ (fait) : entrée maison fondu + montée sous contrôle du niveau de mouvement
+     (`Shell.PresentationMode=NotAnimated` sur les routes poussées) ; aucun flash vu sur l'émulateur.
   - Critères : tout est interruptible et déclenché par un événement (jamais de boucle) ; Sobre =
     fondus de 150 ms ; « Supprimer les animations » = état final direct ; aucune gêne à la saisie ;
     rien ne bouge pendant la lecture d'une étape ; mesures téléphone avant / après (même build,

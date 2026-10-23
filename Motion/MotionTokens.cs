@@ -16,6 +16,7 @@ public static class MotionTokens
     public const uint LetterStaggerMs = 40;
     public const double RiseDistance = 12;
     public const double PressScale = 0.97;
+    public const double SettleScale = 1.04;     // photo qui se pose à l'ouverture d'une recette
     public const double OverflowScale = 1.25;   // minuteur fini : le bol déborde…
     public const int OverflowCount = 3;         // …trois fois, puis s'arrête
 

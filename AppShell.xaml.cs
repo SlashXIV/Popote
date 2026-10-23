@@ -1,3 +1,4 @@
+using Popote.Motion;
 using Popote.Views;
 
 namespace Popote;
@@ -15,5 +16,23 @@ public partial class AppShell : Shell
         Routing.RegisterRoute("CookWithPage", typeof(CookWithPage));
         Routing.RegisterRoute("CookingModePage", typeof(CookingModePage));
         Routing.RegisterRoute("SettingsPage", typeof(SettingsPage));
+
+        // Transitions de page : une route poussée apparaît sans animation native
+        // (Shell.PresentationMode="NotAnimated" sur chaque page poussée ; un style implicite arrive
+        // trop tard) puis se pose selon le niveau de mouvement.
+        Application.Current!.PageAppearing += (_, page) =>
+        {
+            if (!_pushing || page is not ContentPage { Content: { } content }) return;
+            _pushing = false;
+            _ = content.RiseInAsync();
+        };
+    }
+
+    private bool _pushing;
+
+    protected override void OnNavigating(ShellNavigatingEventArgs args)
+    {
+        base.OnNavigating(args);
+        _pushing = args.Source == ShellNavigationSource.Push;
     }
 }

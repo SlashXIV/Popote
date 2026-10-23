@@ -1,6 +1,6 @@
 # Refonte « Mise en place » — Moments (1.2.0)
 
-> Statut : en cours — 22/10/2026 (branche `refonte/moments`)
+> Statut : moments faits, mesures téléphone à faire — 23/10/2026 (branche `refonte/moments`)
 
 ## Objectif
 Donner vie aux instants clés de la cuisine (planche, section 07) sans gêner la saisie ni la
@@ -17,9 +17,12 @@ Ordre de réalisation (du plus simple au plus risqué) :
 - [x] *Minuteur fini* : bol-minuteur dans la carte (vide au repos, posé pendant le décompte,
   plein à la fin) qui se remplit puis déborde trois fois (×1,25), `Confirm`, annonce TalkBack
   unique ; l'alerte « C'est prêt » est gardée (seul signal hors de l'écran).
-- [ ] *Passage au poste*.
-- [ ] *La mise en place* (ouverture d'une recette).
-- [ ] *Transitions de page*.
+- [x] *Passage au poste* : la page se pose (transition), les bols de progression arrivent en
+  cascade, `Confirm` à la première apparition seulement.
+- [x] *La mise en place* : la photo se pose (1,04 → 1 en fondu), le titre monte, les ingrédients
+  suivent en cascade. Une seule fois : changer les portions met à jour sur place.
+- [x] *Transitions de page* : les 5 pages poussées s'affichent sans glissement natif puis se
+  posent (fondu + montée de 12) ; le retour arrière est une coupure nette, sans flash.
 
 Niveaux : Full = mouvement complet ; Reduced (Sobre) = fondu ou remplissage linéaire de
 150 ms ; None (« Supprimer les animations ») = état final direct, sans pause.
@@ -34,6 +37,9 @@ Niveaux : Full = mouvement complet ; Reduced (Sobre) = fondu ou remplissage lin�
 - `Motion/Entrances.cs`, `Motion/MotionTokens.cs` — `OverflowAsync` (3 gonflements ×1,25).
 - `ViewModels/CookingModeViewModel.cs` — `TimerBowl`, événement `TimerFinished`.
 - `Views/CookingModePage.xaml(.cs)` — bol-minuteur, carrousel selon le niveau de mouvement.
+- `AppShell.xaml.cs` — transition d'entrée des routes poussées (`OnNavigating` + `PageAppearing`).
+- `Views/*.xaml` (5 pages poussées) — `Shell.PresentationMode="NotAnimated"`.
+- `Views/RecipeDetailPage.xaml.cs` — la mise en place ; `Motion/Entrances.cs` — `SettleInAsync`.
 - `Resources/Styles/Tokens.xaml` — `OverflowRoom` (marge pour que le bol déborde sans être rogné).
 
 ## Choix techniques
@@ -45,6 +51,14 @@ Niveaux : Full = mouvement complet ; Reduced (Sobre) = fondu ou remplissage lin�
   glisse déjà ; le faire rouler doublerait le mouvement pendant la lecture.
 - `ScaleToAsync` renvoie `true` quand l'animation est **annulée** : la boucle de débordement
   s'arrête alors (page quittée).
+- `Shell.PresentationMode` est posé sur chaque page, pas dans le style implicite de page : un
+  style implicite s'applique quand la page rejoint l'arbre, après que Shell a choisi l'animation.
+- Les briques d'entrée attendent `Loaded` avant d'animer : au moment de `OnAppearing`, les vues
+  d'une page poussée ne sont pas encore attachées et MAUI terminait leurs animations aussitôt.
+- Titre posé d'un bloc plutôt que lettre à lettre : découper le texte en morceaux animés
+  casserait la liaison du titre et le nœud TalkBack unique, pour un effet de 0,4 s.
+- Vérification : vidéo de l'émulateur découpée à 20 images/s (`.claude/outils/rec.sh`), et
+  ralentie ×10 via l'échelle d'animation Android, que les animations MAUI suivent aussi.
 - Libellé barré d'un coup (pas de trait animé) : un trait dessiné ne suit pas un libellé
   sur deux lignes (police 200 %).
 

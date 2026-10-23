@@ -5,6 +5,7 @@
              xmlns:controls="clr-namespace:Popote.Controls"
              xmlns:res="clr-namespace:Popote.Resources.Strings"
              x:Class="Popote.Views.RecipeDetailPage"
+             Shell.PresentationMode="NotAnimated"
              x:DataType="vm:RecipeDetailViewModel"
              Title="{Binding Title}">
 

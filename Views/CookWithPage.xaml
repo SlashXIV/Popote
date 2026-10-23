@@ -7,6 +7,7 @@
              xmlns:conv="clr-namespace:Popote.Converters"
              xmlns:res="clr-namespace:Popote.Resources.Strings"
              x:Class="Popote.Views.CookWithPage"
+             Shell.PresentationMode="NotAnimated"
              x:DataType="vm:CookWithViewModel"
              x:Name="Page"
              Title="{x:Static res:AppResources.CookWith_Title}">

@@ -13,6 +13,10 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 - Moments du mode cuisson : *étape suivante*, le bol de l'étape faite se remplit (le
   carrousel ne glisse plus quand les animations sont coupées) ; *minuteur fini*, un
   bol-minuteur (vide, posé pendant le décompte, plein à la fin) déborde trois fois.
+- Moments d'ouverture : *la mise en place* (photo qui se pose, titre qui monte, ingrédients en
+  cascade, une seule fois), *passage au poste* (bols de progression en cascade, vibration) et
+  **transitions de page** maison (fondu + montée) à la place du glissement natif ; retour
+  arrière instantané.
 
 ## [1.2.0] — 2026-10-22 — Refonte « Mise en place » : fondations
 
