@@ -34,6 +34,31 @@ public static class Entrances
         await view.ScaleToAsync(1, MotionTokens.PressMs * 2, MotionTokens.Release);
     }
 
+    // Le bol « déborde » : trois gonflements puis repos (Full) ; un fondu court (Reduced) ; rien (None).
+    public static async Task OverflowAsync(this VisualElement view)
+    {
+        view.CancelAnimations();
+        view.Scale = 1; view.Opacity = 1;
+        switch (MotionTokens.Level)
+        {
+            case MotionLevel.None:
+                return;
+            case MotionLevel.Reduced:
+                view.Opacity = 0.4;
+                await view.FadeToAsync(1, MotionTokens.ReducedMs, Easing.Linear);
+                return;
+            default:
+                for (var i = 0; i < MotionTokens.OverflowCount; i++)
+                {
+                    // ScaleToAsync renvoie true si l'animation a été annulée (page quittée) : on s'arrête.
+                    if (await view.ScaleToAsync(MotionTokens.OverflowScale, MotionTokens.PressMs * 2, MotionTokens.Release)) break;
+                    if (await view.ScaleToAsync(1, MotionTokens.EnterMs / 2, MotionTokens.Enter)) break;
+                }
+                view.Scale = 1;
+                return;
+        }
+    }
+
     private static async Task RunAfterAsync(uint delayMs, Func<Task> action)
     {
         if (delayMs > 0) await Task.Delay((int)delayMs);

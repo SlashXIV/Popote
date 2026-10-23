@@ -25,13 +25,13 @@
                                SemanticProperties.Description="{Binding ProgressSpoken}">
             <BindableLayout.ItemTemplate>
                 <DataTemplate x:DataType="vm:StepProgress">
-                    <controls:Bowl UseAccent="True" State="{Binding State}" Size="{StaticResource BowlProgress}" />
+                    <controls:Bowl UseAccent="True" AnimatesFill="True" State="{Binding State}" Size="{StaticResource BowlProgress}" />
                 </DataTemplate>
             </BindableLayout.ItemTemplate>
         </HorizontalStackLayout>
 
         <!-- Étapes, une par écran, défilables au doigt -->
-        <CarouselView Grid.Row="2" ItemsSource="{Binding Steps}" Position="{Binding Position}" Loop="False"
+        <CarouselView x:Name="StepsCarousel" Grid.Row="2" ItemsSource="{Binding Steps}" Position="{Binding Position}" Loop="False"
                       HorizontalScrollBarVisibility="Never">
             <CarouselView.ItemTemplate>
                 <DataTemplate x:DataType="vm:StepLine">
@@ -53,19 +53,21 @@
 
         <!-- Minuteur -->
         <Border Grid.Row="3" Style="{StaticResource Card}" Margin="{StaticResource Gutter}">
-            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="{StaticResource Space12}">
-                <controls:Field IsVisible="{Binding IsTimerRunning, Converter={StaticResource Not}}"
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="{StaticResource Space12}">
+                <controls:Bowl x:Name="TimerBowl" UseAccent="True" AnimatesFill="True" State="{Binding TimerBowl}"
+                               Size="{StaticResource BowlCheck}" Margin="{StaticResource OverflowRoom}" />
+                <controls:Field Grid.Column="1" IsVisible="{Binding IsTimerRunning, Converter={StaticResource Not}}"
                                 Suffix="{x:Static res:AppResources.Unit_Minutes}" VerticalOptions="Center">
                     <Entry Text="{Binding TimerMinutes}" Keyboard="Numeric"
                            Placeholder="{x:Static res:AppResources.Cook_Timer}"
                            SemanticProperties.Description="{x:Static res:AppResources.Cook_TimerMinutes}" />
                 </controls:Field>
-                <controls:NumberLabel Text="{Binding TimerDisplay}" Style="{StaticResource Timer}"
+                <controls:NumberLabel Grid.Column="1" Text="{Binding TimerDisplay}" Style="{StaticResource Timer}"
                                       IsVisible="{Binding IsTimerRunning}" VerticalOptions="Center" />
-                <Button Grid.Column="1" Text="{x:Static res:AppResources.Cook_TimerStart}" Style="{StaticResource SecondaryButton}"
+                <Button Grid.Column="2" Text="{x:Static res:AppResources.Cook_TimerStart}" Style="{StaticResource SecondaryButton}"
                         Command="{Binding StartTimerCommand}"
                         IsVisible="{Binding IsTimerRunning, Converter={StaticResource Not}}" />
-                <Button Grid.Column="1" Text="{x:Static res:AppResources.Cook_TimerStop}" Style="{StaticResource QuietButton}"
+                <Button Grid.Column="2" Text="{x:Static res:AppResources.Cook_TimerStop}" Style="{StaticResource QuietButton}"
                         Command="{Binding StopTimerCommand}" IsVisible="{Binding IsTimerRunning}" />
             </Grid>
         </Border>

@@ -10,6 +10,9 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 - Moments (refonte, 1.3.0) : *article coché*, le bol se remplit au geste (rebond, fondu court
   en Sobre, plein d'emblée sans animations) ; *recette enregistrée*, le bouton se change en
   coche avec une vibration de confirmation avant le retour.
+- Moments du mode cuisson : *étape suivante*, le bol de l'étape faite se remplit (le
+  carrousel ne glisse plus quand les animations sont coupées) ; *minuteur fini*, un
+  bol-minuteur (vide, posé pendant le décompte, plein à la fin) déborde trois fois.
 
 ## [1.2.0] — 2026-10-22 — Refonte « Mise en place » : fondations
 

@@ -15,6 +15,8 @@
     <x:Double x:Key="Space32">32</x:Double>
     <Thickness x:Key="PagePadding">16,8,16,24</Thickness>
     <Thickness x:Key="CardPadding">12</Thickness>
+    <!-- Place laissée autour du bol-minuteur pour qu'il « déborde » (×1,25) sans être rogné. -->
+    <Thickness x:Key="OverflowRoom">4</Thickness>
     <Thickness x:Key="WorktopPadding">14,6,14,8</Thickness>
     <Thickness x:Key="Gutter">16,0</Thickness>
     <Thickness x:Key="GutterBand">16,0,16,8</Thickness>

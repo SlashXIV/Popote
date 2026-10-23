@@ -18,7 +18,7 @@ public class Bowl : GraphicsView, IDrawable
         nameof(UseAccent), typeof(bool), typeof(Bowl), false, propertyChanged: (b, _, _) => ((Bowl)b).UpdateGlaze());
 
     public static readonly BindableProperty StateProperty = BindableProperty.Create(
-        nameof(State), typeof(BowlState), typeof(Bowl), BowlState.Placed, propertyChanged: (b, _, _) => ((Bowl)b).Invalidate());
+        nameof(State), typeof(BowlState), typeof(Bowl), BowlState.Placed, propertyChanged: (b, o, n) => ((Bowl)b).OnStateChanged((BowlState)o, (BowlState)n));
 
     public static readonly BindableProperty SizeProperty = BindableProperty.Create(
         nameof(Size), typeof(double), typeof(Bowl), 18.0, propertyChanged: (b, _, n) => ((Bowl)b).WidthRequest = ((Bowl)b).HeightRequest = (double)n);
@@ -38,6 +38,9 @@ public class Bowl : GraphicsView, IDrawable
     public Color Glaze { get => (Color)GetValue(GlazeProperty); set => SetValue(GlazeProperty, value); }
     public double FillProgress { get => (double)GetValue(FillProgressProperty); set => SetValue(FillProgressProperty, value); }
 
+    // Rejoue le remplissage quand l'état passe à Full (bols de progression du mode cuisson).
+    public bool AnimatesFill { get; set; }
+
     public Bowl()
     {
         Drawable = this;
@@ -54,13 +57,13 @@ public class Bowl : GraphicsView, IDrawable
 
     // Le bol se remplit (« article coché », « étape faite ») selon le niveau de mouvement :
     // rebond Release, fondu court en Sobre, plein d'emblée si les animations sont coupées.
-    public Task FillAsync()
+    public Task FillAsync(double from = 0)
     {
         StopFill();
         if (MotionTokens.Level == MotionLevel.None) return Task.CompletedTask;
         var full = MotionTokens.Level == MotionLevel.Full;
         var done = new TaskCompletionSource();
-        new Animation(v => FillProgress = v, 0, 1, full ? MotionTokens.Release : Easing.Linear)
+        new Animation(v => FillProgress = v, from, 1, full ? MotionTokens.Release : Easing.Linear)
             .Commit(this, FillAnimation, length: full ? MotionTokens.ReleaseMs : MotionTokens.ReducedMs,
                 finished: (_, _) => { FillProgress = 1; done.TrySetResult(); });
         return done.Task;
@@ -72,6 +75,16 @@ public class Bowl : GraphicsView, IDrawable
         this.AbortAnimation(FillAnimation);
         FillProgress = 1;
     }
+
+    private void OnStateChanged(BowlState old, BowlState state)
+    {
+        if (AnimatesFill && state == BowlState.Full && old != BowlState.Full)
+            _ = FillAsync(Ratio(old) / Ratio(BowlState.Full)); // repart du contenu déjà posé
+        else
+            Invalidate();
+    }
+
+    private static double Ratio(BowlState state) => state switch { BowlState.Full => 0.64, BowlState.Placed => 0.36, _ => 0 };
 
     private void UpdateGlaze()
     {
@@ -88,7 +101,7 @@ public class Bowl : GraphicsView, IDrawable
         canvas.StrokeSize = rim;
         canvas.DrawCircle(center, (size - rim) / 2);
 
-        var inner = State switch { BowlState.Full => 0.64, BowlState.Placed => 0.36, _ => 0 } * FillProgress;
+        var inner = Ratio(State) * FillProgress;
         if (inner <= 0) return;
         canvas.FillColor = Glaze;
         canvas.FillCircle(center, (float)(size * inner / 2));

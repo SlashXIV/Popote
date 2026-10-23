@@ -16,6 +16,8 @@ public static class MotionTokens
     public const uint LetterStaggerMs = 40;
     public const double RiseDistance = 12;
     public const double PressScale = 0.97;
+    public const double OverflowScale = 1.25;   // minuteur fini : le bol déborde…
+    public const int OverflowCount = 3;         // …trois fois, puis s'arrête
 
     // Courbes (mêmes valeurs que la planche)
     public static readonly Easing Enter = Make(0.2, 0.7, 0.2, 1);

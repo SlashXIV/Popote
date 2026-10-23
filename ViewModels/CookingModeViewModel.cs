@@ -77,6 +77,13 @@ public partial class CookingModeViewModel : ObservableObject
     [ObservableProperty]
     private bool isTimerRunning;
 
+    // Bol-minuteur : vide au repos, posé pendant le décompte, plein à la fin.
+    [ObservableProperty]
+    private Controls.BowlState timerBowl = Controls.BowlState.Empty;
+
+    // Moment « minuteur fini » : la vue fait déborder le bol.
+    public event EventHandler? TimerFinished;
+
     partial void OnRecipeIdChanged(int value)
     {
         if (value > 0)
@@ -115,6 +122,7 @@ public partial class CookingModeViewModel : ObservableObject
         _timer.Tick += OnTick;
         _timer.Start();
         IsTimerRunning = true;
+        TimerBowl = Controls.BowlState.Placed;
     }
 
     [RelayCommand]
@@ -123,6 +131,7 @@ public partial class CookingModeViewModel : ObservableObject
         _timer?.Stop();
         IsTimerRunning = false;
         TimerDisplay = string.Empty;
+        TimerBowl = Controls.BowlState.Empty;
     }
 
     private void OnTick(object? sender, EventArgs e)
@@ -133,6 +142,8 @@ public partial class CookingModeViewModel : ObservableObject
             _timer?.Stop();
             IsTimerRunning = false;
             TimerDisplay = AppResources.Cook_TimerDone;
+            TimerBowl = Controls.BowlState.Full;
+            TimerFinished?.Invoke(this, EventArgs.Empty);
             Motion.Haptics.Confirm();
             SemanticScreenReader.Default.Announce(AppResources.Cook_TimerDoneSpoken); // une seule annonce, à la fin
             _ = Shell.Current.DisplayAlertAsync(AppResources.Cook_Timer, AppResources.Cook_TimerAlertMessage, AppResources.Action_Ok);
