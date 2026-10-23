@@ -1,3 +1,4 @@
+using Popote.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Popote.ViewModels;
@@ -24,19 +25,10 @@ public partial class IngredientLineViewModel : ObservableObject
     // les doublons type « g » / « gr » qui casseraient l'agrégation des courses).
     public IReadOnlyList<string> Units { get; } = UnitOptions;
 
-    public static readonly string[] UnitOptions =
-    {
-        "g", "kg", "ml", "cl", "L",
-        "c. à soupe", "c. à café",
-        "pièce", "pincée", "gousse", "tranche", "sachet"
-    };
+    public static readonly string[] UnitOptions = RecipeVocabulary.Units;
 
     // Rayons proposés (chacun a son émail de bol, cf. Controls/Bowl.cs, AislePalette).
     public IReadOnlyList<string> Aisles { get; } = AisleOptions;
 
-    public static readonly string[] AisleOptions =
-    {
-        "Fruits & légumes", "Crèmerie", "Épicerie",
-        "Viande & poisson", "Surgelés", "Divers"
-    };
+    public static readonly string[] AisleOptions = RecipeVocabulary.Aisles;
 }
