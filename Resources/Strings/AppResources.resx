@@ -232,6 +232,104 @@
   <data name="Edit_Unit" xml:space="preserve">
     <value>Unité</value>
   </data>
+  <data name="Import_AskNew" xml:space="preserve">
+    <value>Ma recette (texte, photo ou lien) :</value>
+  </data>
+  <data name="Import_AskRemodel" xml:space="preserve">
+    <value>Voici ma recette actuelle, à remodeler selon ma demande plus bas :
+
+{0}
+Ce que je veux changer :</value>
+  </data>
+  <data name="Import_CardTitle" xml:space="preserve">
+    <value>Avec une IA</value>
+  </data>
+  <data name="Import_ClipboardEmpty" xml:space="preserve">
+    <value>Le presse-papiers est vide : copie d’abord la réponse de l’IA.</value>
+  </data>
+  <data name="Import_Copied" xml:space="preserve">
+    <value>Consignes copiées. Colle-les dans ton IA.</value>
+  </data>
+  <data name="Import_Copy" xml:space="preserve">
+    <value>Copier les consignes</value>
+  </data>
+  <data name="Import_Done" xml:space="preserve">
+    <value>Recette collée. Vérifie-la, puis enregistre.</value>
+  </data>
+  <data name="Import_DoneWithWarnings" xml:space="preserve">
+    <value>Recette collée. À vérifier avant d’enregistrer :</value>
+  </data>
+  <data name="Import_Instructions" xml:space="preserve">
+    <value>Aide-moi à préparer une recette pour mon app de cuisine Popote.
+Réponds UNIQUEMENT avec un bloc au format ci-dessous, sans rien avant ni après.
+
+Règles :
+- Une ligne par ingrédient : « - quantité unité | nom | rayon ».
+- Quantité en chiffres (250, 1,5 ou ½) ; laisse-la vide pour « selon le goût ».
+- Unités autorisées : {0}. Pas d’unité pour un simple compte (« - 3 | Œufs | Crèmerie »).
+- Rayons autorisés : {1}.
+- Tags, de préférence parmi ceux-ci : {2}.
+- Étapes courtes, une par ligne, numérotées.
+- Durées en minutes.
+
+Format :
+# Titre de la recette
+Portions : 4
+Préparation : 15 min
+Cuisson : 30 min
+Tags : Dessert, Rapide
+## Ingrédients
+- 250 g | Farine | Épicerie
+- 3 | Œufs | Crèmerie
+## Étapes
+1. Première étape.
+2. Deuxième étape.
+## Notes
+Facultatif.
+</value>
+  </data>
+  <data name="Import_NoTags" xml:space="preserve">
+    <value>aucun pour l’instant, propose-en 1 à 3</value>
+  </data>
+  <data name="Import_NothingFound" xml:space="preserve">
+    <value>Aucune recette reconnue dans le presse-papiers.</value>
+  </data>
+  <data name="Import_Paste" xml:space="preserve">
+    <value>Coller la réponse</value>
+  </data>
+  <data name="Import_Step1" xml:space="preserve">
+    <value>Copie les consignes et colle-les dans ton IA (ChatGPT, Claude…) avec ta recette : texte, photo ou lien.</value>
+  </data>
+  <data name="Import_Step2" xml:space="preserve">
+    <value>Copie sa réponse, puis colle-la ici : le formulaire se remplit, à toi de vérifier.</value>
+  </data>
+  <data name="Import_Warn_BadDuration" xml:space="preserve">
+    <value>Ligne {0} : durée illisible (« {1} »).</value>
+  </data>
+  <data name="Import_Warn_BadQuantity" xml:space="preserve">
+    <value>Ligne {0} : quantité illisible (« {1} »), laissée vide.</value>
+  </data>
+  <data name="Import_Warn_BadServings" xml:space="preserve">
+    <value>Ligne {0} : portions illisibles (« {1} »).</value>
+  </data>
+  <data name="Import_Warn_MissingServings" xml:space="preserve">
+    <value>Portions absentes : {1} par défaut.</value>
+  </data>
+  <data name="Import_Warn_MissingTitle" xml:space="preserve">
+    <value>Titre absent.</value>
+  </data>
+  <data name="Import_Warn_NoIngredients" xml:space="preserve">
+    <value>Aucun ingrédient trouvé.</value>
+  </data>
+  <data name="Import_Warn_NoSteps" xml:space="preserve">
+    <value>Aucune étape trouvée.</value>
+  </data>
+  <data name="Import_Warn_UnknownAisle" xml:space="preserve">
+    <value>Ligne {0} : rayon « {1} » inconnu, rangé dans Divers.</value>
+  </data>
+  <data name="Import_Warn_UnknownUnit" xml:space="preserve">
+    <value>Ligne {0} : unité « {1} » inconnue, gardée telle quelle.</value>
+  </data>
   <data name="Ingredient_Spoken" xml:space="preserve">
     <value>{1}, {0}, rayon {2}</value>
   </data>
@@ -372,27 +470,6 @@
   </data>
   <data name="Settings_Version" xml:space="preserve">
     <value>Popote {0} · 100 % hors ligne</value>
-  </data>
-  <data name="Share_Footer" xml:space="preserve">
-    <value>— partagé depuis Popote</value>
-  </data>
-  <data name="Share_ForMany" xml:space="preserve">
-    <value>Pour {0} portions</value>
-  </data>
-  <data name="Share_ForOne" xml:space="preserve">
-    <value>Pour {0} portion</value>
-  </data>
-  <data name="Share_IngredientLine" xml:space="preserve">
-    <value>- {0} : {1}</value>
-  </data>
-  <data name="Share_Ingredients" xml:space="preserve">
-    <value>Ingrédients :</value>
-  </data>
-  <data name="Share_Notes" xml:space="preserve">
-    <value>Notes : {0}</value>
-  </data>
-  <data name="Share_Steps" xml:space="preserve">
-    <value>Préparation :</value>
   </data>
   <data name="Shopping_AddPlaceholder" xml:space="preserve">
     <value>Ajouter un article (ex. : sopalin)</value>

@@ -174,3 +174,24 @@ public class RecipeTextFormatTests
         Assert.Equal(recipe.Notes, back.Notes);
     }
 }
+
+// Le gabarit donné à l'IA (resx) doit se relire sans avertissement : une IA qui l'imite à la
+// lettre produit un texte importable.
+public class AiInstructionsTests
+{
+    [Fact]
+    public void Gabarit_des_consignes_se_relit_sans_avertissement()
+    {
+        var instructions = System.Xml.Linq.XDocument.Load(RepoFiles.PathOf("Resources", "Strings", "AppResources.resx"))
+            .Descendants("data").Single(d => (string)d.Attribute("name")! == "Import_Instructions").Element("value")!.Value;
+        var template = instructions[(instructions.IndexOf("# ", StringComparison.Ordinal))..];
+
+        var (r, warnings) = RecipeTextFormat.Parse(template);
+
+        Assert.Empty(warnings);
+        Assert.Equal(4, r.Servings);
+        Assert.Equal((15, 30), (r.PrepMinutes, r.CookMinutes));
+        Assert.Equal(2, r.Ingredients.Count);
+        Assert.Equal(2, r.Steps.Count);
+    }
+}

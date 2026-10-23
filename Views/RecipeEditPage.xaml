@@ -21,6 +21,22 @@
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Padding="{StaticResource PagePadding}" Spacing="{StaticResource Space24}">
 
+                <!-- Import par IA : le presse-papiers fait le lien, ce formulaire sert d'aperçu -->
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="{StaticResource Space8}">
+                        <Label Text="{x:Static res:AppResources.Import_CardTitle}" Style="{StaticResource BodyStrong}"
+                               SemanticProperties.HeadingLevel="Level2" />
+                        <Label Text="{x:Static res:AppResources.Import_Step1}" Style="{StaticResource Caption}" />
+                        <Button Text="{x:Static res:AppResources.Import_Copy}" Style="{StaticResource CompactButton}"
+                                HorizontalOptions="Start" Command="{Binding CopyAiInstructionsCommand}" />
+                        <Label Text="{x:Static res:AppResources.Import_Step2}" Style="{StaticResource Caption}" />
+                        <Button Text="{x:Static res:AppResources.Import_Paste}" Style="{StaticResource CompactButton}"
+                                HorizontalOptions="Start" Command="{Binding PasteAiAnswerCommand}" />
+                        <Label Text="{Binding ImportReport}" Style="{StaticResource Body}"
+                               IsVisible="{Binding ImportReport, Converter={StaticResource HasText}}" />
+                    </VerticalStackLayout>
+                </Border>
+
                 <controls:Field Label="{x:Static res:AppResources.Edit_FieldTitle}" Error="{Binding TitleError}">
                     <Entry Text="{Binding Title}" Placeholder="{x:Static res:AppResources.Edit_TitlePlaceholder}" />
                 </controls:Field>

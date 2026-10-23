@@ -282,9 +282,8 @@ public static class RecipeTextFormat
         var plain = new StringBuilder();
         foreach (var c in text.Trim().ToLowerInvariant().Normalize(NormalizationForm.FormD))
             if (CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark) plain.Append(c);
-        // Espaces, insécables (U+00A0, U+202F) et points ne comptent pas : « c. à soupe » = « càsoupe ».
-        return Regex.Replace(plain.ToString(), @"\bet\b", "&").Replace(" ", string.Empty)
-            .Replace(" ", string.Empty).Replace(" ", string.Empty).Replace(".", string.Empty);
+        // Espaces (insécables comprises : \s les couvre) et points ne comptent pas : « c. à soupe » = « càsoupe ».
+        return Regex.Replace(Regex.Replace(plain.ToString(), @"\bet\b", "&"), @"[\s.]", string.Empty);
     }
 
     // Puces et numérotation en tête de ligne : « - », « * », « • », « 1. », « 2) ».

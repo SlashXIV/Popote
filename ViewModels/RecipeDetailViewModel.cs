@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Text;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.ApplicationModel.DataTransfer;
@@ -22,6 +21,7 @@ public partial class RecipeDetailViewModel : ObservableObject
     // Lignes pour les portions de BASE, conservées pour recalculer à la volée.
     private readonly List<BaseLine> _baseLines = new();
     private int _baseServings = 1;
+    private int? _prepMinutes, _cookMinutes;
 
     [ObservableProperty]
     private int recipeId;
@@ -103,6 +103,8 @@ public partial class RecipeDetailViewModel : ObservableObject
             Tags.Add(rt.Tag.Name);
         HasTags = Tags.Count > 0;
 
+        _prepMinutes = r.PrepMinutes;
+        _cookMinutes = r.CookMinutes;
         var times = new List<string>();
         if (r.PrepMinutes is int p && p > 0) times.Add(string.Format(AppResources.Detail_Prep, p));
         if (r.CookMinutes is int c && c > 0) times.Add(string.Format(AppResources.Detail_Cook, c));
@@ -169,42 +171,21 @@ public partial class RecipeDetailViewModel : ObservableObject
         await _service.SetFavoriteAsync(RecipeId, IsFavorite);
     }
 
-    // Partage la recette en texte (aux portions actuellement affichées).
+    // Partage au format texte de Popote, aux portions affichées : réimportable tel quel (docs/ai-import.md).
     [RelayCommand]
     private async Task ShareAsync()
     {
-        var sb = new StringBuilder();
-        sb.AppendLine(Title);
-        if (HasTimes) sb.AppendLine(TimesLabel);
-        sb.AppendLine(string.Format(TargetServings > 1 ? AppResources.Share_ForMany : AppResources.Share_ForOne, TargetServings));
-
-        sb.AppendLine();
-        sb.AppendLine(AppResources.Share_Ingredients);
-        foreach (var i in Ingredients)
-            sb.AppendLine(string.IsNullOrEmpty(i.QuantityLabel) ? $"- {i.Name}" : string.Format(AppResources.Share_IngredientLine, i.Name, i.QuantityLabel));
-
-        if (Steps.Count > 0)
-        {
-            sb.AppendLine();
-            sb.AppendLine(AppResources.Share_Steps);
-            foreach (var s in Steps)
-                sb.AppendLine($"{s.Number}. {s.Text}");
-        }
-
-        if (HasNotes)
-        {
-            sb.AppendLine();
-            sb.AppendLine(string.Format(AppResources.Share_Notes, Notes));
-        }
-
-        sb.AppendLine();
-        sb.AppendLine(AppResources.Share_Footer);
+        var target = TargetServings <= 0 ? 1 : TargetServings;
+        var recipe = new TextRecipe(Title, target, _prepMinutes, _cookMinutes, Tags.ToList(),
+            _baseLines.Select(b => new TextIngredient(b.Name, ServingsScaler.Scale(b.Quantity, _baseServings, target), b.Unit,
+                string.IsNullOrWhiteSpace(b.Aisle) ? RecipeVocabulary.DefaultAisle : b.Aisle)).ToList(),
+            Steps.Select(s => s.Text).ToList(), HasNotes ? Notes : null);
 
         await Share.Default.RequestAsync(new ShareTextRequest
         {
             Title = Title,
             Subject = Title,
-            Text = sb.ToString()
+            Text = RecipeTextFormat.Write(recipe)
         });
     }
 

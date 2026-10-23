@@ -210,6 +210,108 @@ public partial class RecipeEditViewModel : ObservableObject
         }
     }
 
+    // --- Import par IA (docs/ai-import.md) : le presse-papiers fait le lien, le formulaire sert d'aperçu ---
+
+    // Compte rendu du dernier copier / coller (vide = rien à dire).
+    [ObservableProperty]
+    private string importReport = string.Empty;
+
+    // Le compte rendu apparaît après un geste : TalkBack le lit aussitôt.
+    partial void OnImportReportChanged(string value)
+    {
+        if (value.Length > 0) SemanticScreenReader.Default.Announce(value);
+    }
+
+    [RelayCommand]
+    private async Task CopyAiInstructionsAsync()
+    {
+        await _catalogsReady;
+        var tags = Tags.Count > 0 ? string.Join(", ", Tags.Select(t => t.Name)) : AppResources.Import_NoTags;
+        var text = string.Format(AppResources.Import_Instructions,
+            string.Join(", ", RecipeVocabulary.Units), string.Join(", ", RecipeVocabulary.Aisles), tags);
+        // Recette déjà commencée : l'IA la remodèle au lieu d'en créer une.
+        text += "\n" + (string.IsNullOrWhiteSpace(Title)
+            ? AppResources.Import_AskNew
+            : string.Format(AppResources.Import_AskRemodel, RecipeTextFormat.Write(ToText())));
+        await Clipboard.Default.SetTextAsync(text);
+        Motion.Haptics.Tick();
+        ImportReport = AppResources.Import_Copied;
+    }
+
+    [RelayCommand]
+    private async Task PasteAiAnswerAsync()
+    {
+        var text = await Clipboard.Default.GetTextAsync();
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            ImportReport = AppResources.Import_ClipboardEmpty;
+            return;
+        }
+
+        var (recipe, warnings) = RecipeTextFormat.Parse(text);
+        if (recipe.Title.Length == 0 && recipe.Ingredients.Count == 0 && recipe.Steps.Count == 0)
+        {
+            ImportReport = AppResources.Import_NothingFound; // le formulaire n'est pas touché
+            return;
+        }
+
+        await _catalogsReady;
+        Apply(recipe);
+        Motion.Haptics.Confirm();
+        ImportReport = warnings.Count == 0
+            ? AppResources.Import_Done
+            : AppResources.Import_DoneWithWarnings + "\n" + string.Join("\n", warnings.Select(w => "• " + Describe(w)));
+    }
+
+    // Remplace le contenu du formulaire par la recette collée (photo et favori gardés).
+    private void Apply(TextRecipe r)
+    {
+        if (r.Title.Length > 0) Title = r.Title;
+        Servings = r.Servings;
+        PrepMinutesText = r.PrepMinutes?.ToString(CultureInfo.InvariantCulture) ?? string.Empty;
+        CookMinutesText = r.CookMinutes?.ToString(CultureInfo.InvariantCulture) ?? string.Empty;
+        Instructions = string.Join("\n", r.Steps);
+        Notes = r.Notes;
+
+        foreach (var toggle in Tags)
+            toggle.IsSelected = r.Tags.Contains(toggle.Name, StringComparer.OrdinalIgnoreCase);
+        foreach (var name in r.Tags.Where(n => !Tags.Any(t => string.Equals(t.Name, n, StringComparison.OrdinalIgnoreCase))))
+            Tags.Add(new TagToggleViewModel(name, isSelected: true));
+
+        Ingredients.Clear();
+        foreach (var i in r.Ingredients)
+            Ingredients.Add(new IngredientLineViewModel
+            {
+                Name = i.Name,
+                QuantityText = FormatQuantity(i.Quantity),
+                Unit = i.Unit,
+                Aisle = i.Aisle
+            });
+    }
+
+    // Le formulaire tel quel, au format texte (consignes « remodeler »).
+    private TextRecipe ToText() => new(
+        Title.Trim(), Servings, ParseMinutes(PrepMinutesText), ParseMinutes(CookMinutesText),
+        Tags.Where(t => t.IsSelected).Select(t => t.Name).ToList(),
+        Ingredients.Where(l => !string.IsNullOrWhiteSpace(l.Name))
+            .Select(l => new TextIngredient(l.Name.Trim(), ParseQuantity(l.QuantityText), l.Unit,
+                string.IsNullOrWhiteSpace(l.Aisle) ? RecipeVocabulary.DefaultAisle : l.Aisle))
+            .ToList(),
+        StepParser.Parse(Instructions), string.IsNullOrWhiteSpace(Notes) ? null : Notes.Trim());
+
+    private static string Describe(ImportWarning w) => string.Format(w.Kind switch
+    {
+        ImportWarningKind.MissingTitle => AppResources.Import_Warn_MissingTitle,
+        ImportWarningKind.MissingServings => AppResources.Import_Warn_MissingServings,
+        ImportWarningKind.BadServings => AppResources.Import_Warn_BadServings,
+        ImportWarningKind.BadDuration => AppResources.Import_Warn_BadDuration,
+        ImportWarningKind.BadQuantity => AppResources.Import_Warn_BadQuantity,
+        ImportWarningKind.UnknownUnit => AppResources.Import_Warn_UnknownUnit,
+        ImportWarningKind.UnknownAisle => AppResources.Import_Warn_UnknownAisle,
+        ImportWarningKind.NoIngredients => AppResources.Import_Warn_NoIngredients,
+        _ => AppResources.Import_Warn_NoSteps,
+    }, w.Line, w.Kind == ImportWarningKind.MissingServings ? RecipeTextFormat.DefaultServings.ToString(CultureInfo.InvariantCulture) : w.Value);
+
     // Ajoute une ligne vide à remplir.
     [RelayCommand]
     private void AddIngredient() => Ingredients.Add(new IngredientLineViewModel());
