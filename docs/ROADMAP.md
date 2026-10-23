@@ -37,8 +37,11 @@
 > À lire en premier dans une conversation neuve. État au 22/10/2026.
 
 **Où on en est**
-- `refonte/fondations` **fusionnée dans `main`** le 22/10/2026 (ni poussée, ni taguée) ; les Moments
-  se développent sur la branche **`refonte/moments`**. `Popote.csproj` est déjà en **1.2.0 (code 2)** ; la Release 1.2.0 n'est pas publiée.
+- État au 23/10/2026, rien de poussé ni tagué. Trois branches empilées, historique linéaire :
+  - **`main`** = Fondations 1.2.0 + 3 correctifs trouvés sur émulateur (réenregistrer une recette à
+    tags, réouverture après « retour », ingrédients/tags accentués) → c'est la **1.2.0 à livrer** ;
+  - **`refonte/moments`** = `main` + les 7 Moments (1.3.0) ;
+  - **`feature/import-ia`** = `refonte/moments` + l'import par IA (1.4.0). `Popote.csproj` est déjà en **1.2.0 (code 2)** ; la Release 1.2.0 n'est pas publiée.
 - Lire d'abord `docs/design-system.md` (le système codé) et `docs/redesign-foundations.md`
   (choix, mesures, limites). Planche validée : https://claude.ai/code/artifact/f73a7898-93b7-4c17-bea9-41e47c58afe5
 - Rien n'a changé dans `Popote.Data` ni dans le schéma (aucune migration).
@@ -63,12 +66,14 @@
   et noté « à mesurer au retour du téléphone » dans le jalon concerné, jamais extrapolé de l'émulateur.
 
 **Prochaines étapes, dans l'ordre**
-1. **Livrer 1.2.0** : ~~fusionner dans `main`~~ (fait), tag `v1.2.0` sur le commit de fusion,
+1. **Livrer 1.2.0** : ~~fusionner dans `main`~~ (fait), tag `v1.2.0`,
    APK signé (`dotnet publish -c Release … -p:AndroidSigningKeyPass=… -p:AndroidSigningStorePass=…`,
    mots de passe par l'auteur), vérifier qu'il **démarre sur le téléphone**, Release GitHub. Installer
    par-dessus la 1.0 réelle : même clé ? sinon sauvegarde / restauration des données d'abord.
    *En attente du téléphone* (vérification du démarrage) ; le reste peut avancer sans lui.
-2. **Refonte — Moments (1.3.0)**, voir le jalon ci-dessous — sur l'émulateur, mesures au retour du téléphone.
+   Tag `v1.2.0` sur la tête de `main` (correctifs compris), pas sur l'ancien commit de fusion.
+2. **Refonte — Moments (1.3.0)** : mesures téléphone (`bench.sh`, Expressive puis Sobre, et CPU du
+   minuteur) puis fusion de `refonte/moments` dans `main`, tag, Release.
    Les 7 moments sont faits (branche `refonte/moments`) ; reste : mesures téléphone, puis fusion et 1.3.0.
 3. **Import par IA (1.4.0)** : fait (branche `feature/import-ia`, au-dessus de `refonte/moments`),
    voir `docs/ai-import.md`. Se livre après la 1.3.0.
