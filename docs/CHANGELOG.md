@@ -6,8 +6,10 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 
 ## [Unreleased]
 
+## [1.3.0] — 2026-10-23 — Refonte « Mise en place » : moments
+
 ### Added
-- Moments (refonte, 1.3.0) : *article coché*, le bol se remplit au geste (rebond, fondu court
+- *Article coché*, le bol se remplit au geste (rebond, fondu court
   en Sobre, plein d'emblée sans animations) ; *recette enregistrée*, le bouton se change en
   coche avec une vibration de confirmation avant le retour.
 - Moments du mode cuisson : *étape suivante*, le bol de l'étape faite se remplit (le
@@ -17,6 +19,10 @@ versionnage [SemVer](https://semver.org/lang/fr/).
   cascade, une seule fois), *passage au poste* (bols de progression en cascade, vibration) et
   **transitions de page** maison (fondu + montée) à la place du glissement natif ; retour
   arrière instantané.
+
+### Performance
+- Mesuré sur téléphone (Release) : démarrage, liste et carrousel inchangés ; le minuteur coûte
+  ≈ 0,1 s de CPU de plus par minute (voir `docs/redesign-moments.md`).
 
 ## [1.2.0] — 2026-10-22 — Refonte « Mise en place » : fondations
 
