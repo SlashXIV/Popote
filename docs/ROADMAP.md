@@ -43,12 +43,13 @@
 - [x] **Minuteur moins gourmand** (`TickerLabel` : décompte sans mise en page) : 0,98 → 0,58 s CPU/min sur téléphone. _[DEV]_ — voir `docs/cooking-mode.md`.
 
 ## Reprise (prochaine session)
-> À lire en premier dans une conversation neuve. État au 23/10/2026 (fin de journée).
+> À lire en premier dans une conversation neuve. État au 23/10/2026 (soir).
 
 **Où on en est**
-- **1.5.0** (code 6) prête : lot du 23/10 codé, vérifié sur émulateur **et** téléphone (copie
-  `onl.nci.popote.perf` : banc, sauvegarde `.zip` → vidage → restauration, orientation EXIF).
-  Commits, tag, Release signée et installation sur le téléphone réel : **sur accord de l'auteur**.
+- `main` = **1.5.0** (code 6), Release GitHub **v1.5.0** publiée le 23/10/2026 (APK signé, empreinte
+  `0a4b62ae…1d11`), installée sur le téléphone de l'auteur (données gardées). Lot du 23/10 vérifié
+  sur émulateur et téléphone (copie `onl.nci.popote.perf` : banc, sauvegarde `.zip` → vidage →
+  restauration, orientation EXIF).
 - Mémoire de la liste ≈ 360 Mo : runtime .NET sans AOT + tampons graphiques, pas les photos
   (voir `docs/recipe-photo.md`). Piste éventuelle, non planifiée : rien de simple sans AOT.
 - Lire d'abord `docs/design-system.md`, `docs/backup-restore.md`, `docs/import-many.md`.
@@ -79,7 +80,7 @@
   désinstalle et vide la base).
 
 ## En cours
-- Publication de la 1.5.0 (sur accord).
+- Rien : voir « Plus tard / idées ».
 
 ### Refonte — preuves
 | Jalon | Version | Preuve |
