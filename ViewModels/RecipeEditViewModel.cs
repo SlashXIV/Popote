@@ -163,9 +163,10 @@ public partial class RecipeEditViewModel : ObservableObject
         if (string.IsNullOrEmpty(ext)) ext = ".jpg";
         var dest = Path.Combine(FileSystem.AppDataDirectory, $"recipe_{Guid.NewGuid():N}{ext}");
 
-        using var src = await photo.OpenReadAsync();
-        using var dst = File.Create(dest);
-        await src.CopyToAsync(dst);
+        using (var src = await photo.OpenReadAsync())
+        using (var dst = File.Create(dest))
+            await src.CopyToAsync(dst);
+        await Task.Run(() => PhotoThumbnails.CreateMissing(new[] { dest })); // vignette de la liste
         return dest;
     }
 

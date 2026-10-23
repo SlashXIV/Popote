@@ -15,6 +15,7 @@
             <!-- Converters globaux -->
             <conv:HasTextConverter x:Key="HasText" />
             <conv:InvertBoolConverter x:Key="Not" />
+            <conv:PhotoThumbConverter x:Key="PhotoThumb" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

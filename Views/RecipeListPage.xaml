@@ -88,7 +88,7 @@
                                             BackgroundColor="{AppThemeBinding Light={StaticResource WorktopLight}, Dark={StaticResource WorktopDark}}">
                                         <Grid>
                                             <controls:Bowl UseAccent="True" Size="{StaticResource BowlLarge}" State="Placed" />
-                                            <Image Source="{Binding PhotoPath}" Aspect="AspectFill"
+                                            <Image Source="{Binding PhotoPath, Converter={StaticResource PhotoThumb}}" Aspect="AspectFill"
                                                    IsVisible="{Binding PhotoPath, Converter={StaticResource HasText}}" />
                                         </Grid>
                                     </Border>

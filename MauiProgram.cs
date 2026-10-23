@@ -111,6 +111,10 @@ public static class MauiProgram
             db.Database.Migrate();
         }
 
+        // Miniatures absentes (photos d'avant la 1.5, sauvegarde restaurée) : créées en arrière-plan.
+        var service = app.Services.GetRequiredService<RecipeService>();
+        _ = Task.Run(async () => PhotoThumbnails.CreateMissing(await service.GetPhotoPathsAsync()));
+
         return app;
     }
 }
