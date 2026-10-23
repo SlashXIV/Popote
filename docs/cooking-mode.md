@@ -8,7 +8,7 @@ s'éteigne, avec un minuteur à portée de main.
 
 ## Comportement attendu
 - Accès : bouton **« Cuisiner »** sur la page détail d'une recette.
-- Depuis la 1.1.0 (« le poste de travail ») : numéro d'étape en très grand, texte en 23, rangée de bols de progression, boutons « Précédente » / « Étape suivante » de 64 de haut, minuteur en chiffres tabulaires ; une seule annonce TalkBack à la fin du minuteur, plus une vibration (réglable).
+- Depuis la 1.2.0 (« le poste de travail ») : numéro d'étape en très grand, texte en 23, rangée de bols de progression, boutons « Précédente » / « Étape suivante » de 64 de haut, minuteur en chiffres tabulaires ; une seule annonce TalkBack à la fin du minuteur, plus une vibration (réglable).
 - Étapes **défilables** (glisser horizontalement, `CarouselView` + points).
 - **Écran maintenu allumé** tant qu'on est sur la page.
 - **Minuteur** : saisir des minutes → décompte `mm:ss` ; alerte à la fin.

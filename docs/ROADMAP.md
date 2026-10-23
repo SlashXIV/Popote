@@ -31,14 +31,14 @@
 - [x] Liste de courses **persistante** : article manuel + cases cochées persistées + retrait/vidage. _[DATA]_ — voir `docs/shopping-list.md`.
 - [x] Partage d'une recette en texte (feuille de partage système). _[DEV]_
 - [x] Tri de la liste des recettes (Favoris / Récent / Titre / Temps). _[DATA]_
-- [x] **Refonte « Mise en place » — Fondations (1.1.0)** : métaphore du bol, base safran/aubergine, thème sombre, Réglages, typo, jetons, contrôles maison, textes externalisés, logo. _[DESIGN + DEV]_ — voir `docs/redesign-foundations.md` et `docs/design-system.md`.
+- [x] **Refonte « Mise en place » — Fondations (1.2.0)** : métaphore du bol, base safran/aubergine, thème sombre, Réglages, typo, jetons, contrôles maison, textes externalisés, logo. _[DESIGN + DEV]_ — voir `docs/redesign-foundations.md` et `docs/design-system.md`.
 
 ## Reprise (prochaine session)
 > À lire en premier dans une conversation neuve. État au 22/10/2026.
 
 **Où on en est**
 - `refonte/fondations` **fusionnée dans `main`** le 22/10/2026 (ni poussée, ni taguée) ; les Moments
-  se développent sur la branche **`refonte/moments`**. `Popote.csproj` est déjà en **1.1.0 (code 2)** ; la Release 1.1.0 n'est pas publiée.
+  se développent sur la branche **`refonte/moments`**. `Popote.csproj` est déjà en **1.2.0 (code 2)** ; la Release 1.2.0 n'est pas publiée.
 - Lire d'abord `docs/design-system.md` (le système codé) et `docs/redesign-foundations.md`
   (choix, mesures, limites). Planche validée : https://claude.ai/code/artifact/f73a7898-93b7-4c17-bea9-41e47c58afe5
 - Rien n'a changé dans `Popote.Data` ni dans le schéma (aucune migration).
@@ -63,17 +63,17 @@
   et noté « à mesurer au retour du téléphone » dans le jalon concerné, jamais extrapolé de l'émulateur.
 
 **Prochaines étapes, dans l'ordre**
-1. **Livrer 1.1.0** : ~~fusionner dans `main`~~ (fait), tag `v1.1.0` sur le commit de fusion,
+1. **Livrer 1.2.0** : ~~fusionner dans `main`~~ (fait), tag `v1.2.0` sur le commit de fusion,
    APK signé (`dotnet publish -c Release … -p:AndroidSigningKeyPass=… -p:AndroidSigningStorePass=…`,
    mots de passe par l'auteur), vérifier qu'il **démarre sur le téléphone**, Release GitHub. Installer
    par-dessus la 1.0 réelle : même clé ? sinon sauvegarde / restauration des données d'abord.
    *En attente du téléphone* (vérification du démarrage) ; le reste peut avancer sans lui.
-2. **Refonte — Moments (1.2.0)**, voir le jalon ci-dessous — sur l'émulateur, mesures au retour du téléphone.
-3. **Import par IA (1.3.0)**, voir le jalon ci-dessous.
+2. **Refonte — Moments (1.3.0)**, voir le jalon ci-dessous — sur l'émulateur, mesures au retour du téléphone.
+3. **Import par IA (1.4.0)**, voir le jalon ci-dessous.
 4. **Vitrine** (en tout dernier, roadmap finie) : refaire le README, voir le jalon ci-dessous.
 
 ## En cours
-- [ ] **Refonte — Moments (1.2.0)** _[DESIGN + DEV]_ — planche, section 07. Briques déjà prêtes :
+- [ ] **Refonte — Moments (1.3.0)** _[DESIGN + DEV]_ — planche, section 07. Briques déjà prêtes :
   `Motion/MotionTokens` (durées, courbes, `Level`), `Motion/Entrances` (`RiseInAsync`,
   `PressAsync`, `PressScaleBehavior`, encore inutilisés), `Controls/Bowl.FillProgress` (le bol se
   remplit), `Motion/Haptics` (`Tick`, `Confirm`).
@@ -93,7 +93,7 @@
     fondus de 150 ms ; « Supprimer les animations » = état final direct ; aucune gêne à la saisie ;
     rien ne bouge pendant la lecture d'une étape ; mesures téléphone avant / après (même build,
     Ambiance Expressive puis Sobre) sans régression de la liste ni du carrousel ; doc `docs/redesign-moments.md`.
-- [ ] **Import par IA (1.3.0)** _[DATA + DEV]_ — préparer, dans l'app, un **copier-coller du format
+- [ ] **Import par IA (1.4.0)** _[DATA + DEV]_ — préparer, dans l'app, un **copier-coller du format
   attendu** pour qu'une IA externe (ChatGPT, Claude…) crée ou remodèle une recette à importer.
   - Bouton « Copier les consignes pour une IA » (Réglages ou écran d'import) : met dans le
     presse-papiers les consignes + le gabarit + les **listes autorisées** (unités de
@@ -133,7 +133,7 @@
 ### Refonte — preuves
 | Jalon | Version | Preuve |
 |---|---|---|
-| Fondations | 1.1.0 | 50 tests verts (dont contrastes/daltonisme des 2 thèmes, aucun texte en dur) ; build sans avertissement nouveau ; émulateur : 8 pages en clair et en sombre, police 200 %, densité 600, arbre TalkBack ; téléphone (Release) : démarrage 1,76 s, liste p90 7 ms, carrousel p90 5 ms |
+| Fondations | 1.2.0 | 50 tests verts (dont contrastes/daltonisme des 2 thèmes, aucun texte en dur) ; build sans avertissement nouveau ; émulateur : 8 pages en clair et en sombre, police 200 %, densité 600, arbre TalkBack ; téléphone (Release) : démarrage 1,76 s, liste p90 7 ms, carrousel p90 5 ms |
 
 ### Journal des décisions (refonte)
 | Décision | Raison |

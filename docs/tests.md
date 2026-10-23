@@ -12,7 +12,7 @@ apprendre les tests en .NET.
 - `ShoppingListBuilder.Aggregate` : regroupement/somme des ingrédients (même
   unité sommée, unités différentes séparées, rayon absent → « Divers », tri).
 - `StepParser` : découpage des étapes.
-- **Interface (depuis la 1.1.0)** :
+- **Interface (depuis la 1.2.0)** :
   - `ThemeContrastTests` : relit `AppColors.xaml` ; contrastes WCAG (texte 7:1, accents 4,5:1,
     graphiques 3:1) dans les deux thèmes, émaux de rayon distincts en protan / deutan
     (Machado 2009, ΔE OKLab ≥ 8), chaque rôle présent en clair et en sombre.

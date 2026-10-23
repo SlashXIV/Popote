@@ -19,7 +19,7 @@ automatiquement les quantités d'ingrédients.
 - `ViewModels/RecipeDetailViewModel.cs` — charge la recette, recalcule les quantités
   quand `TargetServings` change ; expose `Ingredients` (records `ScaledIngredient`) et `Steps` (`StepLine`).
 - `Views/RecipeDetailPage.xaml(.cs)` — UI (chips + étapes numérotées) au design system.
-- `Controls/Bowl.cs` — bol du rayon (émail par `AislePalette`, jetons `Aisle*` de `AppColors.xaml`) ; remplace `AisleToColorConverter` depuis la 1.1.0.
+- `Controls/Bowl.cs` — bol du rayon (émail par `AislePalette`, jetons `Aisle*` de `AppColors.xaml`) ; remplace `AisleToColorConverter` depuis la 1.2.0.
 - `ViewModels/RecipeListViewModel.cs` — le tap ouvre désormais le détail (`GoToDetailCommand`).
 - `AppShell.xaml.cs` (route `RecipeDetailPage`), `MauiProgram.cs` (DI).
 

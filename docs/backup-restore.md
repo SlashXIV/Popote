@@ -7,7 +7,7 @@ Popote étant 100 % local, permettre d'**exporter** ses données et de les
 **restaurer** (nouveau téléphone, réinstallation, sécurité).
 
 ## Comportement attendu
-- Page **Réglages** (icône engrenage de l'onglet Recettes), section *Données* — depuis la 1.1.0 ; avant, menu ⋮ :
+- Page **Réglages** (icône engrenage de l'onglet Recettes), section *Données* — depuis la 1.2.0 ; avant, menu ⋮ :
   - **Sauvegarder les données** → exporte la base (`.db3`) et ouvre le partage
     (Google Drive, Fichiers, mail…). Fichier `popote-sauvegarde-AAAAMMJJ-HHmm.db3`.
   - **Restaurer une sauvegarde** → choisir un fichier `.db3` ; remplace les données

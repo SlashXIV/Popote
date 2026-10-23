@@ -21,7 +21,7 @@
 		<ApplicationId>onl.nci.popote</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>1.2.0</ApplicationDisplayVersion>
 		<ApplicationVersion>2</ApplicationVersion>
 
 		<SupportedOSPlatformVersion>21.0</SupportedOSPlatformVersion>

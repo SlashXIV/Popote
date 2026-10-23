@@ -6,7 +6,10 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 
 ## [Unreleased]
 
-## [1.1.0] — 2026-10-22 — Refonte « Mise en place » : fondations
+## [1.2.0] — 2026-10-22 — Refonte « Mise en place » : fondations
+
+> Numérotée 1.2.0 : la Release GitHub « v1.1 » (juillet) a déjà livré les fonctions d'avant la
+> refonte, l'app y affichant encore « 1.0 ».
 
 ### Added
 - **Identité « Mise en place »** : le bol vu de dessus comme unité visuelle (ingrédients,

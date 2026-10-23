@@ -1,6 +1,6 @@
 # Design system — Popote « Mise en place »
 
-Référence de toute l'interface depuis la 1.1.0. Planche validée le 22/10/2026 (artifact
+Référence de toute l'interface depuis la 1.2.0. Planche validée le 22/10/2026 (artifact
 « Popote, mise en place ») ; ce document décrit ce qui est réellement codé. Objectif : une app
 **cohérente, chaleureuse et pétillante**, qui ne fait plus « contrôles Android par défaut ».
 La cohérence d'une seule métaphore prime sur la quantité d'effets.
@@ -132,7 +132,7 @@ Jetons (`MotionTokens`) : Enter 420 ms `cubic-bezier(.2,.7,.2,1)`, Transition 48
 **Reduced** (Sobre : fondus de 150 ms), **None** (réglage Android « Supprimer les animations »,
 toujours prioritaire, relu au retour au premier plan). Toute animation est déclenchée par un
 événement, annulable, jamais en boucle. Haptique centralisée (`Haptics.Tick` / `Confirm`),
-coupée par le réglage Vibrations. Les « moments » (jalon 1.2.0) s'appuient sur ces briques.
+coupée par le réglage Vibrations. Les « moments » (jalon 1.3.0) s'appuient sur ces briques.
 
 ## Accessibilité (plancher non négociable)
 - Une phrase par élément composé (« Farine, 250 grammes, rayon Épicerie », « Lait, 50 centilitres »),

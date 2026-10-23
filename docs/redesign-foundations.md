@@ -1,4 +1,4 @@
-# Refonte « Mise en place » — Fondations (1.1.0)
+# Refonte « Mise en place » — Fondations (1.2.0)
 
 > Statut : livré — 2026-10-22
 
@@ -57,7 +57,7 @@ planche validée avant le code, palettes testées, accessibilité et performance
   découpé dans la lettre pour rester lisible.
 
 ## Mesures (Release, téléphone Xiaomi 2506BPN68G, Android 17, jeu de démo de 30 recettes / 25 photos)
-| Mesure | 1.1.0 |
+| Mesure | 1.2.0 |
 |---|---|
 | Démarrage à froid (médiane de 8) | 1 760 ms |
 | Défilement de la liste (3 × 20 gestes) | 3 images en retard sur ≈ 14 000 ; p90 7 ms, p99 11 ms ; PSS ≈ 346 Mo |
@@ -71,7 +71,7 @@ chaîne d'outils actuelle plante au démarrage (même cause que ci-dessus).
 Aucun (pas de migration). Les libellés de rayons et d'unités restent des **valeurs de données**.
 
 ## Reste à faire / limites connues
-- Jalon Moments (1.2.0) : animations des moments, transitions de page.
+- Jalon Moments (1.3.0) : animations des moments, transitions de page.
 - Les dialogues natifs (alertes, liste du sélecteur, feuille d'actions de la Semaine) gardent le
   rendu système, seulement recoloré.
 - Mémoire de la liste ≈ 346 Mo avec des photos de 4000 × 3000 : miniatures à l'import à étudier

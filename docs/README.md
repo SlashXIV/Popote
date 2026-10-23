@@ -5,7 +5,7 @@ Une feature = un fichier. Pour toute nouvelle feature, créer `docs/<nom>.md`
 
 ## Design
 - [design-system.md](design-system.md) — Système « Mise en place » : métaphore du bol, couleurs testées, typo, jetons, contrôles maison, mouvement, accessibilité. **À suivre pour toute UI.**
-- [redesign-foundations.md](redesign-foundations.md) — Refonte, jalon Fondations (1.1.0).
+- [redesign-foundations.md](redesign-foundations.md) — Refonte, jalon Fondations (1.2.0).
 - `licences/` — licences OFL des polices embarquées.
 
 ## Features documentées
